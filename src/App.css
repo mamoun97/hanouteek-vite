@@ -1,0 +1,9 @@
+@import url('assets/font/stylesheet.css');
+@import url('https://fonts.googleapis.com/css2?family=Lalezar&family=Noto+Kufi+Arabic:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@500;700;900&display=swap');
+
+:root{
+    --primary-color: "#6e36e5";
+    --secondary-color: "#641da5";
+}
+
+

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-16 h-16">
+  <!-- Search icon -->
+  <g class="search-icon">
+    <circle cx="50" cy="50" r="35" fill="#4A5568" />
+    <path fill="none" stroke="#CBD5E0" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M70 70l20 20" />
+  </g>
+  
+  <!-- Animation -->
+  <animate attributeName="r" from="35" to="40" dur="1s" repeatCount="indefinite" direction="alternate" />
+</svg>

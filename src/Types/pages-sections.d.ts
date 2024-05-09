@@ -1,0 +1,49 @@
+export interface Welcome {
+    id: number;
+    type: string;
+    index: number;
+    subTitle: null;
+    title: null;
+    format: string;
+    size: string;
+    ImageShadow: null;
+    textSize: string;
+    frequency: number;
+    height: null;
+    content: null;
+    cart_type: null;
+    limit: null;
+    typeCart: null;
+    showLoadMore: null;
+    titleColor: null;
+    subTitleColor: null;
+    textColor: null;
+    itemPriceColorBefore: null;
+    itemPriceColorAfter: null;
+    itemTitle: null;
+    itemBorderColor: null;
+    itemBorderColorHover: null;
+    paddingTop: number;
+    paddingBottom: number;
+    backgroundColor: string;
+    Button: null;
+    Style: null;
+    category: null;
+    Product: null;
+    categories: any[];
+    itemButton: null;
+    itemStyle: null;
+    sliders: {
+        id: number;
+        image: string;
+        mobileImage: string;
+        position: string;
+        link: string;
+        index: number;
+        headingText: string;
+        headingColor: string;
+        subheadingText: string;
+        subheadingColor: string;
+    }[];
+}
+
