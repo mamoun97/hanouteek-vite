@@ -86,8 +86,13 @@ const Resources = {
             cancel: "Annuler",
             required: "obligatoire",
             thanks_rating: "Merci pour l'évaluation. L'évaluation a été enregistrée avec succès.",
-            del_waslet:"Livraison en 1H à domicile",
-            addons:"Toppings en suppléments"
+            del_waslet: "Livraison en 1H à domicile",
+            addons: "Toppings en suppléments",
+
+            otp_msg: "Nous avons envoyé un code à %DATA%. Veuillez confirmer votre numéro",
+            confirm: "Confirmer",
+            skip: "Sauter",
+            otp_msg_success:"Le numéro de téléphone a été confirmé"
         }
     },
     "en": {
@@ -174,8 +179,12 @@ const Resources = {
             cancel: "Cancel",
             thanks_rating: "Thank you for the rating. The rating has been saved successfully.",
             required: "required",
-            del_waslet:"Delivery within 1 hour to your home",
-            addons:"Supplementary toppings"
+            del_waslet: "Delivery within 1 hour to your home",
+            addons: "Supplementary toppings",
+            otp_msg: "We have sent a code to %DATA%. Please confirm your number",
+            confirm: "Confirm",
+            skip: "Skip",
+            otp_msg_success:"The phone number has been confirmed"
         }
     },
     "ar": {
@@ -263,8 +272,12 @@ const Resources = {
             cancel: "انهاء",
             thanks_rating: "شكرا على القييم  لقد تم حفظ التقييم بنجاح ",
             required: "مطلوب",
-            del_waslet:"التوصيل خلال ساعة واحدة إلى منزلك",
-            addons:"الطبقة والمكملات الغذائية"
+            del_waslet: "التوصيل خلال ساعة واحدة إلى منزلك",
+            addons: "الطبقة والمكملات الغذائية",
+            otp_msg: "لقد أرسلنا رمزًا إلى %DATA%. يرجى تأكيد رقمك",
+            confirm: "تأكيد",
+            skip: "تخطي",
+            otp_msg_success:"لقد تم تأكيد رقم الهاتف"
         }
     }
 }

@@ -9,7 +9,7 @@ import Textarea from "../Views/Flowbit/Textarea";
 import Radio from "../Views/Flowbit/Radio";
 import { BsPatchCheckFill } from "react-icons/bs"
 import Button from "../Views/Flowbit/Button";
-import { Button as ButtonR } from "rizzui";
+import { Button as ButtonR, PinCode } from "rizzui";
 import { useEffect, useRef, useState } from "react";
 import { useGetWilayasService } from "../Api/Services";
 import { useFormik } from "formik";
@@ -28,6 +28,7 @@ import { MdErrorOutline } from "react-icons/md";
 import CheckoutResturant from "./CheckoutResturant";
 import images from "../assets";
 import { ThemeSetting } from "../Types/ThemeSetting";
+import OtpModal from "../Views/OtpModal";
 
 
 type ModeLivraisan = {
@@ -60,13 +61,14 @@ const validationS = (dt: Erros) => Yup.object().shape({
 });
 export default function Checkout() {
     const theme = useSelector<ThemeSetting>(state => state.theme) as ThemeSetting
-  
-    return theme.theme.templateType=="restaurant"?<CheckoutResturant/>:<CheckoutDefault />
+
+    return theme.theme.templateType == "restaurant" ? <CheckoutResturant /> : <CheckoutDefault />
 }
 
 function CheckoutDefault() {
-    const { t ,i18n} = useTranslation()
+    const { t, i18n } = useTranslation()
     const [modalState, setModalState] = useState<any>(null);
+    const [otp, setOtp] = useState("");
     const cart = useSelector<RootState>(state => state.cart) as Cart
     // const { orderData, commune, wilaya } = useSelector<RootState>(state => state.order) as OrderStore
     const [selectedWilaya, setSelectedWilaya] = useState<Wilaya | null>(null)
@@ -168,9 +170,13 @@ function CheckoutDefault() {
             // console.log(dt)
             // setLoading(false)
             // return
-            ProductApi.createOrder(dt).then((_) => {
+            ProductApi.createOrder(dt).then((res) => {
                 // console.log(res)
+
                 let s = { ...cart }
+                if(res.otp){
+                    setOtp(formik.values.contact_phone)
+                }
                 purchaseEvent(cart.items, getTotal(s), formik.values)
                 setLoading(false)
                 setIsCreated(dt)
@@ -508,7 +514,7 @@ function CheckoutDefault() {
                                                         {el.title}
                                                         {
                                                             !!el.isWaslet && <div className="flex items-center gap-2">
-                                                                {i18n.language=="ar"?"عبر":"via"}
+                                                                {i18n.language == "ar" ? "عبر" : "via"}
                                                                 <img src={images.waslet} style={{ height: "24px" }} alt="" />
                                                             </div>
                                                         }
@@ -634,6 +640,18 @@ function CheckoutDefault() {
                 </div>
             </Modal>}
             <Toaster position="top-center" />
+
+
+
+
+
+
+
+
+
+            {!!otp&&<OtpModal open={otp} setOpen={() => {
+                setOtp("")
+            }} />}
         </Container>
 
     )

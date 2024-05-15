@@ -58,7 +58,7 @@ const getAllCategories =  async(limit:number,offset:number,db?:string):Promise<C
     const {data}=await req.http.get("/tenant/category?page="+offset+"&limit="+limit+(db??ApiConfig.db));
     return data
 }
-const createOrder = async(dt:Order,db?:string):Promise<any> => {
+const createOrder = async(dt:Order,db?:string):Promise<CreateOrderResponse> => {
     const {data}=await req.http.post("/tenant/order"+(db??ApiConfig.dbq),dt);
     return data
 }

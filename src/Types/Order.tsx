@@ -328,5 +328,9 @@ type TrackingResponse = {
         self: string
     }
 }
+type CreateOrderResponse={
+    message:string,
+    otp:boolean
+}
 
 

@@ -6,6 +6,7 @@ import ApiConfig from "./ApiConfig";
 import CategorieApi from "./CategorieApi";
 import ProductApi from "./ProductApi";
 import OrderApi from "./OrderApi";
+import AssociateApi from "./Associate";
 const urls = {
     theme: ApiConfig.rootUrl + "/api/v1/tenant/store/findOne"
 }
@@ -97,5 +98,15 @@ export const useGetAllOrdersService = (params:string,db?:string) => {
 
 export const useGetOrderByIdService = (id:number,db?:string) => {
     const data = useSWR<OrderFull>("orders/"+id+db, () => OrderApi.getById(id,db), options);
+    return data
+}
+
+
+
+// Get All statistics associate
+export const useGetStatisticsService = (dt:{startDate:string,endDate:string},db?:string) => {
+    const data = useSWR(
+        `/tenant/statistics/all?startDate=${dt.startDate}&endDate=${dt.endDate}`+(db??ApiConfig.db)
+        , () => AssociateApi.statistics(dt,db), options);
     return data
 }

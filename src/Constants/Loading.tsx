@@ -51,9 +51,14 @@ export default {
                 <div className="w-14 rounded-md h-8 bg-gray-200"></div>
                 <div className="  rounded-md h-14 bg-gray-200 grow"></div>
             </div>
-           
+
         </div>
-    </div>
+    </div>,
+    statistiqueAssociate: [1, 2, 3, 4].map((_, k) => {
+        return <div key={k} className={`col-span-1 h-28  rounded-md relative overflow-hidden group animate-pulse`}>
+            <div className={`absolute top-0 left-0 right-0 bottom-0 bg-gray-300`}> </div>
+        </div>
+    })
 
 
 }

@@ -30,9 +30,15 @@ const tracking = async (dt:{phone:string},db?:string):Promise<TrackingResponse> 
     const {data}=await req.httpAuth("").post("/tenant/order/phone-tracking"+(db??ApiConfig.dbq),dt);
     return data
 }
+const confirmOtp = async (otp:string,db?:string):Promise<TrackingResponse> => {
+    
+    const {data}=await req.httpAuth("").get("/tenant/order/confirmed-otp?otp="+otp+(db??ApiConfig.db));
+    return data
+}
 
 const OrderApi={
     getAll,updateState,getById,
-    updateOrder,tracking
+    updateOrder,tracking,
+    confirmOtp
 }
 export default OrderApi
