@@ -2,7 +2,7 @@
 
 const url = "https://api.risecart.net";
 
-const db = "db=hanouteekiwY3oYSQ2"
+// const db = "db=hanouteekiwY3oYSQ2"
 // const db="db=taniajawaheroi7JLwmU5"
 // const db="db=template73nv-Cgi5"    
 // const db="db=template73nv-Cgi5"
@@ -11,8 +11,8 @@ const db = "db=hanouteekiwY3oYSQ2"
 // const db="db=Millenium31pn-QVfdiI"
 // const db="db=MyshapedzMyshapedz3nknQCJFy"
 // const db = "db=burgerstoreburgerstoreVQTwAibTm"
-// const db=false;
-const isHanouteek = true
+const db=false;
+const isHanouteek = false
 const ApiConfig = {
     url: url + "/api/v1",
     rootUrl: url,

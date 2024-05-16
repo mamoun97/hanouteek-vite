@@ -39,8 +39,8 @@ const getYalidineCenter =async (name:string,db?:string):Promise<YalidineCenter[]
     const {data}=await req.http.get("/yalidine-centers?wilaya_name="+name+(db??ApiConfig.db));
     return data;
 }
-const getPriceDelivery =async (idcomm:number,db?:string):Promise<PriceDeliveryResponce>=> {
-    const {data}=await req.http.get("/tenant/city-delivery/pricing/"+idcomm+(db??ApiConfig.dbq));
+const getPriceDelivery =async (idcomm:number,db?:string,prods?:number[]):Promise<PriceDeliveryResponce>=> {
+    const {data}=await req.http.get("/tenant/city-delivery/pricing/"+idcomm+"?product="+(prods??[].join(","))+(db??ApiConfig.db));
     return data
 }
 const getPriceDeliveryAdmin =async (idcomm:number,db?:string):Promise<PriceDeliveryResponce>=> {

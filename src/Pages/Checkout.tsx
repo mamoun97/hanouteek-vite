@@ -93,8 +93,8 @@ function CheckoutDefault() {
     )
 
     const { data: priceDelivery } = useSWR(
-        `/tenant/city-delivery/pricing/${selectedCommune?.id ?? 0}`,
-        () => ProductApi.getPriceDelivery(selectedCommune?.id ?? 0),
+        `/tenant/city-delivery/pricing/${selectedCommune?.id ?? 0}?product=${cart.items.map(el=>el.id).join(",")}`,
+        () => ProductApi.getPriceDelivery(selectedCommune?.id ?? 0,undefined,cart.items.map(el=>el.id)),
         {
             keepPreviousData: true,
         }
