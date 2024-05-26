@@ -1,9 +1,6 @@
 
-type CategoriesResponse = {
-    page: number,
-    limit: number,
-    totalCount: number,
-    hasMore: number,
+interface CategoriesResponse extends ResponseAtt {
+    
     data: Array<Category>
 }
 type Category = {
@@ -17,12 +14,9 @@ type Category = {
     updated_at: Date
 }
 
-interface CategoriesResponseProducts {
-    page: number,
-    limit: number,
-    totalCount: number,
-    data: Product[],
-    hasMore: boolean
+interface CategoriesResponseProducts extends ResponseAtt{
+   
+    data: Product[]
 }
 
 

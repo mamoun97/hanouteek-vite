@@ -7,6 +7,7 @@ import CategorieApi from "./CategorieApi";
 import ProductApi from "./ProductApi";
 import OrderApi from "./OrderApi";
 import AssociateApi from "./Associate";
+import OfferApi from "./Offer";
 const urls = {
     theme: ApiConfig.rootUrl + "/api/v1/tenant/store/findOne"
 }
@@ -92,6 +93,16 @@ export const useGetProductByIdCategoryService = (id:number|null,db?:string) => {
 // Get All Products by limit & offset
 export const useGetAllOrdersService = (params:string,db?:string) => {
     const data = useSWR<OrdersResponse>("orders/"+params+db, () => OrderApi.getAll(params,db), options);
+    return data
+}
+export const useGetAllOffers=(filter:string)=>{
+  
+    const data = useSWR("/tenant/offer"+filter, () => OfferApi.getAll(filter), {...options,...{}});
+    return data
+}
+export const useGetOfferById=(id:string| number)=>{
+  
+    const data = useSWR("/tenant/offer/"+id, () => OfferApi.getById(id), {...options,...{}});
     return data
 }
 

@@ -4,105 +4,148 @@
 
 @layer base {
   :root {
-    --background: 255 255 255; /* #ffffff */
-    --foreground: 72 72 72; /* #484848 */
-    --muted: 227 227 227; /* #e3e3e3 */
-    --muted-foreground: 146 146 146; /* #929292 */
+    --background: 255 255 255;
+    /* #ffffff */
+    --foreground: 72 72 72;
+    /* #484848 */
+    --muted: 227 227 227;
+    /* #e3e3e3 */
+    --muted-foreground: 146 146 146;
+    /* #929292 */
 
     /*
     * primary colors
     */
-    --primary-lighter: 227 227 227; /* #e3e3e3 */
-    --primary-default: 34 34 34; /* #222222 */
-    --primary-dark: 0 0 0; /* #000000 */
-    --primary-foreground: 255 255 255; /* #ffffff */
+    --primary-lighter: 227 227 227;
+    /* #e3e3e3 */
+    --primary-default: 34 34 34;
+    /* #222222 */
+    --primary-dark: 0 0 0;
+    /* #000000 */
+    --primary-foreground: 255 255 255;
+    /* #ffffff */
 
     /*
     * secondary colors
     */
-    --secondary-lighter: 221 227 255; /* #dde3ff */
-    --secondary-default: 78 54 245; /* #4e36f5 */
-    --secondary-dark: 67 42 216; /* #432ad8 */
-    --secondary-foreground: 255 255 255; /* #ffffff */
+    --secondary-lighter: 221 227 255;
+    /* #dde3ff */
+    --secondary-default: 78 54 245;
+    /* #4e36f5 */
+    --secondary-dark: 67 42 216;
+    /* #432ad8 */
+    --secondary-foreground: 255 255 255;
+    /* #ffffff */
 
     /*
     * danger colors
     */
-    --red-lighter: 247 212 214; /* #f7d4d6 */
-    --red-default: 238 0 0; /* #e00 */
-    --red-dark: 197 0 0; /* #c50000 */
+    --red-lighter: 247 212 214;
+    /* #f7d4d6 */
+    --red-default: 238 0 0;
+    /* #e00 */
+    --red-dark: 197 0 0;
+    /* #c50000 */
 
     /*
     * warning colors
     */
-    --orange-lighter: 255 239 207; /* #ffefcf */
-    --orange-default: 245 166 35; /* #f5a623 */
-    --orange-dark: 171 87 10; /* #ab570a */
+    --orange-lighter: 255 239 207;
+    /* #ffefcf */
+    --orange-default: 245 166 35;
+    /* #f5a623 */
+    --orange-dark: 171 87 10;
+    /* #ab570a */
 
     /*
     * info colors
     */
-    --blue-lighter: 211 229 255; /* #d3e5ff */
-    --blue-default: 0 112 243; /* #0070f3 */
-    --blue-dark: 7 97 209; /* #0761d1 */
+    --blue-lighter: 211 229 255;
+    /* #d3e5ff */
+    --blue-default: 0 112 243;
+    /* #0070f3 */
+    --blue-dark: 7 97 209;
+    /* #0761d1 */
 
     /*
     * success colors
     */
-    --green-lighter: 185 249 207; /* #b9f9cf */
-    --green-default: 17 168 73; /* #11a849 */
-    --green-dark: 17 132 60; /* #11843c */
+    --green-lighter: 185 249 207;
+    /* #b9f9cf */
+    --green-default: 17 168 73;
+    /* #11a849 */
+    --green-dark: 17 132 60;
+    /* #11843c */
   }
 
   /* --------------------------------- */
   /* dark theme */
   /* --------------------------------- */
   [data-theme="dark"] {
-    --background: 8 9 14; /* #08090e */
-    --foreground: 223 223 223; /* #dfdfdf */
-    --muted: 51 51 51; /* #333333 */
-    --muted-foreground: 102 102 102; /* #666666 */
+    --background: 8 9 14;
+    /* #08090e */
+    --foreground: 223 223 223;
+    /* #dfdfdf */
+    --muted: 51 51 51;
+    /* #333333 */
+    --muted-foreground: 102 102 102;
+    /* #666666 */
 
     /*
     * primary colors
     */
-    --primary-lighter: 34 34 34; /* #222222 */
-    --primary-default: 241 241 241; /* #f1f1f1 */
-    --primary-dark: 255 255 255; /* #ffffff */
-    --primary-foreground: 0 0 0; /* #000000 */
+    --primary-lighter: 34 34 34;
+    /* #222222 */
+    --primary-default: 241 241 241;
+    /* #f1f1f1 */
+    --primary-dark: 255 255 255;
+    /* #ffffff */
+    --primary-foreground: 0 0 0;
+    /* #000000 */
 
     /*
     * secondary colors
     */
-    --secondary-lighter: 31 22 90; /* #1f165a */
-    --secondary-dark: 193 203 255; /* #c1cbff */
+    --secondary-lighter: 31 22 90;
+    /* #1f165a */
+    --secondary-dark: 193 203 255;
+    /* #c1cbff */
 
     /*
     * danger colors
     */
-    --red-lighter: 80 0 0; /* #500000 */
-    --red-dark: 255 193 193; /* #ffc1c1 */
+    --red-lighter: 80 0 0;
+    /* #500000 */
+    --red-dark: 255 193 193;
+    /* #ffc1c1 */
 
     /*
     * warning colors
     */
-    --orange-lighter: 68 29 4; /* #441d04 */
-    --orange-dark: 252 234 139; /* #fcea8b */
+    --orange-lighter: 68 29 4;
+    /* #441d04 */
+    --orange-dark: 252 234 139;
+    /* #fcea8b */
 
     /*
     * info colors
     */
-    --blue-lighter: 13 51 94; /* #0d335e */
-    --blue-dark: 181 233 255; /* #b5e9ff */
+    --blue-lighter: 13 51 94;
+    /* #0d335e */
+    --blue-dark: 181 233 255;
+    /* #b5e9ff */
 
     /*
     * success colors
     */
-    --green-lighter: 3 48 22; /* #033016 */
-    --green-dark: 185 249 207; /* #b9f9cf */
+    --green-lighter: 3 48 22;
+    /* #033016 */
+    --green-dark: 185 249 207;
+    /* #b9f9cf */
 
     /* here you can customize other colors for dark theme if design required */
   }
+
   html {
     font-family: "Gilroy", "Roboto", "Noto Kufi Arabic", "Nunito", "Helvetica", "sans-serif";
   }
@@ -111,7 +154,7 @@
   /* React Datepicker Styling */
   /* ................................................... */
   .react-datepicker-popper .react-datepicker {
-    @apply bg-white  text-gray-600 dark:border-muted dark:bg-gray-50;
+    @apply bg-white text-gray-600 dark:border-muted dark:bg-gray-50;
   }
 
   /* month container */
@@ -393,13 +436,68 @@
     @apply cursor-not-allowed text-muted hover:bg-transparent dark:hover:text-muted;
   }
 
-  .remove-arrow::-webkit-inner-spin-button, 
-        .remove-arrow::-webkit-outer-spin-button { 
-            -webkit-appearance: none; 
-            margin: 0; 
-        } 
+  .remove-arrow::-webkit-inner-spin-button,
+  .remove-arrow::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .remove-arrow {
+    -moz-appearance: textfield;
+  }
+
+
+  .offer-card .offer-span {
+    position: absolute;
+    overflow: hidden;
+    width: 150px;
+    height: 150px;
+    top: -10px;
+    left: -10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .offer-rtl.offer-card .offer-span{
+    left: initial;
+    right: -10px;
+  }
   
-        .remove-arrow { 
-            -moz-appearance: textfield; 
-        } 
+  .offer-card .offer-span::before {
+    content: attr(data-content);
+    position: absolute;
+    width: 150%;
+    height: 40px;
+    background-image: linear-gradient(45deg, #ff6547 0%, #ffb144  51%, #ff7053  100%);
+    transform: rotate(-45deg) translateY(-20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.23);
+  }
+  .offer-rtl.offer-card .offer-span::before{
+    transform: rotate(45deg) translateY(-20px);
+  }
+  
+  .offer-card .offer-span::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    bottom: 0;
+    left: 0;
+    height: 10px;
+    z-index: -1;
+    box-shadow: 140px -140px #cc3f47;
+    background-image: linear-gradient(45deg, #FF512F 0%, #F09819  51%, #FF512F  100%);
+  }
+  .offer-rtl.offer-card .offer-span::after{
+    left: initial;
+    right: 0;
+    box-shadow: -140px -140px #cc3f47;
+  }
+
 }

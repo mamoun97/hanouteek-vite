@@ -20,9 +20,10 @@ import Currency from "../Constants/Currency";
 import Checkout from "./Checkout";
 import { FiShoppingCart } from "react-icons/fi";
 import OfferCard from "../Views/OfferCard";
-import Reviews from "../Views/Reviews";
 import { ThemeSetting } from "../Types/ThemeSetting";
 import ProductResturant from "./ProductResturant";
+import OffersView from "../Views/OffersView";
+import OfferModal from "../Views/OfferModal";
 
 const NULL_STOCK = -9999999
 export default function Product() {
@@ -75,14 +76,18 @@ export function ProductPage({ data, isUpdate = false, index = -1, isSmall = fals
     { data: ProductCart, isUpdate?: boolean, index?: number, isSmall?: boolean, onClose?: any }) {
     const cart = useSelector<RootState>(state => state.cart) as Cart
     const { t } = useTranslation()
+
     const dispatch: AppDispatch = useDispatch();
     const [isCheck, setIsCheck] = useState(false);
+    const [openOfferModal, setOpenOfferModal] = useState(false);
     const checkoutRef = useRef<HTMLDivElement | null>(null);
     const [prod, setProd] = useState<ProductCart>(data)
     const [stock, setStock] = useState<number>(NULL_STOCK)
     const [detect, setDetect] = useState<string | null>(null)
     const initSizes = prod.attribute.options.length ? (prod.attribute.options[0].sizes.length ? true : false) : false;
     const addToCart = (chekout = false) => {
+        // setOpenOfferModal(true)
+        // return
         if (!isValid()) {
             alert(t("please_select_att"))
             return
@@ -176,7 +181,7 @@ export function ProductPage({ data, isUpdate = false, index = -1, isSmall = fals
                                     color: el
                                 },
                                 price: (prod.hasOffer && prod.minNumberQteOffer && prod.priceOffer && prod.qte >= prod.minNumberQteOffer) ? prod.priceOffer : (el.price ? el.price : data.price),
-                                originalPrice: data.price
+                                oldPrice: data.price
                             })
                             setStock(el.sizes.length != 0 ? NULL_STOCK : el.stock)
                             if (!!el.image)
@@ -201,7 +206,7 @@ export function ProductPage({ data, isUpdate = false, index = -1, isSmall = fals
                                         size: el
                                     },
                                     price: (prod.hasOffer && prod.minNumberQteOffer && prod.priceOffer && prod.qte >= prod.minNumberQteOffer) ? prod.priceOffer : (el.price ? el.price : data.price),
-                                    originalPrice: data.price
+                                    oldPrice: data.price
                                 })
                                 if (prod.checkData.color)
                                     setStock(el.stock)
@@ -222,6 +227,9 @@ export function ProductPage({ data, isUpdate = false, index = -1, isSmall = fals
                         </>}
                     </div> : ""
                 }
+                <div className="my-2">
+                    <OffersView productId={prod.id}/>
+                </div>
                 <div className="mt-2 flex items-center">
                     <IconButton onClick={() => {
                         let s = cart.faverites.find(el => el.id == data.id)
@@ -321,6 +329,13 @@ export function ProductPage({ data, isUpdate = false, index = -1, isSmall = fals
         {!isSmall && <div>
             <RelatedProducts title={t("related_prod")} />
         </div>}
+        {
+            openOfferModal&&<OfferModal {...{
+                open:openOfferModal,
+                setOpen:setOpenOfferModal,
+                prod
+            }} />
+        }
 
     </Container>
 }

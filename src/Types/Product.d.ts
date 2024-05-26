@@ -69,17 +69,15 @@ declare global {
         deliveryCostToTheHome: number | null,
         deliveryCostToTheOffice: number | null,
         specificPriceDelivery: boolean,
-        originalPrice?: number
+        originalPrice:number,
+        oldPrice?: number
     }
 
-    type ProductsResponse = {
-        page: number,
-        limit: number,
-        totalCount: number,
-        hasMore: number,
+    interface ProductsResponse extends ResponseAtt {
+
         data: Array<Product>
     }
-    
+
     interface ProductCart extends Product {
         qte: number,
         checkData: {
@@ -87,7 +85,7 @@ declare global {
             size: Size | null,
             addon?: AddonSubQte[]
         },
-        
+
     }
 
 
@@ -112,12 +110,46 @@ declare global {
         updated_at: string,
 
     }
-    interface ReviewResponse {
-        page: number,
-        limit: number,
-        totalCount: number,
+    interface ReviewResponse extends ResponseAtt {
         data: ReviewFull[],
-        hasMore: boolean
+    }
+    type Offer = {
+        id: number,
+        name: string,
+        slug: string | null,
+        state: boolean,
+        price: number,
+        description: string,
+        created_at: string,
+        updated_at: string,
+        offerItems: {
+            id: number,
+            price: number,
+            product: Product
+        }[]
+    }
+    interface OfferResponse extends ResponseAtt {
+        data: Offer[],
+    }
+
+    type ExistingOfferProps = {
+        price_total: number,
+        price_item: number,
+        qte: number,
+        color: string,
+        size: string,
+        product: {
+            id: number
+        }
+    }
+    type ExistingOfferPropsRequest={
+        data:ExistingOfferProps[]
     }
 }
+
+
+
+
+
+
 

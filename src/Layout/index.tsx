@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Cart, openCart } from "../Store/cartSlice";
 import { RootState } from "../Store"
 import { ThemeSetting } from "../Types/ThemeSetting"
+import UpdatePrices from "../hoock/UpdatePrices"
 export default function Layout({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch()
   const cart = useSelector<RootState>(state => state.cart) as Cart
@@ -19,6 +20,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-[100vh] bg-white">
+      <UpdatePrices/>
       <Navbar />
       {children}
       <Footer />

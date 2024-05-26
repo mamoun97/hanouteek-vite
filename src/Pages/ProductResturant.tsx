@@ -234,7 +234,7 @@ export function ProductPage({ data, isUpdate = false, index = -1, isSmall = fals
                                     color: el
                                 },
                                 price: (prod.hasOffer && prod.minNumberQteOffer && prod.priceOffer && prod.qte >= prod.minNumberQteOffer) ? prod.priceOffer : (el.price ? el.price : data.price),
-                                originalPrice: data.price
+                                oldPrice: data.price
                             })
 
                             if (!!el.image)
@@ -259,7 +259,7 @@ export function ProductPage({ data, isUpdate = false, index = -1, isSmall = fals
                                         size: el
                                     },
                                     price: (prod.hasOffer && prod.minNumberQteOffer && prod.priceOffer && prod.qte >= prod.minNumberQteOffer) ? prod.priceOffer : (el.price ? el.price : data.price),
-                                    originalPrice: data.price
+                                    oldPrice: data.price
                                 })
 
 

@@ -9,7 +9,7 @@ import Textarea from "../Views/Flowbit/Textarea";
 import Radio from "../Views/Flowbit/Radio";
 import { BsPatchCheckFill } from "react-icons/bs"
 import Button from "../Views/Flowbit/Button";
-import { Button as ButtonR, PinCode } from "rizzui";
+import { Button as ButtonR } from "rizzui";
 import { useEffect, useRef, useState } from "react";
 import { useGetWilayasService } from "../Api/Services";
 import { useFormik } from "formik";
@@ -68,7 +68,8 @@ export default function Checkout() {
 function CheckoutDefault() {
     const { t, i18n } = useTranslation()
     const [modalState, setModalState] = useState<any>(null);
-    const [otp, setOtp] = useState("");
+    const [otp, setOtp] = useState<OtpModalOpen | null>();
+    const [orderResponse, setOrderResponse] = useState<CreateOrderResponse | null>(null);
     const cart = useSelector<RootState>(state => state.cart) as Cart
     // const { orderData, commune, wilaya } = useSelector<RootState>(state => state.order) as OrderStore
     const [selectedWilaya, setSelectedWilaya] = useState<Wilaya | null>(null)
@@ -93,8 +94,8 @@ function CheckoutDefault() {
     )
 
     const { data: priceDelivery } = useSWR(
-        `/tenant/city-delivery/pricing/${selectedCommune?.id ?? 0}?product=${cart.items.map(el=>el.id).join(",")}`,
-        () => ProductApi.getPriceDelivery(selectedCommune?.id ?? 0,undefined,cart.items.map(el=>el.id)),
+        `/tenant/city-delivery/pricing/${selectedCommune?.id ?? 0}?product=${cart.items.map(el => el.id).join(",")}`,
+        () => ProductApi.getPriceDelivery(selectedCommune?.id ?? 0, undefined, cart.items.map(el => el.id)),
         {
             keepPreviousData: true,
         }
@@ -125,44 +126,44 @@ function CheckoutDefault() {
             setLoading(true)
             const m = modeDelivery?.find(el => el.check)
             let dt: Order = {
-                "price_items": getSubTotal(cart),
-                "price_total": getTotal(cart),
-                "price_promo": 0,
-                "price_delivery": m?.cost ?? 0,
-                "to_commune_name": formik.values.to_commune_name,
-                "to_wilaya_name": formik.values.to_wilaya_name,
-                "address": "",
-                "fullName": formik.values.fullName,
-                "firstname": formik.values.fullName,
-                "familyname": formik.values.fullName,
-                "email": "",
-                "contact_phone": "+213" + parseInt(formik.values.contact_phone),
-                "weight": "0",
-                "couponCode": "",
-                "width": 0,
-                "height": 0,
-                "length": 0,
-                "do_insurance": false,
-                "freeshipping": false,
-                "is_stopdesk": m?.value ? true : false,
-                "stopdesk_id": m?.value ? m.value.center_id ?? 0 : 0,
-                "has_exchange": false,
-                "CompareAtPrice": 0,
-                "address_lat": 0,
-                "address_lng": 0,
-                "time_delivery": 0,
-                "nots": formik.values.nots,
-                "item": cart.items.map(el => {
+                price_items: getSubTotal(cart),
+                price_total: getTotal(cart),
+                price_promo: 0,
+                price_delivery: m?.cost ?? 0,
+                to_commune_name: formik.values.to_commune_name,
+                to_wilaya_name: formik.values.to_wilaya_name,
+                address: "",
+                fullName: formik.values.fullName,
+                firstname: formik.values.fullName,
+                familyname: formik.values.fullName,
+                email: "",
+                contact_phone: "+213" + parseInt(formik.values.contact_phone),
+                weight: "0",
+                couponCode: "",
+                width: 0,
+                height: 0,
+                length: 0,
+                do_insurance: false,
+                freeshipping: false,
+                is_stopdesk: m?.value ? true : false,
+                stopdesk_id: m?.value ? m.value.center_id ?? 0 : 0,
+                has_exchange: false,
+                CompareAtPrice: 0,
+                address_lat: 0,
+                address_lng: 0,
+                time_delivery: 0,
+                nots: formik.values.nots,
+                item: cart.items.map(el => {
                     return {
-                        "name": el.name,
-                        "price_total": el.price,
-                        "price_item": el.price,
-                        "color": el.checkData.color?.value ?? "",
-                        "size": el.checkData.size?.value ?? "",
-                        "qte": el.qte,
-                        "cancelled": false,
-                        "product": {
-                            "id": el.id
+                        name: el.name,
+                        price_total: el.price,
+                        price_item: el.price,
+                        color: el.checkData.color?.value ?? "",
+                        size: el.checkData.size?.value ?? "",
+                        qte: el.qte,
+                        cancelled: false,
+                        product: {
+                            id: el.id
                         }
                     }
                 })
@@ -170,12 +171,17 @@ function CheckoutDefault() {
             // console.log(dt)
             // setLoading(false)
             // return
+
+
             ProductApi.createOrder(dt).then((res) => {
                 // console.log(res)
 
                 let s = { ...cart }
-                if(res.otp){
-                    setOtp(formik.values.contact_phone)
+                if (res.otp) {
+                    setOrderResponse({
+                        ...res,
+                        state: 1
+                    })
                 }
                 purchaseEvent(cart.items, getTotal(s), formik.values)
                 setLoading(false)
@@ -562,6 +568,29 @@ function CheckoutDefault() {
                     <p className="mt-2 max-w-2xl text-center">
                         {t("order_valid_msg")}
                     </p>
+                    {orderResponse?.state == 1 && <>
+                        <div className="flex my-4 w-full max-w-xl items-center gap-2">
+                            <div className="border grow"></div>
+                            <span className="text-sm font-bold text-gray-400">{t("or")}</span>
+                            <div className="border grow"></div>
+                        </div>
+                        <p className="mb-4 max-w-2xl text-center">
+                            {t("msg_conf_n")}
+                        </p>
+                        <ButtonR onClick={() => {
+                            setOtp({
+                                id:orderResponse.order,
+                                phone:isCreated.contact_phone})
+                        }}>
+                            {t("msg_conf_n_btn")}
+                        </ButtonR>
+                    </>}
+                    {
+                        orderResponse?.state == 2 && <p className="mb-4 max-w-2xl text-center text-green-600">
+                            {t("otp_conf")}
+                        </p>
+                    }
+
                     <div className="bg-[#F1F1F1] rounded-md p-5 w-full max-w-4xl mt-4 flex justify-center">
                         <div className="flex items-center justify-center flex-col">
                             <span>{t("total")} :</span>
@@ -649,9 +678,18 @@ function CheckoutDefault() {
 
 
 
-            {!!otp&&<OtpModal open={otp} setOpen={() => {
-                setOtp("")
-            }} />}
+            {!!otp && <OtpModal
+                afterCahnge={() => {
+                    if (orderResponse)
+                        setOrderResponse({
+                            ...orderResponse,
+                            state:2
+                        })
+                }}
+                open={otp}
+                setOpen={() => {
+                    setOtp(null)
+                }} />}
         </Container>
 
     )

@@ -47,6 +47,9 @@ const cartSlice = createSlice({
         state.items = [...state.items, action.payload];
       // saveData("cart", state);
     },
+    addToCartItems: (state, action: PayloadAction<ProductCart[]>) => {
+        state.items = [...state.items, ...action.payload];
+    },
     removeFromCart: (state, action: PayloadAction<number>) => {
       state.items = state.items.filter((el, index) => el && action.payload != index);
       // saveData("cart", state);
@@ -55,6 +58,10 @@ const cartSlice = createSlice({
       state.items = state.items.map((el, k) => {
         return action.payload.index == k ? action.payload.item : el
       });
+      // saveData("cart", state);
+    },
+    updateCartFull: (state, action: PayloadAction<Array<ProductCart>>) => {
+      state.items =action.payload
       // saveData("cart", state);
     },
     videCart: (state) => {
@@ -89,7 +96,9 @@ export const {
   updateCart,
   videCart,
   addToFavorite,
-  removeFromFavorite
+  removeFromFavorite,
+  addToCartItems,
+  updateCartFull
 } = cartSlice.actions;
 export const selectCart = (state: { cart: Cart }) => state.cart;
 export default cartSlice.reducer;

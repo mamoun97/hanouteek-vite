@@ -66,7 +66,31 @@ export default {
           "100%": {
             transform: 'translateX(0px)'
           },
-        }
+        },
+        vibre_sc: {
+          "0%": {
+            transform: "none"
+          },
+          "20%": {
+            transform: 'scale(1)'
+          },
+          "40%": {
+            transform: 'scale(0.9)'
+          },
+          "60%": {
+            transform: 'scale(1)'
+          },
+          "80%": {
+            transform: 'scale(0.95)'
+          },
+          "100%": {
+            transform: 'scale(1)'
+          },
+        },
+        anim_border: {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
       },
       colors: {
         background: 'rgb(var(--background) / <alpha-value>)',
@@ -155,6 +179,8 @@ export default {
         vibre: 'vibre 2s linear infinite',
         rotateH: 'rotateH 25s linear infinite',
         modalProd: 'modalProd .5s ',
+        vibre_sc: "vibre_sc 5s linear infinite",
+        // anim_border:"anim_border 4s ease infinite"
       }
     },
   },

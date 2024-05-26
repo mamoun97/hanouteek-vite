@@ -89,10 +89,21 @@ const Resources = {
             del_waslet: "Livraison en 1H à domicile",
             addons: "Toppings en suppléments",
 
-            otp_msg: "Nous avons envoyé un code à %DATA%. Veuillez confirmer votre numéro",
+            otp_msg: "Nous avons envoyé un code à %DATA%. Veuillez confirmer votre numéro pour confirmer votre commande",
             confirm: "Confirmer",
             skip: "Sauter",
-            otp_msg_success:"Le numéro de téléphone a été confirmé"
+            otp_msg_success: "Votre commande a bien été confirmé comme convenu, vous n’allez pas recevoir d’appel de notre service de confirmation car votre commande est déjà confirmé. Vous allez recevoir votre commande dans 24h à 48h",
+            msg_conf_n: "Afin d’éviter l’étape de validation de votre commande par téléphone vous pouvez confirmer votre commande automatiquement et instantanément par SMS. vous devenez néanmoins être sûre de votre commande.",
+            msg_conf_n_btn: "Confirmer ma commande par SMS",
+            or: "ou",
+            otp_conf:"Votre numéro de téléphone a été confirmé",
+            ok:"d'accord",
+            add_next_prod:"Ajoutez le produit suivant",
+            added:"Ajoutée",
+            select_all_prod:"Tous les produits suivants doivent être sélectionnés",
+            must_add_all_prods:"Pour bénéficier de l’offre, vous devez ajouter tous les produits concernés par l’offre",
+            resend:"Renvoyer",
+            timeout_resend:"Le temps est expiré, veuillez soumettre à nouveau"
         }
     },
     "en": {
@@ -181,10 +192,21 @@ const Resources = {
             required: "required",
             del_waslet: "Delivery within 1 hour to your home",
             addons: "Supplementary toppings",
-            otp_msg: "We have sent a code to %DATA%. Please confirm your number",
+            otp_msg: "We have sent a code to %DATA%. Please confirm your number to confirm your order",
             confirm: "Confirm",
             skip: "Skip",
-            otp_msg_success:"The phone number has been confirmed"
+            otp_msg_success: "Your order has been confirmed as agreed, you will not receive a call from our confirmation service because your order has already been confirmed. You will receive your order in 24 to 48 hours",
+            msg_conf_n: "In order to avoid the step of validating your order by telephone, you can confirm your order automatically and instantly by SMS. you nevertheless become sure of your order.",
+            msg_conf_n_btn: "Confirm my order via SMS",
+            or: "or",
+            otp_conf:"Your phone number has been confirmed",
+            ok:"ok",
+            add_next_prod:"Add the next product",
+            added:"Added",
+            select_all_prod:"All of the following products must be selected",
+            must_add_all_prods:"To benefit from the offer, you must add all the products covered by the offer",
+            resend:"Resend",
+            timeout_resend:"Time has expired, please resubmit"
         }
     },
     "ar": {
@@ -274,10 +296,23 @@ const Resources = {
             required: "مطلوب",
             del_waslet: "التوصيل خلال ساعة واحدة إلى منزلك",
             addons: "الطبقة والمكملات الغذائية",
-            otp_msg: "لقد أرسلنا رمزًا إلى %DATA%. يرجى تأكيد رقمك",
+            otp_msg: "لقد أرسلنا رمزًا إلى %DATA%. يرجى تأكيد رقمك لتأكيد طلبك",
             confirm: "تأكيد",
             skip: "تخطي",
-            otp_msg_success:"لقد تم تأكيد رقم الهاتف"
+            otp_msg_success: "لقد تم تأكيد طلبك كما هو متفق عليه، ولن تتلقى مكالمة من خدمة التأكيد لدينا لأنه تم تأكيد طلبك بالفعل. سوف تتلقى طلبك في 24 إلى 48 ساعة",
+            msg_conf_n: "لتجنب خطوة التحقق من صحة طلبك عبر الهاتف، يمكنك تأكيد طلبك تلقائيًا وفوريًا عبر الرسائل النصية القصيرة. ومع ذلك تصبح متأكدًا من طلبك.",
+            msg_conf_n_btn: "تأكيد طلبي عبر الرسائل النصية",
+            or: "أو",
+            otp_conf:"تم تأكيد رقم هاتفك",
+            ok:"موافق",
+            add_next_prod:"اضافة المنتج التالي",
+            added:"تمت الاضافة",
+            select_all_prod:"يجب اختيار جميع المنتجات التالية",
+            must_add_all_prods:"للاستفادة من العرض يجب عليك إضافة كافة المنتجات المشمولة بالعرض",
+            resend:"إعادة إرسال",
+            timeout_resend:"انتهى الوقت يرجى اعادة الارسال"
+            
+            
         }
     }
 }

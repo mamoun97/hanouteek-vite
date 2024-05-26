@@ -179,12 +179,9 @@ type StatesOrder = {
     comment: string | null,
     created_at: string
 }
-interface OrdersResponse {
-    page: number,
-    limit: number,
-    totalCount: number,
-    data: OrderFull[],
-    hasMore?: boolean
+interface OrdersResponse extends ResponseAtt {
+    
+    data: OrderFull[]
 }
 type OrderOptionRequest = {
     limit: number,
@@ -330,7 +327,14 @@ type TrackingResponse = {
 }
 type CreateOrderResponse={
     message:string,
-    otp:boolean
+    otp:boolean,
+    order: number,
+    state:1|2
 }
+type OtpModalOpen={
+    id:number,
+    phone:string
+}
+
 
 

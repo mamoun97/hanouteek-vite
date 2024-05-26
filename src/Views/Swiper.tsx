@@ -97,9 +97,16 @@ function SwiperF({ breakpoints = {}, items = [], swiperProps = {},withPagination
                         return '<span class="' + className + '"></span>';
                       },
                  }}
+                 onClickCapture={(e)=>{
+                    console.log(e)
+                 }}
+                 onSwiper={(e)=>{
+                    console.log(e)
+                 }}
                 breakpoints={breakpoints}
-                {...swiperProps}
                 className="mySwiper"
+                {...swiperProps}
+                
             >
                 {
                     items.map((el: any, index: any) => {

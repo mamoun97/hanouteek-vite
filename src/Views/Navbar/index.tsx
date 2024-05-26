@@ -22,11 +22,16 @@ import NavbarResturant from "./indexResturant";
 // import { useSelector } from "react-redux";
 // import { ThemeSetting } from "../../Types/ThemeSetting";
 
-export default function Navbar(){
+export default function Navbar() {
     const theme = useSelector<ThemeSetting>(state => state.theme) as ThemeSetting
-    const location=useLocation()
-    const type=theme.theme.HomePage.HomePageSections.length&&theme.theme.HomePage.HomePageSections[0].type=="slider"&&!ApiConfig.isHanouteek?"restaurant":"store";
-    return (type=="restaurant"&&location.pathname=="/")?<NavbarResturant slider={theme.theme.HomePage.HomePageSections[0]}/>:<NavbarDefault/>
+    const location = useLocation()
+    const type = (
+        theme.theme.templateType=="restaurant"&&
+        theme.theme.HomePage.HomePageSections.length &&
+        theme.theme.HomePage.HomePageSections[0].type == "slider"
+    ) &&
+        !ApiConfig.isHanouteek ? "restaurant" : "store";
+    return (type == "restaurant" && location.pathname == "/") ? <NavbarResturant slider={theme.theme.HomePage.HomePageSections[0]} /> : <NavbarDefault />
     // return <NavbarDefault/>
 }
 function NavbarDefault() {
@@ -54,14 +59,14 @@ function NavbarDefault() {
     const theme = useSelector<RootState>(state => state.theme) as ThemeSetting
 
     const dispatch: AppDispatch = useDispatch();
-    const getSubTotal=(dt:ProductCart)=>{
-        return dt.price*dt.qte+
-        (dt.checkData.addon?.reduce((a,b)=>{return a+b.price*b.qte},0)??0)
+    const getSubTotal = (dt: ProductCart) => {
+        return dt.price * dt.qte +
+            (dt.checkData.addon?.reduce((a, b) => { return a + b.price * b.qte }, 0) ?? 0)
     }
     const getTotal = () => {
         let s = 0;
         for (let i = 0; i != cart.items.length; i++)
-            s +=getSubTotal( cart.items[i])
+            s += getSubTotal(cart.items[i])
         return s
     }
     const [fixed, setFixed] = useState(false);
@@ -75,7 +80,7 @@ function NavbarDefault() {
         l == "en" && images.img_en ||
         l == "dz" && images.img_dz || images.img_dz
 
-    const clr=i18n.language!="ar"?"right-0 translate-x-1/4":"left-0 -translate-x-1/4"
+    const clr = i18n.language != "ar" ? "right-0 translate-x-1/4" : "left-0 -translate-x-1/4"
     return (<>
         <div className={"bg-white border-b border-gray-100 min-h-[98px]  "}>
             <Container className="flex justify-end items-center h-10" onClick={() => {
@@ -96,11 +101,11 @@ function NavbarDefault() {
                         <option value="en">English</option>
                     </select>
 
-                   
+
                 </div>
                 <div className="grow"></div>
                 <IconButton className={"relative "}>
-                    {cart.faverites.length ? <div  className={clr+" w-5 font-bold h-5 text-[11px] absolute flex items-center justify-center rounded-full top-0  -translate-y-[10%] text-white bg-primary"}>
+                    {cart.faverites.length ? <div className={clr + " w-5 font-bold h-5 text-[11px] absolute flex items-center justify-center rounded-full top-0  -translate-y-[10%] text-white bg-primary"}>
                         {cart.faverites.length}
                     </div> : ""}
                     <MdOutlineFavoriteBorder className="text-lg" />
@@ -131,16 +136,16 @@ function NavbarDefault() {
 
                         <div className="me-2"></div>
                         <IconButton className="relative">
-                            {cart.items.length ? <div  className={clr+" w-5 h-5 text-[11px] absolute flex items-center justify-center rounded-full top-0 -translate-y-1/4  text-white bg-primary"}>
+                            {cart.items.length ? <div className={clr + " w-5 h-5 text-[11px] absolute flex items-center justify-center rounded-full top-0 -translate-y-1/4  text-white bg-primary"}>
                                 {cart.items.length}
                             </div> : ""}
-                            <FiShoppingCart className={"text-xl "+(i18n.language=="ar"?"[transform:rotateY(180deg)]":"")} />
+                            <FiShoppingCart className={"text-xl " + (i18n.language == "ar" ? "[transform:rotateY(180deg)]" : "")} />
                         </IconButton>
 
                     </Link>
                     {
                         fixed && <IconButton className={"relative "}>
-                            {cart.faverites.length ? <div className={clr+" w-5 font-bold h-5 text-[11px] absolute flex items-center justify-center rounded-full top-0  -translate-y-1/4  text-white bg-primary"}>
+                            {cart.faverites.length ? <div className={clr + " w-5 font-bold h-5 text-[11px] absolute flex items-center justify-center rounded-full top-0  -translate-y-1/4  text-white bg-primary"}>
                                 {cart.faverites.length}
                             </div> : ""}
                             <MdOutlineFavoriteBorder className="text-lg" />
@@ -154,7 +159,7 @@ function NavbarDefault() {
         </div>
 
         {/* https://patiotime.loftocean.com/wp-content/uploads/2022/03/louis-hansel-Sj8rgEu7jcM-unsplash.jpg */}
-        </>
+    </>
     )
 }
 function MenuDesktop({ links, className = "" }: {
@@ -210,7 +215,7 @@ function MenuMobile({ links }: {
     </>
 }
 function LinkSS({ to, children, onClick = () => { }, className = "" }: { to: string, onClick?: React.MouseEventHandler, children: React.ReactNode, className?: string }) {
-   
+
     const location = useLocation()
     const active = location.pathname == "/" ? to == "/" : (to != "/" ? location.pathname.includes(to) : false);
     return <Link onClick={onClick} className={`text-base h-full uppercase flex items-center relative 

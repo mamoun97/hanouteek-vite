@@ -21,6 +21,7 @@ import AddOrder from "./Admin/Pages/AddOrder";
 import Tracking from "./Pages/Tracking";
 import CategoriesResturant from "./Pages/CategoriesResturant";
 import Catalog from "./Pages/Catalog";
+import Offer from "./Pages/Offer";
 declare namespace NodeJS {
   export interface ProcessEnv {
     REACT_APP_SEC_KEY: string;
@@ -62,6 +63,11 @@ function getRoutes(t:ThemeSetting) {
       path: "/product/:slug",
       element: <Layout><Product /></Layout>,
     },
+    {
+      path: "/offer/:id",
+      element: <Layout><Offer /></Layout>,
+    },
+    
     {
       path: "/product/:slug/:index",
       element: <Layout><Product /></Layout>,

@@ -82,7 +82,7 @@ export default function CartItem({ data, index, onClose = () => { }, isCheckout 
                                 item: {
                                     ...data,
                                     qte: data.qte + 1,
-                                    price: (data.hasOffer && data.minNumberQteOffer && data.priceOffer && (data.qte + 1) >= data.minNumberQteOffer) ? data.priceOffer : (data.originalPrice ?? data.price)
+                                    price: (data.hasOffer && data.minNumberQteOffer && data.priceOffer && (data.qte + 1) >= data.minNumberQteOffer) ? data.priceOffer : (data.oldPrice ?? data.price)
                                 },
                                 index
                             }))
@@ -93,7 +93,7 @@ export default function CartItem({ data, index, onClose = () => { }, isCheckout 
                                     item: {
                                         ...data,
                                         qte: data.qte - 1,
-                                        price: (data.hasOffer && data.minNumberQteOffer && data.priceOffer && (data.qte - 1) >= data.minNumberQteOffer) ? data.priceOffer : (data.originalPrice ?? data.price)
+                                        price: (data.hasOffer && data.minNumberQteOffer && data.priceOffer && (data.qte - 1) >= data.minNumberQteOffer) ? data.priceOffer : (data.oldPrice ?? data.price)
                                     },
                                     index
                                 }))
