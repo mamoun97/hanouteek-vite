@@ -31,6 +31,7 @@ export default function OtpModal({ open, setOpen, afterCahnge = () => { } }: Pro
     const [errorSendOtp, setErrorSendOtp] = useState("")
 
     const [value, setValue] = useState<string>("")
+    const [otpTime, setOtpTime] = useState<number>(30)
     const confirm = () => {
         setError("")
         setLoading(true)
@@ -46,13 +47,8 @@ export default function OtpModal({ open, setOpen, afterCahnge = () => { } }: Pro
     }
     const sendOtp = () => {
 
-        // setLoadingSendOtp(true)
-        // setErrorSendOtp("")
-        // setTimeout(()=>{
-        //     setResend(false)
-        //     setLoadingSendOtp(false)
-        // },2000)
-        OrderApi.sendOtp(open.id).then(_ => {
+        OrderApi.sendOtp(open.id).then(res => {
+            setOtpTime(res.otp_time?res.otp_time*60:120)
             setResend(false)
             setLoadingSendOtp(false)
         }).catch(err => {
@@ -82,7 +78,7 @@ export default function OtpModal({ open, setOpen, afterCahnge = () => { } }: Pro
                 : <div className="m-auto px-7 pt-6 pb-8">
                     <div className="flex justify-center flex-col items-center my-6 gap-4">
                         <img src={ApiConfig.rootUrl + "/" + theme.theme.Logo} alt="" className='h-6' />
-                        <h1 className='text-4xl text-primary font-bold my-2'>OTP Verification</h1>
+                        <h1 className='text-4xl  font-bold my-2 text-center text-gray-700'>OTP Verification</h1>
                         <p className='text-center text-lg font-medium leading-5  max-w-sm '>{(t("otp_msg") as string).replace("%DATA%", open.phone)}</p>
                     </div>
                     <div className='my-9 mb-0 max-sm:hidden' dir='ltr' key={piCokeKey}>
@@ -145,7 +141,7 @@ export default function OtpModal({ open, setOpen, afterCahnge = () => { } }: Pro
                                     <span className='text-sm font-semibold'>{t("resend")}</span>
                                 </div>
                                 :
-                                <OtpTimer duration={60} onExpire={() => {
+                                <OtpTimer duration={otpTime} key={"otptimer-"+otpTime} onExpire={() => {
                                     setError(t("timeout_resend"))
                                     setResend(true)
                                 }} />

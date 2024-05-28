@@ -14,13 +14,13 @@ import { MdOutlineFavorite, MdOutlineFavoriteBorder } from "react-icons/md"
 import { Button } from "rizzui"
 import { FiShoppingCart } from "react-icons/fi"
 import Currency from "../Constants/Currency"
-import OfferCard from "../Views/OfferCard"
+// import OfferCard from "../Views/OfferCard"
 import { useGetOfferById } from "../Api/Services"
 import { useParams } from "react-router-dom"
 import ApiConfig from "../Api/ApiConfig"
 import { IoMdCheckmarkCircle } from "react-icons/io"
 import toast, { Toaster } from "react-hot-toast"
-import { FaInfo, FaInfoCircle } from "react-icons/fa"
+import { FaInfoCircle } from "react-icons/fa"
 
 
 type ProductCartStock = ProductCart & {
@@ -158,8 +158,8 @@ export default function Offer() {
                     {prods[k].name}
                 </h1>
                 <div className="flex text-[12px] my-2 max-[390px]:flex-col items-center">
-                    <span className="tracking-normal  line-through text-gray-500  mx-1">{prods[k].oldPrice} DZ</span>
-                    <span className="tracking-normal font-bold text-primary">{prods[k].price} DZ</span>
+                    <span className="tracking-normal  line-through text-gray-500  mx-1">{prods[k].oldPrice} <Currency/></span>
+                    <span className="tracking-normal font-bold text-primary">{prods[k].price} <Currency/></span>
 
                 </div>
             </div>
@@ -195,9 +195,10 @@ export default function Offer() {
 
                                     <div className="!h-full   grow flex flex-col items-center gap-3 relative">
                                         <h1 className="text-center text- font-bold tracking-widest text-3xl">{offers?.name} 👊</h1>
-                                        <div className="text-sm ">
-                                            <h1 className="tracking-widest text-center text-base mb-3 text-">
-                                                Achetez d'autres produits à un prix inférieur
+                                        <div className="text-sm  max-w-4xl">
+                                            <h1 className="tracking-normal  text-center text-sm  ">
+                                               
+                                                <div dangerouslySetInnerHTML={{ __html: offers.description }} ></div>
                                             </h1>
 
                                         </div>
@@ -298,7 +299,7 @@ function OfferPage({
 
             </div>
             <div className="col-span-1">
-                {prod.hasOffer && prod.minNumberQteOffer && prod.priceOffer ? <OfferCard prod={prod} /> : ""}
+                {/* {prod.hasOffer && prod.minNumberQteOffer && prod.priceOffer ? <OfferCard prod={prod} /> : ""} */}
                 <h1 className="text-2xl font-semibold tracking-wider">{prod.name}  </h1>
                 <div className="flex mt-2 items-center font-semibold">
                     {!!data.CompareAtPrice && <>

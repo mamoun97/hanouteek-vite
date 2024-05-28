@@ -35,7 +35,7 @@ const confirmOtp = async (otp:string,db?:string):Promise<TrackingResponse> => {
     const {data}=await req.httpAuth("").get("/tenant/order/confirmed-otp?otp="+otp+(db??ApiConfig.db));
     return data
 }
-const sendOtp = async (id_order:number,db?:string):Promise<TrackingResponse> => {
+const sendOtp = async (id_order:number,db?:string):Promise<{otp_time:number}> => {
     
     const {data}=await req.httpAuth("").get("/tenant/order/sendotp/"+id_order+(db??ApiConfig.dbq));
     return data

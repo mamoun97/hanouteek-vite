@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import OfferApi from '../Api/Offer'
 import { Cart, updateCartFull } from '../Store/cartSlice'
-import { Loader } from 'rizzui'
+// import { Loader } from 'rizzui'
 // import { Modal } from 'rizzui'
 
 export default function UpdatePrices() {
@@ -65,7 +65,7 @@ export default function UpdatePrices() {
     return <>
         {
             loading && <div className='fixed flex items-center justify-center top-0 left-0 right-0 bottom-0 z-[1000] bg-white/40'>
-                <Loader  size='lg' className='w-16 h-16' color='primary'/>
+                {/* <Loader  size='lg' className='w-16 h-16' color='primary'/> */}
             </div>
         }
         {/* <Modal
