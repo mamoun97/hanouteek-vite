@@ -19,6 +19,8 @@ export default function AddOrder() {
   const getData=()=>{
     setisLoading(true)
     OrderApi.getById(d,(global?.platform)?"?"+global?.platform:undefined).then((res)=>{
+      delete res.address_lat
+      delete res.address_lng
       setData(res)
       setisLoading(false)
     }).catch(_=>{
@@ -28,6 +30,7 @@ export default function AddOrder() {
   useEffect(() => {
     getData()
   }, [])
+  console.log(data)
   return (
     <div>
       <h1 className="text-2xl font-semibold">Update Order</h1>
