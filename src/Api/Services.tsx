@@ -11,6 +11,8 @@ import OfferApi from "./Offer";
 const urls = {
     theme: ApiConfig.rootUrl + "/api/v1/tenant/store/findOne"
 }
+
+
 const options = {
 
     dedupingInterval: 50000,
@@ -48,6 +50,12 @@ export const useGetAllProductsByNameService = (name:string,db?:string) => {
     const data = useSWR<ProductsResponse>("prods?name="+name+db, () => ProductApi.getAllByName(name,db), options);
     return data
 }
+// Get price total
+export const useGetPriceTotalService = (filter:string,db?:string) => {
+    const data = useSWR("/tenant/order/price-total"+filter+(db??ApiConfig.db), () => OrderApi.priceTotal(filter,db), options);
+    return data
+}
+
 export const useGetAllProductsByNameServiceAssociate = (name:string,db?:string) => {
     const data = useSWR<ProductsResponse>("prods?name="+name+db, () => ProductApi.getAllByNameAssociate(name,db), options);
     return data

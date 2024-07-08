@@ -22,6 +22,11 @@ import Tracking from "./Pages/Tracking";
 import CategoriesResturant from "./Pages/CategoriesResturant";
 import Catalog from "./Pages/Catalog";
 import Offer from "./Pages/Offer";
+import AddOrderPos from "./Admin/Pages/AddOrderPos";
+import LayoutTheme from "./Admin/LayoutTheme";
+import ProductBuy from "./Pages/ProductBuy";
+import DynamicPage from "./Pages/DynamicPage";
+
 declare namespace NodeJS {
   export interface ProcessEnv {
     REACT_APP_SEC_KEY: string;
@@ -62,6 +67,10 @@ function getRoutes(t:ThemeSetting) {
     {
       path: "/product/:slug",
       element: <Layout><Product /></Layout>,
+    },
+    {
+      path: "/product-buy/:slug",
+      element: <Layout><ProductBuy /></Layout>,
     },
     {
       path: "/offer/:id",
@@ -121,12 +130,24 @@ function getRoutes(t:ThemeSetting) {
     },
     {
       path: "/order/create",
-      element: <LayoutAdmin><AddOrder /></LayoutAdmin>,
+      element: <LayoutAdmin><AddOrder update={false} /></LayoutAdmin>,
+    },
+    {
+      path: "/pos/order/create",
+      element: <LayoutTheme>
+        <div className="p-4"><AddOrderPos  /></div>
+      </LayoutTheme>,
     },
     {
       path: "/order/edit/:id",
       element: <LayoutAdmin><AddOrder /></LayoutAdmin>,
     },
+    ...t.Pages.map(el=>{
+      return {
+        path: "/"+el.slug,
+        element: <Layout><DynamicPage page={el} /></Layout>,
+      }
+    })
   ]
 }
 

@@ -36,6 +36,18 @@ const options: selectOptionR[] = [
     db: "db=marketX9-HJKluT",
     avatar: ApiConfig.rootUrl + "/market png-1703598191310-240851212.webp",
   },
+  {
+    label: "Wahren original",
+    value: "Wahren original",
+    db: "db=wahrenoriginalwahrenoriginalSBEv1XWgn",
+    avatar: ApiConfig.rootUrl + "/favicon-10-1711322612974-666498865.webp",
+  },
+  {
+    label: "Oran shoes",
+    value: "Oran shoes",
+    db: "db=oranshoesdefweGOLG",
+    avatar: ApiConfig.rootUrl + "/434094843_930261791983750_2048385286810111503_n-1711454875827-785379680.webp",
+  },
 
 ];
 

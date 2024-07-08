@@ -8,6 +8,7 @@ import { Cart, openCart } from "../Store/cartSlice";
 import { RootState } from "../Store"
 import { ThemeSetting } from "../Types/ThemeSetting"
 import UpdatePrices from "../hoock/UpdatePrices"
+import { ThemeProvider } from "../utils/ThemeProvider"
 export default function Layout({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch()
   const cart = useSelector<RootState>(state => state.cart) as Cart
@@ -19,13 +20,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }, [location.pathname])
 
   return (
-    <div className="min-h-[100vh] bg-white">
-      <UpdatePrices/>
-      <Navbar />
-      {children}
-      <Footer />
-      {/* {cart.cartOpen && <CartViewResturant onClose={() => dispatch(openCart(false))} />} */}
-      {theme.theme.templateType=="restaurant"&&cart.items.length!=0&&<CartViewResturant onClose={() => dispatch(openCart(false))} />}
-    </div>
+    // <ThemeProvider>
+      <div className="min-h-[100vh] bg-white">
+        <UpdatePrices />
+        <Navbar />
+        {children}
+        <Footer />
+        {/* {cart.cartOpen && <CartViewResturant onClose={() => dispatch(openCart(false))} />} */}
+        {theme.theme.templateType == "restaurant" && cart.items.length != 0 && <CartViewResturant onClose={() => dispatch(openCart(false))} />}
+      </div>
+    // </ThemeProvider>
+
   )
 }

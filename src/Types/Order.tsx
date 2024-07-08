@@ -107,6 +107,7 @@ type OrderFull = {
     length?: number,
     do_insurance?: boolean,
     freeshipping?: boolean,
+    soldFromTheStore?: boolean,
     is_stopdesk?: boolean,
     ProductStock?: boolean,
     product_to_collect?: string | null,
@@ -129,7 +130,8 @@ type OrderFull = {
     associate?: {
         firstName: string,
         lastName: string,
-        phoneNumber: string
+        phoneNumber: string,
+        avatar:string
     },
     item: OrderFullItem[],
     states: StatesOrder[],

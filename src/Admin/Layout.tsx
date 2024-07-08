@@ -20,6 +20,7 @@ export default function LayoutAdmin({ children }: {
   const global = useSelector<RootState>((state) => state.global) as GlobalS
 
   const [open, setOpen] = useState(false)
+  const [openPos, setOpenPos] = useState(true)
   const navigate = useNavigate()
 
   const location = useLocation()
@@ -51,15 +52,14 @@ export default function LayoutAdmin({ children }: {
 
 
 
-  const { data } = useThemeService(global?.platform?"?"+global?.platform:undefined)
-  useEffect(()=>{
+  const { data } = useThemeService(global?.platform ? "?" + global?.platform : undefined)
+  useEffect(() => {
     if (data) {
-      console.log(data)
       dispatch(changeTheme(data))
       document.documentElement.style.setProperty('--primary-color', data.theme.Primary);
       document.documentElement.style.setProperty('--secondary-color', data.theme.Secondary);
     }
-  },[data])
+  }, [data])
 
   return (
     <ThemeProvider
@@ -69,11 +69,18 @@ export default function LayoutAdmin({ children }: {
         {
           user?.id ?
             <div className={(location.pathname.includes("order/edit") ? "" : "") + ' flex min-h-screen  '} dir='ltr'>
-              <div className="w-64 min-w-[256px] max-sm:w-0 max-sm:min-w-0 ">
+              {openPos && <div className="w-64 min-w-[256px] max-sm:w-0 max-sm:min-w-0 ">
                 <Drower {...{ open, setOpen }} />
-              </div>
+              </div>}
               <div className='grow h-screen overflow-auto'>
-                <Navbar {...{ open, setOpen }} />
+                <Navbar {...{ open, setOpen }}
+                  btnClose={null
+                  // <button onClick={() => {
+                  //   setOpenPos(!openPos)
+                  // }} className=" p-2 mr-3 text-gray-600 rounded cursor-pointer  hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700">
+                  //   <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12"> <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h14M1 6h14M1 11h7" /> </svg>
+                  // </button>
+                } />
                 <div className="p-5 relative max-md:p-3">
                   {children}
                 </div>
@@ -91,19 +98,15 @@ function TH({ children }: {
   const { theme, } = useTheme();
   useEffect(() => {
 
-
-    let th = getMode()
     document.getElementById("html")?.classList.remove("dark")
     document.getElementById("html")?.classList.remove("light")
-    document.getElementById("html")?.classList.add(th)
+
+    document.getElementById("html")?.classList.add(theme??"light")
+    
 
   }, [theme])
-  const getMode = () => {
-    let i = window.matchMedia("(prefers-color-scheme: dark)").matches
-    let th = theme == "system" ? (i ? "dark" : "light") : theme ?? ""
-    return th
-  }
-  return <div className={getMode() == "dark" ? 'dark' : ""} key={getMode()}>
+  
+  return <div className={theme??"light"} >
     {children}
   </div>
 }

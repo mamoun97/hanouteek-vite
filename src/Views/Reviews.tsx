@@ -149,7 +149,7 @@ export default function Reviews({ id }: { id: number }) {
                 <ReviewsItems data={data} />
                 <div className="flex justify-center ">
                     {(data.data.length < data.totalCount && !loading) && <ActionIcon rounded="full" variant="outline" onClick={() => {
-                        setData({
+                        setData({ 
                             ...data,
                             page: data.page + 1
 

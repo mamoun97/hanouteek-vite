@@ -43,7 +43,8 @@ function Footer() {
                         <ul>
                             {
                                 theme.Menu.aboutMenu.listLinks.map((el, k) => {
-                                    return <Link to={"/" + el.Link} key={k} className="text-[13px] hover:text-primary hover:underline">
+                                    
+                                    return <Link to={"/" + el.Link} target={el.ExternalLink?"_blank":""}  key={k} className="text-[13px] hover:text-primary hover:underline">
                                         <li >{el.name}</li>
                                     </Link>
 

@@ -18,6 +18,7 @@ import Currency from "../../Constants/Currency";
 import images from "../../assets";
 import { Classes } from "../../Constants";
 import NavbarResturant from "./indexResturant";
+import LoginButton from "./LoginButton";
 
 // import { useSelector } from "react-redux";
 // import { ThemeSetting } from "../../Types/ThemeSetting";
@@ -26,7 +27,7 @@ export default function Navbar() {
     const theme = useSelector<ThemeSetting>(state => state.theme) as ThemeSetting
     const location = useLocation()
     const type = (
-        theme.theme.templateType=="restaurant"&&
+        theme.theme.templateType == "restaurant" &&
         theme.theme.HomePage.HomePageSections.length &&
         theme.theme.HomePage.HomePageSections[0].type == "slider"
     ) &&
@@ -143,6 +144,7 @@ function NavbarDefault() {
                         </IconButton>
 
                     </Link>
+
                     {
                         fixed && <IconButton className={"relative "}>
                             {cart.faverites.length ? <div className={clr + " w-5 font-bold h-5 text-[11px] absolute flex items-center justify-center rounded-full top-0  -translate-y-1/4  text-white bg-primary"}>
@@ -151,6 +153,7 @@ function NavbarDefault() {
                             <MdOutlineFavoriteBorder className="text-lg" />
                         </IconButton>
                     }
+                    {ApiConfig.isJoomla&&<LoginButton/>}
                     <MenuMobile links={links} />
                 </Container>
             </div>

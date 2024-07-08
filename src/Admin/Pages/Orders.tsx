@@ -17,6 +17,7 @@ import { GlobalS } from "../../Store/globalSlice"
 
 export default function Orders() {
   const global = useSelector<RootState>((state) => state.global) as GlobalS
+  const user = useSelector<RootState>((state) => state.user) as UserAuth
   const [option, setOptions] = useState<OrderOptionRequest>({
     limit: 10,
     page: 1,
@@ -27,13 +28,13 @@ export default function Orders() {
     id: "0",
     product: null,
     to_wilaya_name: "",
-    state: null,
+    state: user.role == "pos" ? "soldFromTheStore" : null,
 
   })
 
   const [param, setParam] = useState(`?limit=${option.limit}&page=${option.page}`)
 
-  const { data, isLoading, mutate } = useGetAllOrdersService(param,(global?.platform)?"&"+global?.platform:undefined)
+  const { data, isLoading, mutate } = useGetAllOrdersService(param, (global?.platform) ? "&" + global?.platform : undefined)
   // const [showColumns, setShowColumns] = useState({
   //   checked: true,
   //   id: true,
@@ -58,9 +59,8 @@ export default function Orders() {
       p += !!option.startDate ? `&startDate=${moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm")}` : ""
       p += !!option.endDate ? `&endDate=${moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")}` : ""
       p += !!option.duplicate ? `&duplicate=${option.duplicate}` : ""
-      p += !!option.contact_phone ? `&contact_phone=${
-        parseInt(option.contact_phone)
-      }` : ""
+      p += !!option.contact_phone ? `&contact_phone=${parseInt(option.contact_phone)
+        }` : ""
       p += (!!option.id && option.id != "0") ? `&id=${option.id}` : ""
       p += !!option.product ? `&productId=${option.product.id}` : ""
       p += !!option.state ? `&state=${option.state}` : ""
@@ -93,15 +93,15 @@ export default function Orders() {
   return (
     <div dir="ltr">
       <h1 className="text-2xl font-semibold">All Orders</h1>
-      <div className="block sm:hidden">
-          {selectS}
-        </div>
+      {user.role=="associate"&&<div className="block sm:hidden">
+        {selectS}
+      </div>}
       <div className="flex py-2 items-center gap-2">
-        <div className="max-sm:hidden w-full max-w-sm">
+        { user.role=="associate"&&<div className="max-sm:hidden w-full max-w-sm">
           {selectS}
-        </div>
+        </div>}
         <div className="grow"></div>
-        <Searche {...{ option, setOptions }} db={(global?.platform)?"&"+global?.platform:undefined} />
+        <Searche {...{ option, setOptions }} db={(global?.platform) ? "&" + global?.platform : undefined} />
         <Popover >
           <Popover.Trigger>
             <Button variant="flat">
@@ -129,7 +129,7 @@ export default function Orders() {
             )}
           </Popover.Content>
         </Popover>
-        <Link to="/order/create">
+        <Link to={user.role=="associate"?"/order/create":"/pos/order/create"}>
           <Button>
             <span className="max-sm:hidden">Add New Order</span>
             <span className="me-1"></span>
@@ -142,8 +142,10 @@ export default function Orders() {
         afterChange={() => mutate()}
         data={data?.data ? data : {
           data: [],
-          ...option,
           totalCount: 0,
+          limit: option.limit,
+          hasMore: true,
+          page: option.page
 
         }} showCols={showCols} isLoading={isLoading} option={option} setOption={setOptions} />
     </div>
@@ -152,7 +154,7 @@ export default function Orders() {
 
 
 
-function Searche({ option, setOptions,db }: {db?:string, option: OrderOptionRequest, setOptions: (d: OrderOptionRequest) => void }) {
+function Searche({ option, setOptions, db }: { db?: string, option: OrderOptionRequest, setOptions: (d: OrderOptionRequest) => void }) {
 
   const { data: wilayas } = useGetWilayasService(db);
   const [optionV, setOptionsV] = useState<OrderOptionRequest>(option)

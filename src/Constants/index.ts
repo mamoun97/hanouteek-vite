@@ -7,3 +7,30 @@ export const Classes = {
         focus:border-primary focus:border-2 font-semibold
     `
 }
+export const breakPointsProduct={
+    0: {
+        slidesPerView: 2,
+        spaceBetween: 0
+    },
+    740: {
+        slidesPerView: 2,
+        spaceBetween: 0
+    },
+    830: {
+        slidesPerView: 3,
+        spaceBetween: 0
+    },
+
+    900: {
+        slidesPerView: 4,
+        spaceBetween: 0
+    },
+    1200: {
+        slidesPerView: 5,
+        spaceBetween: 0
+    },
+    8000: {
+        slidesPerView: 5,
+        spaceBetween: 0
+    }
+}

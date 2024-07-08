@@ -7,6 +7,7 @@ export function ThemeProvider({ children }: React.PropsWithChildren<{}>) {
       defaultTheme="system"
       storageKey="theme-r"
       disableTransitionOnChange
+      themes={["dark","light"]}
     >
       {children}
     </NextThemeProvider>

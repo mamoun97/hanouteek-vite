@@ -8,6 +8,11 @@ const getAll = async (param:string,db?:string):Promise<OrdersResponse> => {
     const {data}=await req.httpAuth(user?.token??"").get("/tenant/order/associate"+param+(db??ApiConfig.db));
     return data
 }
+const priceTotal = async (filter:string,db?:string):Promise<number> => {
+    const user:UserAuth|null = loadData("user") 
+    const {data}=await req.httpAuth(user?.token??"").get("/tenant/order/associate/price-total"+filter+(db??ApiConfig.db));
+    return data
+}
 const getById = async (id:number,db?:string):Promise<OrderFull> => {
     const user:UserAuth|null = loadData("user") 
     const {data}=await req.httpAuth(user?.token??"")
@@ -22,6 +27,24 @@ const updateState = async (id:number,payload:UpdateStatePayload,db?:string):Prom
 const updateOrder = async (order:OrderFull,db?:string):Promise<any> => {
     const user:UserAuth|null = loadData("user") 
     const {data}=await req.httpAuth(user?.token??"").put("/tenant/order/associate/"+order.id+(db??ApiConfig.dbq),order);
+    return data
+}
+const createOrder = async (order:OrderFull,db?:string):Promise<any> => {
+    const user:UserAuth|null = loadData("user") 
+    const {data}=await req.httpAuth(user?.token??"").post("/tenant/order"+(db??ApiConfig.dbq),order);
+
+    return data
+}
+const createOrderAssociate = async (order:OrderFull,db?:string):Promise<any> => {
+    const user:UserAuth|null = loadData("user") 
+    const {data}=await req.httpAuth(user?.token??"").post("/tenant/order/create"+(db??ApiConfig.dbq),order);
+
+    return data
+}
+const createOrderPos = async (order:OrderFull,db?:string):Promise<any> => {
+    const user:UserAuth|null = loadData("user") 
+    const {data}=await req.httpAuth(user?.token??"").post("/tenant/order"+(db??ApiConfig.dbq),order);
+
     return data
 }
 
@@ -44,7 +67,9 @@ const sendOtp = async (id_order:number,db?:string):Promise<{otp_time:number}> =>
 const OrderApi={
     getAll,updateState,getById,
     updateOrder,tracking,
-    confirmOtp,
-    sendOtp
+    confirmOtp,createOrder,
+    sendOtp,createOrderPos,
+    priceTotal,
+    createOrderAssociate
 }
 export default OrderApi

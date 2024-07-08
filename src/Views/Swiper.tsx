@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from 'swiper/modules';
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import "swiper/css";
 import "swiper/css/pagination";
 import 'swiper/css/navigation';
@@ -72,23 +72,25 @@ const DivC = styled.div`
 `
 
 
-function SwiperF({ breakpoints = {}, items = [], swiperProps = {},withPagination=false }: {
+function SwiperF({ breakpoints = {},className="",autoPlay=false, items = [], swiperProps = {},withPagination=false }: {
     swiperProps?: any,
     breakpoints?: any,
+    autoPlay?:boolean,
     withPagination?:boolean,
-    items?: Array<any>
+    items?: Array<any>,
+    className?:string
 }) {
     const theme = useSelector<RootState>(state => state.theme) as ThemeSetting
     const {i18n}=useTranslation()
     return (
-        <DivC  theme={theme.theme}>
+        <DivC  theme={theme.theme} className={className}>
 
             <Swiper
             style={{ width: '100%', height: '100%' }}
                 key={i18n.language}
                 dir={i18n.language=="ar"?"rtl":"ltr"}
                 spaceBetween={30}
-                modules={[Navigation, ...withPagination?[Pagination]:[]]}
+                modules={[Navigation, ...withPagination?[Pagination]:[],...autoPlay?[Autoplay]:[]]}
                 navigation
                 pagination={{ 
                     clickable: true,
@@ -98,10 +100,10 @@ function SwiperF({ breakpoints = {}, items = [], swiperProps = {},withPagination
                       },
                  }}
                  onClickCapture={(e)=>{
-                    console.log(e)
+                    // console.log(e)
                  }}
                  onSwiper={(e)=>{
-                    console.log(e)
+                    // console.log(e)
                  }}
                 breakpoints={breakpoints}
                 className="mySwiper"

@@ -11,6 +11,10 @@ const url = "https://api.risecart.net";
 // const db="db=Millenium31pn-QVfdiI"
 // const db="db=MyshapedzMyshapedz3nknQCJFy"
 // const db = "db=burgerstoreburgerstoreVQTwAibTm"
+// const db = "db=oranshoesdefweGOLG"
+// const db = "db=wahrenoriginalwahrenoriginalSBEv1XWgn"
+// const db = "db=joomlajoomlayhLZnl16G"
+// const db="db=mBoutiquemboutiquesBC900gHy"
 const db=false;
 const isHanouteek = false
 const ApiConfig = {
@@ -21,6 +25,7 @@ const ApiConfig = {
     } : {
         isHanouteek: false,
     },
+    isJoomla:window.location.host.includes("joomla.risecart.net"),
     swrStop: {
         dedupingInterval: 500000,
         refreshWhenOffline: false,

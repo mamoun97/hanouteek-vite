@@ -9,15 +9,17 @@ import CartItem2 from "./CartItem2";
 import OrderApi from "../../../Api/OrderApi";
 import alertError from "../../../hoock/alertError";
 import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../Store";
 import { GlobalS } from "../../../Store/globalSlice";
 
-export default function FormOrder({ data }: { data: OrderFull }) {
+export default function FormOrder({ data, isAdd = false }: { data: OrderFull, isAdd?: boolean }) {
   const global = useSelector<RootState>((state) => state.global) as GlobalS
   const [dataOrder, setDataOrder] = useState<OrderFull>(data)
-  const navigate=useNavigate()
+  const navigate = useNavigate()
+ 
+  const user = useSelector<RootState>((state) => state.user) as UserAuth
   const [loading, setLoading] = useState(false)
   const [delivery, setDelivery] = useState<PriceDeliveryResponce | null>(null)
   const [cart, setCart] = useState<OrderFullItem[]>(
@@ -27,14 +29,28 @@ export default function FormOrder({ data }: { data: OrderFull }) {
     initialValues: data,
     onSubmit: (_: OrderFull) => {
       setLoading(true)
-      OrderApi.updateOrder({...dataOrder,item:cart},global?.platform?"?"+global.platform:undefined).then(_ => {
-        toast.success("Modifié avec succès")
-        navigate("/orders")
-        setLoading(false)
-      }).catch(err => {
-        setLoading(false)
-        alertError(err)
-      })
+      if (isAdd) {
+        OrderApi[user.role=="order_creator"?"createOrder":"createOrderAssociate"]({
+          ...dataOrder, item: cart,
+          contact_phone: "+213" + parseInt(dataOrder.contact_phone),
+        }, global?.platform ? "?" + global.platform : undefined).then(_ => {
+          toast.success("Ajoute avec succès")
+          if (user.role == "associate")
+            navigate("/orders")
+          setLoading(false)
+        }).catch(err => {
+          setLoading(false)
+          alertError(err)
+        })
+      } else
+        OrderApi.updateOrder({ ...dataOrder, item: cart }, global?.platform ? "?" + global.platform : undefined).then(_ => {
+          toast.success("Modifié avec succès")
+          navigate("/orders")
+          setLoading(false)
+        }).catch(err => {
+          setLoading(false)
+          alertError(err)
+        })
     }
   });
   const getTotal = () => {
@@ -53,7 +69,7 @@ export default function FormOrder({ data }: { data: OrderFull }) {
     return price
   }
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} >
       <div className="grid grid-cols-5  gap-2 mt-3">
         <div className="col-span-3  max-md:col-span-5 p-0">
 
@@ -88,7 +104,8 @@ export default function FormOrder({ data }: { data: OrderFull }) {
               } <small className="font-medium">DZD</small></span>
             </div>
             <div className="border-b border-dashed border-gray-300 my-3"></div>
-            <Select
+
+            {!isAdd&&<Select
               label="Select state"
               value={{ label: dataOrder.state, value: dataOrder.state }}
               onChange={(e: typeof associatStates[0]) => {
@@ -98,27 +115,34 @@ export default function FormOrder({ data }: { data: OrderFull }) {
                 })
               }}
               options={associatStates}
-            />
+            />}
+
             <Password
               className="mt-2"
               label="Password"
             />
             <Input
               suffix={
-                <Button className="rounded-l-none" type="button">Apply</Button>
+                <Button className="rounded-l-none" type="button">Appliquer</Button>
               }
               prefix={
-                <span className="text-gray-500 font-semibold text-[12px]">Coupon Code</span>
+                <span className="text-gray-500 font-semibold text-[12px]">Code promo</span>
               }
               inputClassName="pe-0"
               className="mt-4"
               label=""
             />
-            <Button className="mt-4 w-full" type="submit" isLoading={loading}>Save</Button>
+            {
+              isAdd ?
+                <Button className="mt-4 w-full" type="submit" isLoading={loading}>Ajouter</Button>
+                :
+                <Button className="mt-4 w-full" type="submit" isLoading={loading}>Sauvegarder</Button>
+            }
+
           </div>
         </div>
       </div>
-      <Toaster position="top-center"/>
+      <Toaster position="top-center" />
     </form>
   )
 }

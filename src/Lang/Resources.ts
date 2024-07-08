@@ -96,14 +96,20 @@ const Resources = {
             msg_conf_n: "Afin d’éviter l’étape de validation de votre commande par téléphone vous pouvez confirmer votre commande automatiquement et instantanément par SMS. vous devenez néanmoins être sûre de votre commande.",
             msg_conf_n_btn: "Confirmer ma commande par SMS",
             or: "ou",
-            otp_conf:"Votre numéro de téléphone a été confirmé",
-            ok:"d'accord",
-            add_next_prod:"Ajoutez le produit suivant",
-            added:"Ajoutée",
-            select_all_prod:"Tous les produits suivants doivent être sélectionnés",
-            must_add_all_prods:"Pour bénéficier de l’offre, vous devez ajouter tous les produits concernés par l’offre",
-            resend:"Renvoyer",
-            timeout_resend:"Le temps est expiré, veuillez soumettre à nouveau"
+            otp_conf: "Votre numéro de téléphone a été confirmé",
+            ok: "d'accord",
+            add_next_prod: "Ajoutez le produit suivant",
+            added: "Ajoutée",
+            select_all_prod: "Tous les produits suivants doivent être sélectionnés",
+            must_add_all_prods: "Pour bénéficier de l’offre, vous devez ajouter tous les produits concernés par l’offre",
+            resend: "Renvoyer",
+            timeout_resend: "Le temps est expiré, veuillez soumettre à nouveau",
+            apply: "Appliquer",
+            promo_code: "Code promo",
+            enter_promo: "Entrez le code promo",
+            contact_us_buy:"Contactez-nous pour acheter",
+            dispo:"Disponible",
+
         }
     },
     "en": {
@@ -124,6 +130,7 @@ const Resources = {
             qte: "Quantity",
             qte_instock: "Quantity in stock",
             desc: "Description",
+            no_dispo: "No disponible",
             no_available: "Not available",
             add_to_cart: "Add to cart",
             edit_cart: "Edit cart",
@@ -199,14 +206,19 @@ const Resources = {
             msg_conf_n: "In order to avoid the step of validating your order by telephone, you can confirm your order automatically and instantly by SMS. you nevertheless become sure of your order.",
             msg_conf_n_btn: "Confirm my order via SMS",
             or: "or",
-            otp_conf:"Your phone number has been confirmed",
-            ok:"ok",
-            add_next_prod:"Add the next product",
-            added:"Added",
-            select_all_prod:"All of the following products must be selected",
-            must_add_all_prods:"To benefit from the offer, you must add all the products covered by the offer",
-            resend:"Resend",
-            timeout_resend:"Time has expired, please resubmit"
+            otp_conf: "Your phone number has been confirmed",
+            ok: "ok",
+            add_next_prod: "Add the next product",
+            added: "Added",
+            select_all_prod: "All of the following products must be selected",
+            must_add_all_prods: "To benefit from the offer, you must add all the products covered by the offer",
+            resend: "Resend",
+            timeout_resend: "Time has expired, please resubmit",
+            apply: "Apply",
+            promo_code: "Promo code",
+            enter_promo: "Enter promo code",
+            contact_us_buy:"Contact us to purchase",
+            dispo:"Available"
         }
     },
     "ar": {
@@ -303,16 +315,21 @@ const Resources = {
             msg_conf_n: "لتجنب خطوة التحقق من صحة طلبك عبر الهاتف، يمكنك تأكيد طلبك تلقائيًا وفوريًا عبر الرسائل النصية القصيرة. ومع ذلك تصبح متأكدًا من طلبك.",
             msg_conf_n_btn: "تأكيد طلبي عبر الرسائل النصية",
             or: "أو",
-            otp_conf:"تم تأكيد رقم هاتفك",
-            ok:"موافق",
-            add_next_prod:"اضافة المنتج التالي",
-            added:"تمت الاضافة",
-            select_all_prod:"يجب اختيار جميع المنتجات التالية",
-            must_add_all_prods:"للاستفادة من العرض يجب عليك إضافة كافة المنتجات المشمولة بالعرض",
-            resend:"إعادة إرسال",
-            timeout_resend:"انتهى الوقت يرجى اعادة الارسال"
-            
-            
+            otp_conf: "تم تأكيد رقم هاتفك",
+            ok: "موافق",
+            add_next_prod: "اضافة المنتج التالي",
+            added: "تمت الاضافة",
+            select_all_prod: "يجب اختيار جميع المنتجات التالية",
+            must_add_all_prods: "للاستفادة من العرض يجب عليك إضافة كافة المنتجات المشمولة بالعرض",
+            resend: "إعادة إرسال",
+            timeout_resend: "انتهى الوقت يرجى اعادة الارسال",
+            apply: "تطبيق",
+            promo_code: "رمز الترويج",
+            enter_promo: "أدخل رمز الترويج",
+            contact_us_buy:"اتصل بنا للشراء",
+            dispo:"متوفر"
+
+
         }
     }
 }

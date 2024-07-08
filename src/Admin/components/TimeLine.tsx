@@ -32,7 +32,8 @@ export default function TimeLine({ data }: { data: OrderFull }) {
                                     return <li className="mb-10 ms-4" key={i}>
                                         <div className="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
                                         <time className="mb-2 text-sm  leading-none text-gray-400 dark:text-gray-500 font-semibold">{moment(el.created_at).format("yyyy-MM-DD HH:mm")}</time>
-                                        <div className="mt-2">
+                                        <div className="mt-2 flex flex-col">
+
                                             <span
                                                 className={" whitespace-nowrap text-center capitalize rounded-full p-1 px-2 cursor-pointer w-auto  text-[13px] font-semibold border py-1 !text-[" + statesColor[el?.state ?? ""] + "]"}
                                                 style={{
@@ -41,6 +42,9 @@ export default function TimeLine({ data }: { data: OrderFull }) {
                                                     backgroundColor: statesColor[el?.state ?? ""] + "22"
                                                 }} >
                                                 {el.state}
+                                            </span>
+                                            <span className="text-[13px] max-w-[180px]">
+                                            {el.comment} 
                                             </span>
                                         </div>
 

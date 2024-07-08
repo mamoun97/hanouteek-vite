@@ -1,3 +1,4 @@
+type RoleAssociate="order_creator"|"associate"|"pos"
 interface UserAuth{
     id: number,
     firstName: string,
@@ -5,7 +6,7 @@ interface UserAuth{
     email: string,
     phoneNumber: string,
     address: string,
-    role: string,
+    role: RoleAssociate,
     avatar: string,
     active: boolean,
     socketId: string|null,

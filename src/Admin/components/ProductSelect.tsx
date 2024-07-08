@@ -3,22 +3,22 @@ import { Input, Loader } from "rizzui";
 import { useGetAllProductsByNameServiceAssociate } from '../../Api/Services';
 import ApiConfig from '../../Api/ApiConfig';
 import useClickOutside from '../../hoock/ClickOutSide';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../Store';
-import { GlobalS } from '../../Store/globalSlice';
+import { MdSearch } from 'react-icons/md';
+import useGlobal from '../../hoock/useGlobal';
 
 
 
 export default function ProductSelect({ setValue = () => { }, nameProduct = "", isSearch = false }: { isSearch?: boolean, nameProduct?: string, setValue?: any }) {
     const [name, setName] = useState(nameProduct);
-    const global = useSelector<RootState>((state) => state.global) as GlobalS
+    
+    const global=useGlobal("&")
     const [open, setOpen] = useState(false);
     const clickOutsideRef = useClickOutside({
         onOutsideClick: () => {
             setOpen(false)
         }
     });
-    const { data, isLoading, error: _ } = useGetAllProductsByNameServiceAssociate(name,global?.platform?"&"+global.platform:undefined)
+    const { data, isLoading, error: _ } = useGetAllProductsByNameServiceAssociate(name,global)
     return (
         <div className={"w-full"} ref={clickOutsideRef}>
 
@@ -34,9 +34,9 @@ export default function ProductSelect({ setValue = () => { }, nameProduct = "", 
                     }
                 } : {}}
 
-
+                prefix={<MdSearch className="w-5 h-5" />}
                 onFocus={() => setOpen(true)}
-                placeholder='select product'
+                placeholder='Select product'
                 onChange={(e) => { setName(e.target.value) }}
             />
 

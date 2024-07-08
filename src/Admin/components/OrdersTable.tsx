@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import Table from "./Table";
 import HeaderCell from "./HeaderCell";
-import { ActionIcon, Checkbox, Select, Text, Tooltip } from "rizzui";
+import { ActionIcon, Avatar, Checkbox, Select, Text, Tooltip } from "rizzui";
 import { FiEdit, FiPrinter } from "react-icons/fi";
 import { MdContentCopy, MdLocalPhone } from "react-icons/md";
 import Pagination from "./Pagination";
@@ -15,13 +15,19 @@ import StateChange from "./StateChangeButton";
 import orderCols from "../Const/order-cols";
 import ItemsProductModal from "./ItemsProductModal";
 import { IoCopyOutline } from "react-icons/io5";
+import getPlatformUrl from "../../Constants/Platform";
+import ApiConfig from "../../Api/ApiConfig";
+import { useSelector } from "react-redux";
+import { RootState } from "../../Store";
+import Timer from "./Timer";
 moment.locale('fr')
 const getColumns = (
   order: string,
   column: string,
   onHeaderClick: (value: string) => any,
   afterChange: any,
-  changeFilter: any
+  changeFilter: any,
+  isPos?:boolean
 ) => [
     {
       title: <></>,
@@ -48,6 +54,23 @@ const getColumns = (
       onHeaderCell: () => onHeaderClick("id"),
       dataIndex: "id",
       key: "id",
+    },
+    {
+      title: <HeaderCell title="Loader" />,
+      dataIndex: "loader",
+      key: "loader",
+      show: false,
+      render: (_: string, row: OrderFull) => (
+        <div className="flex items-center">
+          {row.state === "pending" ?(
+                    <Timer createdAt={row.created_at} />
+                  ):(  
+                    <div className="item">
+                    <div className="animate-load_pulse bg-green-500 w-10 h-10 rounded-full"></div>
+                </div>
+                  )}
+        </div>
+      ),
     },
     {
       title: <HeaderCell title="Name" />,
@@ -88,6 +111,39 @@ const getColumns = (
       title: <HeaderCell title="Commune" />,
       dataIndex: "to_commune_name",
       key: "to_commune_name",
+    },
+    {
+      title: <HeaderCell title="Platform" />,
+      dataIndex: "platform",
+      key: "platform",
+      render: (platform: string) => (
+        <div className="flex items-center whitespace-nowrap justify-center">
+          {platform ? <Tooltip content={platform} placement="top">
+            <div>
+              <Avatar name=""
+                src={getPlatformUrl(platform)} />
+            </div>
+            
+          </Tooltip>
+            : "not exist yet"}
+        </div>
+      ),
+    },
+    {
+      title: <HeaderCell title="َAssociate" />,
+      dataIndex: "associate",
+      key: "associate",
+      render: (_: string, row: OrderFull) => (
+        <div className="flex items-center whitespace-nowrap justify-center">
+          {row.associate ? <Tooltip content={row.associate.firstName+" "+row.associate.lastName} placement="top">
+            <div>
+              <Avatar name=""
+                src={ApiConfig.rootUrl + "/" + row.associate.avatar} />
+            </div>
+          </Tooltip>
+            : "not exist "}
+        </div>
+      ),
     },
     {
       title: <HeaderCell title="tracking" />,
@@ -149,7 +205,8 @@ const getColumns = (
     },
 
 
-    {
+
+    ...isPos?[]:[{
       title: <></>,
       dataIndex: "action",
       key: "action",
@@ -179,7 +236,7 @@ const getColumns = (
           {row.duplicate != 0 && <Tooltip content={"duplicate"} color="invert" placement="top">
 
             <div className="relative inline-flex">
-              <ActionIcon variant="text" className="text-[#222]" onClick={() => {
+              <ActionIcon variant="text" className="text-[#222] dark:text-[#777]" onClick={() => {
 
                 changeFilter({
                   limit: 10, page: 1,
@@ -193,7 +250,7 @@ const getColumns = (
               <span className="absolute text-xs bg-gray-800 text-white w-4 h-4 text-center rounded-full right-0 top-0 -translate-y-[25%]">
                 {row.duplicate}
               </span>
-              
+
             </div>
           </Tooltip>}
 
@@ -201,7 +258,7 @@ const getColumns = (
 
         </div>
       ),
-    },
+    },]
   ];
 
 export default function OrdersTable({ data, option, showCols, setOption, isLoading, afterChange = () => { } }:
@@ -215,29 +272,17 @@ export default function OrdersTable({ data, option, showCols, setOption, isLoadi
   const onHeaderClick = (value: string) => ({
     onClick: () => {
       setColumn(value);
-      // setOrder(order === "desc" ? "asc" : "desc");
-      // if (order === "desc") {
-      //   // @ts-ignore
-      //   setData([...data.sort((a, b) => (a[value] > b[value] ? -1 : 1))]);
-      // } else {
-      //   // @ts-ignore
-      //   setData([...data.sort((a, b) => (a[value] > b[value] ? 1 : -1))]);
-      // }
+     
     },
   });
   const changeFilter = (e: any) => {
 
     setOption(e)
   }
-  const columns = useMemo<any>(() => getColumns(order, column, onHeaderClick, afterChange, changeFilter)
+  const user = useSelector<RootState>((state) => state.user) as UserAuth
+  const columns = useMemo<any>(() => getColumns(order, column, onHeaderClick, afterChange, changeFilter,user.role=="pos")
     , [order, column, onHeaderClick, afterChange, changeFilter])
-  // useEffect(
-  //   () => {
-  //     setColumns(getColumns(order, column, onHeaderClick, showCols, afterChange))
-  //   }
-  //   ,
-  //   [order, column, onHeaderClick, showCols]
-  // );
+  
 
   const footerT = <div className="flex justify-end p-2">
     <Pagination

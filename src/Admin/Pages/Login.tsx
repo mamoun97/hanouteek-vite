@@ -23,6 +23,7 @@ const validationS = Yup.object().shape({
     email: Yup.string().email().required()
 });
 
+
 export default function Login() {
     const navigate = useNavigate()
     const param = new URLSearchParams(window.location.search)
@@ -31,7 +32,7 @@ export default function Login() {
         (!!param.get("email") && !!param.get("password")) ? {
             email: param.get("email") ?? "",
             password: param.get("password") ?? ""
-        } : null)
+        } : null) 
 
     const theme = useSelector<RootState>(state => state.theme) as ThemeSetting
     const userS = useSelector<RootState>((state) => state.user) as UserAuth
@@ -54,6 +55,7 @@ export default function Login() {
         try {
             setLoading(true)
             const data = await AuthApi.signIn(values)
+            // const data=client
             if (data.id) {
 
                 dispatch(changeUser({

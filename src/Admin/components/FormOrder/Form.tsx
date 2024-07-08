@@ -17,8 +17,8 @@ type FormProps = {
     setCart: any,
     dataOrder: OrderFull,
     setDataOrder: (x: OrderFull) => void,
-    delivery:PriceDeliveryResponce|null,
-    setDelivery:(e:PriceDeliveryResponce)=>void
+    delivery: PriceDeliveryResponce | null,
+    setDelivery: (e: PriceDeliveryResponce) => void
 }
 
 export default function Form({
@@ -42,11 +42,11 @@ export default function Form({
                 setSelectedWilaya(find ?? null)
             }
         },
-    },global?.platform?"&"+global.platform:undefined);
-    const { data: yalidine } = useGetYalidineCenterService(selectedWilaya?.name ?? "",global?.platform?"&"+global.platform:undefined);
+    }, global?.platform ? "&" + global.platform : undefined);
+    const { data: yalidine } = useGetYalidineCenterService(selectedWilaya?.name ?? "", global?.platform ? "&" + global.platform : undefined);
     const { data: communes, isLoading: communeLoading, mutate: refrechCommunes } = useSWR(
         `/tenant/city-delivery/${selectedWilaya?.id ?? 0}`,
-        () => ProductApi.getCityDelivery(selectedWilaya?.id ?? 0,global?.platform?"?"+global.platform:undefined),
+        () => ProductApi.getCityDelivery(selectedWilaya?.id ?? 0, global?.platform ? "?" + global.platform : undefined),
         {
             dedupingInterval: 500000,
             keepPreviousData: true,
@@ -62,7 +62,7 @@ export default function Form({
     )
 
     const getPriceDeliveryAdmin = (id: number) => {
-        ProductApi.getPriceDeliveryAdmin(id,global?.platform?"?"+global.platform:undefined).then(res => {
+        ProductApi.getPriceDeliveryAdmin(id, global?.platform ? "?" + global.platform : undefined).then(res => {
             setDelivery(res)
         }).catch(_ => {
 
@@ -82,7 +82,7 @@ export default function Form({
             <Card title="Select Product">
                 <ProductSelect setValue={setSelectProduct} />
                 {
-                    selectProduct && <div>
+                    selectProduct && <div key={selectProduct.slugName}>
                         <ProductOptions
                             setValue={(e: any) => {
                                 setCart([...cart, e])
@@ -105,8 +105,10 @@ export default function Form({
                 <div className="grid-cols-6 grid gap-2">
                     <Input
                         label="Prénom"
+                        name="prenom"
                         className="col-span-3 max-sm:col-span-6"
                         value={dataOrder.firstname ?? ""}
+                        
                         onChange={(e) => {
                             setDataOrder({
                                 ...dataOrder,
@@ -116,6 +118,7 @@ export default function Form({
                     />
                     <Input
                         label="Nom"
+                        name="nom"
                         className="col-span-3 max-sm:col-span-6"
                         value={dataOrder.familyname ?? ""}
                         onChange={(e) => {
@@ -127,6 +130,9 @@ export default function Form({
                     />
                     <Input
                         label="Email"
+                        autoComplete="off"
+                        
+                        inputMode="email"
                         className="col-span-2 max-sm:col-span-6"
                         value={dataOrder.email ?? ""}
                         onChange={(e) => {
@@ -138,6 +144,7 @@ export default function Form({
                     />
                     <Input
                         label="Address"
+                        name="addressss"
                         className="col-span-2 max-sm:col-span-6"
                         value={dataOrder.address ?? ""}
                         onChange={(e) => {
@@ -149,9 +156,16 @@ export default function Form({
                     />
                     <Input
                         label="Phone"
+                       inputMode="tel"
+                        name="phone"
+                        autoComplete="off"
                         className="col-span-2 max-sm:col-span-6"
                         value={dataOrder.contact_phone}
                         onChange={(e) => {
+                            if ((!/^[0-9]{0,10}$/.test(e.target.value))) {
+                                return
+                            }
+                            else 
                             setDataOrder({
                                 ...dataOrder,
                                 contact_phone: e.target.value
@@ -175,8 +189,8 @@ export default function Form({
                                 to_wilaya_name: e.value
                             })
                         }}
-                        
-                        {...lodingWilaya?{suffix:<Loader />}:{}}
+
+                        {...lodingWilaya ? { suffix: <Loader /> } : {}}
 
                     />
                     <Select
@@ -195,7 +209,7 @@ export default function Form({
                                 to_commune_name: e.value
                             })
                         }}
-                        {...communeLoading?{suffix:<Loader />}:{}}
+                        {...communeLoading ? { suffix: <Loader /> } : {}}
                     />
                 </div>
             </Card>
@@ -308,6 +322,16 @@ export default function Form({
 
             <Card title="Shipping">
                 <div className="flex flex-col gap-2">
+                    <Checkbox
+                        label="Vendu depuis le magasin"
+                        checked={dataOrder.soldFromTheStore ?? false}
+                        onChange={() => {
+                            setDataOrder({
+                                ...dataOrder,
+                                soldFromTheStore: !(dataOrder.soldFromTheStore ?? false)
+                            })
+                        }}
+                    />
                     <Checkbox
                         label="Insurance"
                         checked={dataOrder.do_insurance ?? false}

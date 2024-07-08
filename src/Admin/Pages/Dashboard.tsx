@@ -1,7 +1,6 @@
 
-import StatHomeCards from "../components/Dashboard/StateHomeCards";
 import SalesReport from "../components/Dashboard/SalesReport";
-import { useGetStatisticsService } from "../../Api/Services";
+import { useGetPriceTotalService, useGetStatisticsService } from "../../Api/Services";
 import { RootState } from "../../Store";
 import { useSelector } from "react-redux";
 import { GlobalS } from "../../Store/globalSlice";
@@ -9,12 +8,16 @@ import statesColor from "../Const/statesColor";
 import DatePicker from "../components/Datepicker";
 import { useState } from "react";
 import moment from "moment";
-import Loading from "../../Constants/Loading";
+// import Loading from "../../Constants/Loading";
 import invertColor from "../../utils/invertColor";
+import { MdOutlineCloudOff } from "react-icons/md";
+import { FaDollarSign } from "react-icons/fa";
+import { FiBox } from "react-icons/fi";
+import { IoStatsChart } from "react-icons/io5";
 
 export default function Dashboard() {
   const global = useSelector<RootState>((state) => state.global) as GlobalS
-
+  const user = useSelector<RootState>((state) => state.user) as UserAuth
 
   const [option, setOptions] = useState({
     startDate: moment().add("day").startOf("day").format(),
@@ -24,6 +27,13 @@ export default function Dashboard() {
     startDate: moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm"),
     endDate: moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")
   }, (global?.platform) ? "&" + global?.platform : undefined)
+
+  const { data: price_total } = useGetPriceTotalService(
+    `?startDate=${moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm")}&endDate=${moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")}&states=soldFromTheStore&priceType=price_total&type=created_at`
+  )
+  const { data: compareAtPrice } = useGetPriceTotalService(
+    `?startDate=${moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm")}&endDate=${moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")}&states=soldFromTheStore&priceType=CompareAtPrice&type=created_at`
+  )
   return (
     <div className="">
       <h1 className="text-2xl font-medium">Dashboard</h1>
@@ -58,19 +68,66 @@ export default function Dashboard() {
           placeholderText="End Date"
         />
       </div>
-
+      <div className="grid grid-cols-3 gap-2 mt-3">
+        {
+          [
+            {
+              name: "All Orders",
+              value: !!data?.length ? data.reduce((a, b) => {
+                return a + b.count;
+              }, 0) : 0,
+              icon: FiBox,
+              color: "#FE9090",
+            },
+            ...user.role=="pos"?[
+              {
+                name: "Chiffre d'affaires",
+                value: price_total!=undefined ? price_total + " DZD" : "",
+                icon: FaDollarSign,
+                color: "#10D164",
+              },
+              {
+                name: "Bénéfices",
+                value: compareAtPrice!=undefined ? compareAtPrice + " DZD" : "",
+                icon: IoStatsChart,
+                color: "#FD8451",
+              }
+            ]:[]
+          ].map((el, k) => {
+            return <div key={k}
+              style={{
+                backgroundColor: el.color,
+                color: "#FFF"
+              }}
+              className={`p-2  h-28   rounded-md flex gap-4  items-center `}
+            >
+              <div className="">
+                <el.icon className="w-11 h-11" />
+              </div>
+              <div>
+                <p className="text-lg font-semibold  text-center line-clamp-2">
+                  All Orders
+                </p>
+                <span className="font-bold text-2xl" key={el.value}>
+                  {el.value}
+                </span>
+              </div>
+            </div>
+          })
+        }
+      </div>
       <div className="my-4 grid grid-cols-4 max-sm:grid-cols-2 gap-2">
-        {data && <div className={`p-2  h-28   rounded-md flex flex-col justify-center items-center `+(data.length==0?"col-span-full":"")}
-        >
-          <p className="text-lg font-semibold  text-center line-clamp-2">
-            All Orders
-          </p>
-          <span className="font-bold text-2xl">
-            {data.reduce((a, b) => {
-              return a + b.count;
-            }, 0)}
-          </span>
-        </div>}
+
+        {
+          data?.length === 0 && <div className={`p-2     rounded-md flex flex-col justify-center items-center col-span-full`}
+          >
+            <MdOutlineCloudOff className="w-28 h-28 text-primary" />
+            <p className="text-lg font-medium  text-center line-clamp-2">
+              Il n'y a pas de commande à cette date
+            </p>
+
+          </div>
+        }
         {
           data?.map((el, k) => {
             return <div className={`p-2 h-28 border  rounded-md flex flex-col justify-center items-center `}
@@ -85,7 +142,7 @@ export default function Dashboard() {
             </div>
           })
         }
-        
+
         {
           isLoading && <div className="flex justify-center col-span-full">
             <svg aria-hidden="true" role="status" className="inline w-16 h-16 me-3 text-primary animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

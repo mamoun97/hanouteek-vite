@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Container from "../Views/Container";
 import ProductZoom from "../Views/ProductZoom";
 import RelatedProducts from "../Views/RelatedProducts";
@@ -7,7 +7,6 @@ import { useGetProductBySlugService } from "../Api/Services";
 import Attribute from "../Views/Attribute";
 import Qte from "../Views/Qte";
 import Button from "../Views/Flowbit/Button";
-import { Badge, Button as ButtonR, Modal } from "rizzui";
 import { AppDispatch, RootState } from "../Store";
 import { useDispatch, useSelector } from "react-redux";
 import { Cart, openCart, addToCart as addToCartS, updateCart, addToFavorite, removeFromFavorite } from "../Store/cartSlice";
@@ -18,19 +17,16 @@ import Loading from "../Constants/Loading";
 import { addToCartEvent, viewContentEvent } from "../Api/PixelService";
 import { useTranslation } from "react-i18next";
 import Currency from "../Constants/Currency";
-import Checkout from "./Checkout";
 import { FiShoppingCart } from "react-icons/fi";
 import OfferCard from "../Views/OfferCard";
 import { ThemeSetting } from "../Types/ThemeSetting";
 import ProductResturant from "./ProductResturant";
 import OffersView from "../Views/OffersView";
 import OfferModal from "../Views/OfferModal";
-import Reviews from "../Views/Reviews";
-import ApiConfig from "../Api/ApiConfig";
-import { BsMessenger } from "react-icons/bs";
+import CheckoutSimple from "../Views/CheckoutSimple";
 
 const NULL_STOCK = -9999999
-export default function Product() {
+export default function ProductBuy() {
     const theme = useSelector<RootState>(state => state.theme) as ThemeSetting
     if (theme.theme.templateType == "restaurant")
         return <ProductResturant />;
@@ -80,17 +76,11 @@ export function ProductPage({ data, isUpdate = false, index = -1, isSmall = fals
     { data: ProductCart, isUpdate?: boolean, index?: number, isSmall?: boolean, onClose?: any }) {
     const cart = useSelector<RootState>(state => state.cart) as Cart
     const { t } = useTranslation()
-    const client = useSelector<RootState>((state) => state.client) as UserAuth
-    const hidePrice = ApiConfig.isJoomla ? (client?.id ? false : true) : false
+
     const dispatch: AppDispatch = useDispatch();
     const [isCheck, setIsCheck] = useState(false);
     const [openOfferModal, setOpenOfferModal] = useState(false);
-    const [openContact, setOpenContact] = useState(false);
     const checkoutRef = useRef<HTMLDivElement | null>(null);
-    const [fixedB, setFixedB] = useState(false)
-    const refF = useRef<HTMLDivElement | null>(null);
-    const refA = useRef<HTMLDivElement | null>(null);
-
     const [prod, setProd] = useState<ProductCart>(data)
     const [stock, setStock] = useState<number>(NULL_STOCK)
     const [detect, setDetect] = useState<string | null>(null)
@@ -145,26 +135,9 @@ export function ProductPage({ data, isUpdate = false, index = -1, isSmall = fals
         }
         return false
     }
-
-    const changeFixed = (_: any) => {
-        let ref = refF.current
-
-        if (ref)
-            setFixedB(
-                ref.offsetTop - ref.clientHeight < window.scrollY ||
-                window.scrollY < ref.offsetTop - window.outerHeight + ref.clientHeight
-            )
-        else setFixedB(false)
-
-
-    }
     useEffect(() => {
 
         viewContentEvent(data.id, data.price)
-        window.addEventListener("scroll", changeFixed);
-        return () => {
-            window.removeEventListener("scroll", changeFixed);
-        }
     }, [])
     const isQteChange = prod.checkData.size &&
         prod.qte > prod.checkData.size.stock &&
@@ -178,11 +151,6 @@ export function ProductPage({ data, isUpdate = false, index = -1, isSmall = fals
                 { ...prod, qte: prod.checkData.size?.stock ?? 1 }
             )
     }, [prod.checkData.size, prod.qte])
-    const isDispo=(
-        !!prod.checkData.color||!!prod.checkData.size?prod.attribute.options[0].stock>0:true
-    )||(prod.checkData.size?.stock && prod.checkData.size.stock>0 ||
-        prod.checkData.color?.stock && prod.checkData.color.stock>0)
-
     return <Container className={"mt-5 "}>
         <div className={"grid grid-cols-2 gap-4 max-md:grid-cols-1"}>
             <div className="col-span-1">
@@ -191,13 +159,13 @@ export function ProductPage({ data, isUpdate = false, index = -1, isSmall = fals
             <div className="col-span-1">
                 {prod.hasOffer && prod.minNumberQteOffer && prod.priceOffer ? <OfferCard prod={prod} /> : ""}
                 <h1 className="text-xl font-medium">{prod.name}</h1>
-                {hidePrice ? null : <div className="flex mt-2 items-center font-semibold" ref={refA}>
+                <div className="flex mt-2 items-center font-semibold">
                     {!!data.CompareAtPrice && <>
                         <span className="italic text-gray-600 text-sm line-through font-normal">{prod.CompareAtPrice.toFixed(2)} <Currency /></span>
                         <span className="me-2 mb-2"></span>
                     </>}
                     <span className="text-lg text-primary">{prod.price.toFixed(2)} <Currency /></span>
-                </div>}
+                </div>
                 {prod.attribute.options.length ? <div className="mt-3">
 
                     <h2 className="font-medium italic">{prod.attribute.name}</h2>
@@ -285,106 +253,66 @@ export function ProductPage({ data, isUpdate = false, index = -1, isSmall = fals
                 </div>
                 <div className="mt-2">
                     <h2 className="font-medium italic">{t("qte")}</h2>
-                    <div className="flex mt-2 gap-2" ref={refF}>
+                    <div className="flex mt-2 gap-2">
+                        <Qte
+                            addClick={() => {
+                                setProd({
+                                    ...prod,
+                                    qte: prod.qte + 1,
+                                    ...prod.hasOffer && prod.minNumberQteOffer && prod.priceOffer ? {
+                                        ...(prod.qte + 1) >= prod.minNumberQteOffer ? {
+                                            price: prod.priceOffer
+                                        } : {
+                                            price: data.price
+                                        }
+                                    } : {}
+                                })
 
+                            }}
+                            removeClick={() => {
+                                setProd({
+                                    ...prod,
+                                    qte: prod.qte - 1,
+                                    ...prod.hasOffer && prod.minNumberQteOffer && prod.priceOffer ? {
+                                        ...(prod.qte - 1) >= prod.minNumberQteOffer ? {
+                                            price: prod.priceOffer
+                                        } : {
+                                            price: data.price
+                                        }
+                                    } : {}
+                                })
+
+                            }}
+                            value={prod.qte}
+                            large={true} />
                         {
-                            ApiConfig.isJoomla ? <>
-                                {
-                                    isDispo ? <>
+                            isUpdate ?
 
-                                        <Badge className="min-w-[80px]" color="success">{t("dispo")}</Badge>
-                                    </> : <>
-
-                                        <Badge color="danger" className="min-w-[80px]">{t("no_dispo")}</Badge>
-                                    </>
-                                }
-                                <Link to={"https://m.me/133121346554730"} className="grow" target="_blank">
                                 <Button
-                                    
-                                    onClick={() => {
-                                    }}
-                                    className={"w-full text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100   font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 grow  flex items-center justify-center "+(isDispo?"animate-vibre":"")}>
-                                        <BsMessenger className="text-2xl" />
-                                        <span className="me-2"></span>
-                                    {t("contact_us_buy")}
+                                    onClick={() => addToCart()}
+                                    className={"text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100   font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 grow  flex items-center justify-center"}>
+                                    <FiShoppingCart className="text-xl" />
+                                    <div className="me-2"></div>
+                                    {t("edit_cart")}
+                                </Button> :
+                                <Button
+                                    onClick={() => addToCart()}
+                                    className={"text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100   font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 grow  flex items-center justify-center"}>
+                                    <FiShoppingCart className="text-xl" />
+                                    <div className="me-2"></div>
+                                    {t("add_to_cart")}
                                 </Button>
-                                </Link>
-                            </> : <>
-                                <Qte
-                                    addClick={() => {
-                                        setProd({
-                                            ...prod,
-                                            qte: prod.qte + 1,
-                                            ...prod.hasOffer && prod.minNumberQteOffer && prod.priceOffer ? {
-                                                ...(prod.qte + 1) >= prod.minNumberQteOffer ? {
-                                                    price: prod.priceOffer
-                                                } : {
-                                                    price: data.price
-                                                }
-                                            } : {}
-                                        })
-
-                                    }}
-                                    removeClick={() => {
-                                        setProd({
-                                            ...prod,
-                                            qte: prod.qte - 1,
-                                            ...prod.hasOffer && prod.minNumberQteOffer && prod.priceOffer ? {
-                                                ...(prod.qte - 1) >= prod.minNumberQteOffer ? {
-                                                    price: prod.priceOffer
-                                                } : {
-                                                    price: data.price
-                                                }
-                                            } : {}
-                                        })
-
-                                    }}
-                                    value={prod.qte}
-                                    large={true} />
-                                {
-                                    isUpdate ?
-
-                                        <Button
-                                            onClick={() => {
-                                                if (ApiConfig.isJoomla) {
-                                                    setOpenContact(true)
-                                                    return
-                                                }
-                                                addToCart()
-                                            }}
-                                            className={"text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100   font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 grow  flex items-center justify-center"}>
-                                            <FiShoppingCart className="text-xl" />
-                                            <div className="me-2"></div>
-                                            {t("edit_cart")}
-                                        </Button> :
-                                        <Button
-                                            onClick={() => {
-                                                if (ApiConfig.isJoomla) {
-                                                    setOpenContact(true)
-                                                    return
-                                                }
-                                                addToCart()
-                                            }}
-                                            className={"text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100   font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 grow  flex items-center justify-center"}>
-                                            <FiShoppingCart className="text-xl" />
-                                            <div className="me-2"></div>
-                                            {t("add_to_cart")}
-                                        </Button>
-                                }
-                            </>
-
                         }
-
 
                     </div>
                 </div>
-                {/* {!onClose && <div className="my-2">
+                {!onClose && <div className="my-2">
                     <Button
                         onClick={() => addToCart(true)}
                         className={"customPrimary grow text-white h-11 w-full animate-vibre"}>
                         {t("buy")}
                     </Button>
-                </div>} */}
+                </div>}
                 <div className="mt-2">
                     <h2 className="font-medium italic">{t("desc")}</h2>
                     <div className="overflow-auto font-normal mt-2">
@@ -392,14 +320,15 @@ export function ProductPage({ data, isUpdate = false, index = -1, isSmall = fals
                     </div>
 
                 </div>
+                <div ref={checkoutRef}></div>
+                <CheckoutSimple />
             </div>
         </div>
         <div>
-            <Reviews id={data.id} />
+            {/* <Reviews id={data.id}/> */}
         </div>
-        <div ref={checkoutRef}></div>
-        {isCheck ? <Checkout /> : ""}
-        {!isSmall && <div className="relative z-0">
+
+        {!isSmall && <div>
             <RelatedProducts title={t("related_prod")} />
         </div>}
         {
@@ -409,22 +338,6 @@ export function ProductPage({ data, isUpdate = false, index = -1, isSmall = fals
                 prod
             }} />
         }
-
-        <div className={"fixed z-10 bottom-0 left-0 flex justify-center right-0 p-4  " + (fixedB ? "" : "hidden")}>
-            <ButtonR
-                variant="solid"
-                color="primary"
-                onClick={() => {
-                    if (refA && refA.current)
-                        window.scrollTo(refA.current.offsetTop, refA.current.offsetTop)
-                }}
-                className={" w-full max-w-sm animate-vibre border border-white"}>
-                <FiShoppingCart className="text-xl" />
-                <div className="me-2"></div>
-                {t("add_to_cart")}
-            </ButtonR>
-
-        </div>
 
     </Container>
 }

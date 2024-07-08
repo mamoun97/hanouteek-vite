@@ -5,7 +5,7 @@ export default {
   content: [
     './src/**/*.{js,jsx,ts,tsx}',
     'node_modules/flowbite-react/lib/esm/**/*.js',
-    
+
     "./node_modules/rizzui/dist/*.{js,ts,jsx,tsx}",
   ],
   theme: {
@@ -17,7 +17,7 @@ export default {
         'delete': 'url(./src/assets/delete.ico), pointer',
       },
 
-      
+
       keyframes: {
         transcart: {
           '0%': { transform: 'translateX(100%)' },
@@ -26,6 +26,11 @@ export default {
         transcart_rtl: {
           '0%': { transform: 'translateX(-100%)' },
           '100%': { transform: 'none' },
+        },
+        load_pulse: {
+          '0%': { transform: 'scale(0.15)' ,opacity:"0"},
+          '50%': { opacity:"1" },
+          '100%': { transform: 'scale(1)' ,opacity:"0"},
         },
         scalet: {
           '0%': { maxHeight: '0' },
@@ -172,14 +177,15 @@ export default {
       },
       animation: {
         cart: 'transcart .3s ',
-        trt:"trt .3s",
-        scalet:"scalet .3s",
+        trt: "trt .3s",
+        scalet: "scalet .3s",
         cart_rtl: 'transcart_rtl .3s ',
         faveorite: 'faveorite .2s ',
         vibre: 'vibre 2s linear infinite',
         rotateH: 'rotateH 25s linear infinite',
         modalProd: 'modalProd .5s ',
         vibre_sc: "vibre_sc 5s linear infinite",
+        load_pulse:" load_pulse 0.85s infinite linear"
         // anim_border:"anim_border 4s ease infinite"
       }
     },

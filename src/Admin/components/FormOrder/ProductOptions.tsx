@@ -11,20 +11,7 @@ export function ProductOptions({ data, setValue }:
     const [stock, setStock] = useState<number>(NULL_STOCK)
     const initSizes = prod.attribute.options.length ? (prod.attribute.options[0].sizes.length ? true : false) : false;
     const addToCart = () => {
-        console.log({
-            "index": Date(),
-            "name": prod.name,
-            "price_item": prod.price,
-            "price_total": prod.price * prod.qte,
-            "color": prod.checkData.color?.value ?? "",
-            "size": prod.checkData.size?.value ?? "",
-            "qte": prod.qte,
-            "cancelled": false,
-            "product": {
-                id: prod.id,
-                images: prod.images
-            }
-        })
+        
         if (isValid())
             setValue({
                 "index": Date(),
@@ -56,9 +43,9 @@ export function ProductOptions({ data, setValue }:
         return false
     }
 
-    return <div className="p-4 border border-gray-100 mt-3  rounded-lg  ">
+    return <div className="p-4 border border-gray-100 dark:border-[#444] dark:bg-[#222] mt-3  rounded-lg  ">
         {/* <h1>{data.name}</h1> */}
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-col">
 
             {/* <div className={`bg-cover cursor-pointer bg-no-repeat bg-center w-20 h-20 min-w-[80px] rounded-md mt-2 sticky 
             `}
@@ -115,7 +102,7 @@ export function ProductOptions({ data, setValue }:
                     </div> : ""
                 }
                 {
-                    stock != NULL_STOCK && stock > 0 ? <div className="flex justify-center bg-green-100 p-3 my-2">
+                    stock != NULL_STOCK && stock > 0 ? <div className="flex justify-center bg-green-100 p-3 my-2 dark:text-black">
                         {stock <= 0 ? <>
                             <span className='text-red-800'>Non disponible</span>
                         </> : <>

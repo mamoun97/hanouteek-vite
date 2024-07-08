@@ -14,6 +14,7 @@ import { FiShoppingCart } from "react-icons/fi"
 import { useTranslation } from "react-i18next"
 import Currency from "../Constants/Currency"
 import ProductView from "./Resturant/ProductView"
+
 // import ProductView from "./Resturant/ProductView"
 
 // import tw from 'twin.macro'
@@ -21,7 +22,8 @@ import ProductView from "./Resturant/ProductView"
 type ProductsProps = {
     data: Product,
     className?: string,
-    showFull?: boolean
+    showFull?: boolean,
+    hidePrice?: boolean
 }
 const ProductCard = (props: ProductsProps) => {
     const theme = useSelector<ThemeSetting>(state => state.theme) as ThemeSetting
@@ -30,12 +32,17 @@ const ProductCard = (props: ProductsProps) => {
     return <ProductHanouteek {...props} />
 }
 
-function ProductHanouteek({ data, showFull = false, className = "" }: { data: Product, className?: string, showFull?: boolean }) {
+function ProductHanouteek({ data, showFull = false, className = ""
+    //  ,hidePrice=false
+}: ProductsProps) {
     const theme = useSelector<ThemeSetting>(state => state.theme) as ThemeSetting
     const cart = useSelector<RootState>(state => state.cart) as Cart
+    const client = useSelector<RootState>((state) => state.client) as UserAuth
+    const hidePrice = ApiConfig.isJoomla ? (client?.id ? false : true) : false
     const dispatch: AppDispatch = useDispatch();
     const [openModal, setOpenModal] = useState(false)
     const { t } = useTranslation()
+    const promo = Math.ceil(100 - data.price * 100 / data.CompareAtPrice)
     return <>
         <div className={"bg-white group cursor-pointer relative cardProd " + className}>
 
@@ -77,7 +84,7 @@ function ProductHanouteek({ data, showFull = false, className = "" }: { data: Pr
             </div>
             <div className="p-2 flex flex-col">
                 <h1 className="text-sm  text-center leading-5 font-medium mt-3 min-h-[40px] ">{data.name}</h1>
-                <div className="flex justify-center text-[13px] font-semibold mt-2 max-md:flex-col max-md:items-center">
+                {!!!hidePrice && <div className="flex justify-center text-[13px] font-semibold mt-2 max-md:flex-col max-md:items-center">
                     {
                         !!data.CompareAtPrice && <>
                             <span className="italic text-gray-400 max-sm:text-[12px] line-through font-medium">{data.CompareAtPrice.toFixed(2)} <Currency /></span>
@@ -87,7 +94,7 @@ function ProductHanouteek({ data, showFull = false, className = "" }: { data: Pr
 
 
                     <span style={{ color: theme.theme.Primary }}>{data.price.toFixed(2)} <Currency /></span>
-                </div>
+                </div>}
 
                 <Link to={"/product/" + data.slugName} className="w-full">
                     <Button className={`w-full border-none mt-2 bg-transparent group-hover:bg-secondary group-hover:text-white buttonProd `}>
@@ -97,18 +104,18 @@ function ProductHanouteek({ data, showFull = false, className = "" }: { data: Pr
 
             </div>
             {
-                !!data.CompareAtPrice && <div dir="ltr" className={` absolute top-1 text-sm font-semibold left-1 flex justify-center items-center  text-white rounded-full px-2 py-1 max-sm:px-1 max-sm:text-[12px]`}
+                !!promo ? <div dir="ltr" className={` absolute top-1 text-sm font-semibold left-1 flex justify-center items-center  text-white rounded-full px-2 py-1 max-sm:px-1 max-sm:text-[12px]`}
                     style={{
                         backgroundColor: theme.theme.Primary
                     }}>
                     - {
-                        Math.ceil(100 - data.price * 100 / data.CompareAtPrice)
+                        promo
                     } %
-                </div>
+                </div> : null
             }
 
         </div>
-
+        
         {openModal && <ProductModal data={data} onClose={setOpenModal} />}
 
     </>

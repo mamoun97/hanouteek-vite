@@ -9,7 +9,7 @@ import Textarea from "../Views/Flowbit/Textarea";
 import Radio from "../Views/Flowbit/Radio";
 import { BsPatchCheckFill } from "react-icons/bs"
 import Button from "../Views/Flowbit/Button";
-import { Button as ButtonR, Input } from "rizzui";
+import { Button as ButtonR } from "rizzui";
 import { useEffect, useRef, useState } from "react";
 import { useGetWilayasService } from "../Api/Services";
 import { useFormik } from "formik";
@@ -25,9 +25,8 @@ import Currency from "../Constants/Currency";
 import { Toaster } from "react-hot-toast";
 import { Modal } from "rizzui";
 import { MdErrorOutline } from "react-icons/md";
-import CheckoutResturant from "./CheckoutResturant";
+
 import images from "../assets";
-import { ThemeSetting } from "../Types/ThemeSetting";
 import OtpModal from "../Views/OtpModal";
 
 
@@ -59,10 +58,10 @@ const validationS = (dt: Erros) => Yup.object().shape({
     to_commune_name: Yup.string().required(dt.commune_op),
     nots: Yup.string()
 });
-export default function Checkout() {
-    const theme = useSelector<ThemeSetting>(state => state.theme) as ThemeSetting
+export default function CheckoutSimple() {
 
-    return theme.theme.templateType == "restaurant" ? <CheckoutResturant /> : <CheckoutDefault />
+
+    return <CheckoutDefault />
 }
 
 function CheckoutDefault() {
@@ -410,14 +409,20 @@ function CheckoutDefault() {
             <div ref={ref.checkout}></div>
             {!isCreated ?
                 <>
-                    {cart.items.length != 0 ? <form onSubmit={formik.handleSubmit}>
-                        <div className="grid grid-cols-10 gap-3">
-                            <div className="col-span-6 max-md:col-span-5 max-sm:col-span-10 flex justify-center ">
-                                <div className="max-w-lg w-full pt-12 relative pb-12">
+                    <form onSubmit={formik.handleSubmit}>
+                        <div className="flex flex-col gap-2">
+                            <div className=" flex justify-center ">
+                                <div className="max-w-lg w-full  relative">
 
                                     <div className=" sticky top-[60px] ">
                                         <h1 className="text-center text-xl font-bold mb-6">{t("your_info")}</h1>
-
+                                        <div ref={ref.fullName}></div>
+                                        <TextEditor
+                                            id="fullName"
+                                            label={t("fullname")}
+                                            placeholder={t("fullname")}
+                                            {...register("fullName")}
+                                        />
                                         <div ref={ref.contact_phone}></div>
                                         <TextEditor
                                             id="contact_phone"
@@ -427,15 +432,6 @@ function CheckoutDefault() {
                                             placeholder={t("phone")}
                                             {...register("contact_phone")}
                                         />
-
-                                        <div ref={ref.fullName}></div>
-                                        <TextEditor
-                                            id="fullName"
-                                            label={t("fullname")}
-                                            placeholder={t("fullname")}
-                                            {...register("fullName")}
-                                        />
-
                                         <div ref={ref.to_wilaya_name}></div>
                                         <SelectEditor
                                             id="to_wilaya_name"
@@ -473,6 +469,43 @@ function CheckoutDefault() {
                                                 })
                                             }
                                         </SelectEditor>
+                                        <div>
+                                            <div ref={ref.modeDelivery}></div>
+                                            <div className="text-red-600 font-semibold animate-vibre">{errors.deliveryRequire}</div>
+                                            {modeDelivery.length!=0&&<div className="flex font-medium">
+                                                {t("delivery_mode")}
+                                            </div>}
+                                            {
+                                                !!errors.deliveryError && <div className="mt-1 text-center font-semibold rounded-md bg-red-100 text-red-700 p-4 ">
+                                                    {errors.deliveryError}
+                                                </div>
+                                            }
+                                            {
+                                                modeDelivery.map((el, k) => {
+                                                    return <div className="flex items-center cursor-pointer mt-1 group" key={k} onClick={() => {
+                                                        setModeDelivery(modeDelivery.map((item, i) => {
+                                                            return { ...item, check: i == k }
+                                                        }))
+                                                    }}>
+                                                        <Radio id="modL" type="checkbox" checked={el.check} onChange={() => { }} />
+                                                        <div className="me-2"></div>
+                                                        <span className="text-sm group-hover:underline me-1 flex flex-col items-start gap-">
+                                                            {el.title}
+                                                            {
+                                                                !!el.isWaslet && <div className="flex items-center gap-2">
+                                                                    {i18n.language == "ar" ? "عبر" : "via"}
+                                                                    <img src={images.waslet} style={{ height: "24px" }} alt="" />
+                                                                </div>
+                                                            }
+                                                        </span>
+
+
+                                                        <div className="grow me-2"></div>
+                                                        <span>{el.cost?.toFixed(2)}<Currency /></span>
+                                                    </div>
+                                                })
+                                            }
+                                        </div>
                                         <div ref={ref.nots}></div>
                                         <Textarea
                                             id="nots"
@@ -483,10 +516,9 @@ function CheckoutDefault() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-span-4 max-md:col-span-5 max-sm:col-span-10 relative">
-                                <div className="bg-gray-50 rounded-md p-5 pt-12 sticky top-[60px] border border-gray-200">
+                            <div className=" relative">
+                                <div className="bg-gray-50 rounded-md p-5   border border-gray-200">
                                     <h1 className="text-center  text-xl font-bold mb-6">{t("your_command")}</h1>
-                                    
                                     <div className="flex flex-col gap-2">
                                         {
                                             cart.items.map((el, k) => {
@@ -499,72 +531,19 @@ function CheckoutDefault() {
                                         <div className="grow"></div>
                                         <span className="font-semibold">{getSubTotal(cart).toFixed(2)} <Currency /></span>
                                     </div>
-                                    <div className="border border-dotted border-gray-300 mt-2 mb-3"></div>
-                                    <div ref={ref.modeDelivery}></div>
-                                    <div className="text-red-600 font-semibold animate-vibre">{errors.deliveryRequire}</div>
-                                    <div className="flex font-medium">
-                                        {t("delivery_mode")}
-                                    </div>
-                                    <div>
-                                        {
-                                            !!errors.deliveryError && <div className="mt-1 text-center font-semibold rounded-md bg-red-100 text-red-700 p-4 ">
-                                                {errors.deliveryError}
-                                            </div>
-                                        }
-                                        {
-                                            modeDelivery.map((el, k) => {
-                                                return <div className="flex items-center cursor-pointer mt-1 group" key={k} onClick={() => {
-                                                    setModeDelivery(modeDelivery.map((item, i) => {
-                                                        return { ...item, check: i == k }
-                                                    }))
-                                                }}>
-                                                    <Radio id="modL" type="checkbox" checked={el.check} onChange={() => { }} />
-                                                    <div className="me-2"></div>
-                                                    <span className="text-sm group-hover:underline me-1 flex flex-col items-start gap-">
-                                                        {el.title}
-                                                        {
-                                                            !!el.isWaslet && <div className="flex items-center gap-2">
-                                                                {i18n.language == "ar" ? "عبر" : "via"}
-                                                                <img src={images.waslet} style={{ height: "24px" }} alt="" />
-                                                            </div>
-                                                        }
-                                                    </span>
-
-
-                                                    <div className="grow me-2"></div>
-                                                    <span>{el.cost?.toFixed(2)}<Currency /></span>
-                                                </div>
-                                            })
-                                        }
-                                    </div>
+                                    
                                     <div className="border border-dotted border-gray-300 mt-3 mb-3"></div>
                                     <div className="flex items-center">
                                         <Radio id="dd" checked={true} onChange={() => { }} />
                                         <div className="me-2"></div>
                                         {t("cahch_ondeliv")}
                                     </div>
-
-                                   
-                                    <Input
-                                        
-                                        suffix={
-                                            <ButtonR className="ltr:rounded-l-none rtl:rounded-r-none" type="button">{t("apply")}</ButtonR>
-                                        }
-                                        prefix={
-                                            <span className="text-gray-500 font-semibold text-[12px]">{t("promo_code")}</span>
-                                        }
-                                        placeholder={t("enter_promo")}
-                                        inputClassName="pe-0"
-                                        className="mt-4"
-                                        label=""
-                                    />
-                                     {/* <div className="border border-dotted border-gray-300 mt-3 mb-2"></div> */}
+                                    <div className="border border-dotted border-gray-300 mt-3 mb-2"></div>
                                     <div className="flex mt-3 items-center">
                                         <h1 className="text-lg font-bold uppercase">{t("total")}</h1>
                                         <div className="grow"></div>
                                         <span className="font-semibold text-2xl">{getTotal(cart).toFixed(2)} <small className="font-medium"><Currency /></small></span>
                                     </div>
-                                    
                                     <Button
                                         type="submit"
                                         isLoading={loading}
@@ -577,8 +556,7 @@ function CheckoutDefault() {
 
                             </div>
                         </div>
-                    </form> :
-                        <CartEmpty />}
+                    </form>
                 </>
 
 

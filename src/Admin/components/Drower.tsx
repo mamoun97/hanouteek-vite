@@ -8,20 +8,61 @@ import { AppDispatch, RootState } from "../../Store";
 import { changeUser } from "../../Store/authSlice";
 import ApiConfig from "../../Api/ApiConfig";
 import AuthApi from "../../Api/Auth";
+import { TbShoppingCartPlus } from "react-icons/tb";
+
+// const items = [
+//     {
+//         link: "/dashboard",
+//         text: "Dashboard",
+//         role: ["associate", "order_creator"],
+//         icon: IoBarChartSharp
+//     },
+//     {
+//         link: "/order/create",
+//         text: "Create order",
+//         role: [ "order_creator"],
+//         icon: TbShoppingCartPlus
+//     },
+//     {
+//         link: "/orders",
+//         text: "Ordres",
+//         role: ["associate"],
+//         icon: BsBoxFill
+//     },
+//     {
+//         link: "/pos/order/create",
+//         text: "POS",
+//         role: ["associate","order_creator"],
+//         icon: BsBoxFill
+//     }
+// ]
 
 const items = [
     {
         link: "/dashboard",
         text: "Dashboard",
+        role: ["associate", "order_creator","pos"],
         icon: IoBarChartSharp
     },
     {
+        link: "/order/create",
+        text: "Create order",
+        role: [ "associate","order_creator"],
+        icon: TbShoppingCartPlus
+    },
+    {
         link: "/orders",
-        text: "Orders",
+        text: "Ordres",
+        role: ["associate","pos"],
+        icon: BsBoxFill
+    },
+    {
+        link: "/pos/order/create",
+        text: "POS",
+        role: ["pos"],
         icon: BsBoxFill
     }
 ]
-
 export default function Drower({
     open,
     setOpen
@@ -41,9 +82,9 @@ export default function Drower({
             }}></div>
             <div className={"h-full px-3 py-4 overflow-y-auto bg-gray-950 text-gray-100 relative max-sm:animate-cart_rtl"}>
                 <div className='flex flex-col items-center'>
-                   
+
                     <div className="w-20 h-20 rounded-full  bg-slate-300 border-2 border-white bg-center bg-cover bg-no-repeat"
-                    style={{backgroundImage:"url('"+ApiConfig.rootUrl+"/"+user.avatar+"')"}}></div>
+                        style={{ backgroundImage: "url('" + ApiConfig.rootUrl + "/" + user.avatar + "')" }}></div>
                     <h1 className='text-lg font-bold capitalize mt-2   max-w-[80%]  truncate ...'>
                         {user.firstName + " " + user.lastName}
                     </h1>
@@ -66,13 +107,15 @@ export default function Drower({
                 <ul className="space-y-2 font-medium">
                     {
                         items.map((el, k) => {
-                            return <li key={k}>
-                                <Link to={el.link} onClick={()=> setOpen(false)} className={"flex items-center p-2  rounded-lg  hover:text-white  hover:bg-gray-700/25 group " + ((location.pathname == el.link) ? "text-white !bg-gray-700" : "text-gray-300")}>
+                            if (el.role.find(d => d == user.role))
+                                return <li key={k}>
+                                    <Link to={el.link} onClick={() => setOpen(false)} className={"flex items-center p-2  rounded-lg  hover:text-white  hover:bg-gray-700/25 group " + ((location.pathname == el.link) ? "text-white !bg-gray-700" : "text-gray-300")}>
 
-                                    <el.icon className={"w-5 h-5  transition duration-75 dark:text-gray-400 group-hover:text-gray-100 " + ((location.pathname == el.link) ? "text-gray-100" : "text-gray-500")} />
-                                    <span className="ms-3">{el.text}</span>
-                                </Link>
-                            </li>
+                                        <el.icon className={"w-5 h-5  transition duration-75 dark:text-gray-400 group-hover:text-gray-100 " + ((location.pathname == el.link) ? "text-gray-100" : "text-gray-500")} />
+                                        <span className="ms-3">{el.text}</span>
+                                    </Link>
+                                </li>
+                            return null
                         })
                     }
 
