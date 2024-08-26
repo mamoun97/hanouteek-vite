@@ -73,7 +73,7 @@ export default function LayoutAdmin({ children }: {
               {openPos && <div className="w-64 min-w-[256px] max-sm:w-0 max-sm:min-w-0 ">
                 <Drower {...{ open, setOpen }} />
               </div>}
-              <div className='grow h-screen overflow-auto'>
+              <div className='grow min-h-screen  bg-background'>
                 <Navbar {...{ open, setOpen }}
                   btnClose={
                   <button onClick={() => {
@@ -83,7 +83,7 @@ export default function LayoutAdmin({ children }: {
                     <LuArrowRightFromLine className="w-5 h-5" />}
                   </button>
                 } />
-                <div className="p-5 relative max-md:p-3">
+                <div className="p-5 relative max-md:p-3 ">
                   {children}
                 </div>
               </div>

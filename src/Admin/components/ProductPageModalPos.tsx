@@ -31,9 +31,9 @@ function ProductPageRequest({ prod }: { prod: ProductModalProps }) {
         ProductApi.getProductBySlug(prod.slug, global).then(res => {
             setProduct({
                 ...res,
-                ...user.role=="vendor"?{
-                    price:res.drop_price??res.price
-                }:{}
+                ...user.role == "vendor" ? {
+                    price: res.drop_price ?? res.price
+                } : {}
             })
             setLoading(false)
         }).catch(err => {
@@ -50,7 +50,7 @@ function ProductPageRequest({ prod }: { prod: ProductModalProps }) {
             <Loader className="w-16 h-16" size="lg" color="warning" />
         </div>;
 
-    return <div key={prod.slug} className="">
+    return product ? <div key={prod.slug} className="">
         <div className="flex justify-center items-center flex-col">
             <h1 className="text-lg font-bold text-center">
                 {product?.name ?? "FFFF"}
@@ -73,6 +73,10 @@ function ProductPageRequest({ prod }: { prod: ProductModalProps }) {
                     size: null
                 }
             }} />}
+    </div> : <div>
+            <h1 className="text-lg font-bold text-center text-red-500">
+            indisponible
+            </h1>
     </div>
 }
 

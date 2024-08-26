@@ -21,6 +21,8 @@ import { Link } from "react-router-dom";
 import { IoArrowBackOutline } from "react-icons/io5";
 import useGlobal from "../../hoock/useGlobal";
 import TabC from "../components/TabC";
+import ButtomDrower from "../components/BottomDrower";
+import { FiShoppingCart } from "react-icons/fi";
 
 type ProductsTotal = {
     data: Product[],
@@ -37,6 +39,7 @@ export default function AddOrderPos({ dropData }: { dropData?: DropData }) {
     const user = useSelector<RootState>((state) => state.user) as UserAuth
     const [selectProduct, setSelectProduct] = useState<Product | null>(null)
     const [selectCateg, setSelectCateg] = useState<Category | null>(null)
+    const [openCart, setOpenCart] = useState(false)
     const [selectSubCateg, setSelectSubCateg] = useState<Category | null>(null)
     const globalAnd = useGlobal("&")
     const globalQue = useGlobal("?")
@@ -68,7 +71,7 @@ export default function AddOrderPos({ dropData }: { dropData?: DropData }) {
         ProductApi.getAllByFilterAssociate(`?limit=${limit}&page=${page}${dropData ? "&dropshipping=true" : ""}${selectCateg ? "&categoryId=" + selectCateg.id : ""}`, globalAnd).then(res => {
             setProducts({
                 data: [
-                    ...products.data, 
+                    ...products.data,
                     ...res.data.map(el => {
                         return { ...el, price: dropData ? el.drop_price ?? el.price : el.price }
                     })
@@ -118,9 +121,81 @@ export default function AddOrderPos({ dropData }: { dropData?: DropData }) {
         setOpenModal(true)
     }, [selectProduct])
 
+    const cartView = <>
+
+        <h1 className="text-center  text-xl font-bold my-4">Cart</h1>
+        <div className="flex flex-col gap-2">
+            {
+                cart.map((el, k) => {
+                    return <CartItem2 data={{
+                        ...el
+
+                    }} index={k} {...{ cart, setCart }} />
+                })
+            }
+        </div>
+        <div className="flex mt-3 items-center">
+            <h1 className="text-sm font-medium">SubTotal</h1>
+            <div className="grow"></div>
+            <span className="font-semibold">{getTotal().toFixed(2)} DZD</span>
+        </div>
+
+        <div className="flex mt-3 items-center">
+            <h1 className="text-sm font-bold uppercase">Total</h1>
+            <div className="grow"></div>
+            <span className="font-semibold text-2xl">{
+                (getTotal()).toFixed(2)
+            } <small className="font-medium">DZD</small></span>
+        </div>
+        {
+            dropData ? <>
+                <Button className="mt-4 w-full" type="button" onClick={() => {
+                    dropData.setDataDrop({
+                        ...dataOrder,
+                        item: cart
+                    })
+                    dropData.setOpenForm(true)
+                    setOpenCart(false)
+                }}>Add Command</Button>
+            </> : <>
+                <div className="border-b border-dashed border-gray-300 my-3"></div>
+                <Input
+                    label="Phone"
+                    inputMode="tel"
+                    name="phone"
+                    autoComplete="off"
+                    className=""
+                    value={dataOrder.contact_phone}
+                    onChange={(e) => {
+                        if ((!/^[0-9]{0,10}$/.test(e.target.value))) {
+                            return
+                        }
+                        else
+                            setDataOrder({
+                                ...dataOrder,
+                                contact_phone: e.target.value
+                            })
+                    }}
+                />
+                <Input
+                    suffix={
+                        <Button className="rounded-l-none" type="button">Appliquer</Button>
+                    }
+                    prefix={
+                        <span className="text-gray-500 font-semibold text-[12px]">Code promo</span>
+                    }
+                    inputClassName="pe-0"
+                    className="mt-4"
+                    label=""
+                />
+
+                <Button className="mt-4 w-full" type="submit" isLoading={loading}>Ajouter</Button>
+            </>
+        }
+    </>
     return (
         <form onSubmit={handleSubmit}>
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center ">
                 {dropData ? null : <Link to={"/dashboard"}>
                     <ActionIcon variant="flat" size="lg" className="text-lg">
                         <IoArrowBackOutline />
@@ -129,7 +204,7 @@ export default function AddOrderPos({ dropData }: { dropData?: DropData }) {
                 <h1 className="text-2xl font-semibold">Ajouter une commande</h1>
             </div>
             <div className="grid grid-cols-6 max-[910px]:grid-cols-2 gap-2">
-                <div className="col-span-4 max-[1080px]:col-span-3 mt-2">
+                <div className="col-span-4 max-[1080px]:col-span-3 mt-2 ">
 
                     <div className="relative z-30">
                         <ProductSelect setValue={setSelectProduct} isSearch={true} />
@@ -192,7 +267,7 @@ export default function AddOrderPos({ dropData }: { dropData?: DropData }) {
 
 
 
-                    <div className="grid relative z-0 grid-cols-5 max-[1300px]:grid-cols-4 gap-6 max-sm:gap-2 mt-3 max-[1080px]:grid-cols-2 max-[960px]:grid-cols-2 max-sm:grid-cols-2 max-xs:grid-cols-1">
+                    <div className="grid relative z-0 grid-cols-5 max-[1300px]:grid-cols-4 gap-2 max-sm:gap-2 mt-3 max-[1080px]:grid-cols-2 max-[960px]:grid-cols-2 max-sm:grid-cols-2 max-xs:grid-cols-1">
                         {!loading && products.data.length == 0 && <div className={`p-2     rounded-md flex flex-col justify-center items-center col-span-full `}
                         >
                             <MdOutlineCloudOff className="w-28 h-28 text-primary" />
@@ -231,79 +306,11 @@ export default function AddOrderPos({ dropData }: { dropData?: DropData }) {
                         </div>}
                     </div>
                 </div>
-                <div className="col-span-2 max-[1080px]:col-span-3 max-sm:col-span-2 ">
-                    <div className={`bg-gray-50 mt-[33px] rounded-md p-5 sticky ${dropData ? "top-16" : "top-3"} border border-gray-200 dark:bg-[#222] dark:border-[#444]`}>
-                        <h1 className="text-center  text-xl font-bold my-4">Cart</h1>
-                        <div className="flex flex-col gap-2">
-                            {
-                                cart.map((el, k) => {
-                                    return <CartItem2 data={{
-                                        ...el
-                                        
-                                    }} index={k} {...{ cart, setCart }} />
-                                })
-                            }
-                        </div>
-                        <div className="flex mt-3 items-center">
-                            <h1 className="text-sm font-medium">SubTotal</h1>
-                            <div className="grow"></div>
-                            <span className="font-semibold">{getTotal().toFixed(2)} DZD</span>
-                        </div>
-
-                        <div className="flex mt-3 items-center">
-                            <h1 className="text-sm font-bold uppercase">Total</h1>
-                            <div className="grow"></div>
-                            <span className="font-semibold text-2xl">{
-                                (getTotal()).toFixed(2)
-                            } <small className="font-medium">DZD</small></span>
-                        </div>
+                <div className="col-span-2 max-[1080px]:col-span-3 max-sm:col-span-2 max-sm:min-h-[80px] ">
+                    <div className={` mt-[33px] rounded-md p-5 max-sm:hidden sticky ${dropData ? "top-16" : "top-3"}   bg-gray-50 dark:bg-[#292a2d]    border border-gray-200  dark:border-gray-800 shadow dark:shadow-black  `} >
                         {
-                            dropData ? <>
-                                <Button className="mt-4 w-full" type="button" onClick={() => {
-                                    dropData.setDataDrop({
-                                        ...dataOrder,
-                                        item: cart
-                                    })
-                                    dropData.setOpenForm(true)
-                                }}>Add Command</Button>
-                            </> : <>
-                                <div className="border-b border-dashed border-gray-300 my-3"></div>
-                                <Input
-                                    label="Phone"
-                                    inputMode="tel"
-                                    name="phone"
-                                    autoComplete="off"
-                                    className=""
-                                    value={dataOrder.contact_phone}
-                                    onChange={(e) => {
-                                        if ((!/^[0-9]{0,10}$/.test(e.target.value))) {
-                                            return
-                                        }
-                                        else
-                                            setDataOrder({
-                                                ...dataOrder,
-                                                contact_phone: e.target.value
-                                            })
-                                    }}
-                                />
-                                <Input
-                                    suffix={
-                                        <Button className="rounded-l-none" type="button">Appliquer</Button>
-                                    }
-                                    prefix={
-                                        <span className="text-gray-500 font-semibold text-[12px]">Code promo</span>
-                                    }
-                                    inputClassName="pe-0"
-                                    className="mt-4"
-                                    label=""
-                                />
-
-                                <Button className="mt-4 w-full" type="submit" isLoading={loading}>Ajouter</Button>
-                            </>
+                            cartView
                         }
-
-
-
                     </div>
                 </div>
             </div>
@@ -320,6 +327,17 @@ export default function AddOrderPos({ dropData }: { dropData?: DropData }) {
                         setCart([...cart, e])
                     }
                 }} />}
+            {!!cart.length&&<Button onClick={() => setOpenCart(true)} className="fixed  justify-center gap-2 items-center bottom-4 left-4 right-4 z-20 max-sm:flex hidden">
+                <FiShoppingCart className="text-xl" />
+                <span className="tet-lg font-bold">Total</span>
+                <div className="grow"></div>
+                <span className="font-bold">{(getTotal()).toFixed(2)} DZD</span>
+            </Button>}
+            <ButtomDrower open={openCart} onClose={() => setOpenCart(false)}  >
+                <div className="p-4">
+                    {cartView}
+                </div>
+            </ButtomDrower>
         </form>
     )
 }

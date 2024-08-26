@@ -21,7 +21,7 @@ export default function Navbar({
 
     if (open) { }
     return (
-        <header className=" w-full bg-[#FFFc] dark:bg-[#111] shadow-gray-100 dark:shadow-[#0008] backdrop-blur-md h-14 flex items-center sticky top-0 z-10 shadow-md  ">
+        <header className=" w-full bg-background shadow dark:shadow-[#0008] backdrop-blur-md h-14 flex items-center sticky top-0 z-10  ">
             <nav className=" border-gray-200 px-4 lg:px-6 py-2.5  w-full">
                 <div className="flex flex-wrap justify-between items-center">
                     <div className="flex justify-start items-center w-full gap-2">

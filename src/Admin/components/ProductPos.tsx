@@ -31,14 +31,14 @@ export default function ProductPos({ data, showAddToCart = false, addToCart }: {
     return <>
         <div
 
-            className={`transition-all z-50 shadow-none border-none cursor-pointer`}
+            className={`transition-all z-50 rounded-md border-none cursor-pointer bg-gray-50 dark:bg-[#292a2d]    border border-gray-200  dark:border-gray-800 shadow dark:shadow-black`}
             onClick={() => {
                 // navigate("/product/" + data.slugName)
             }}
         >
             <div className="overflow-visible p-0 relative ">
 
-                <div className="w-full pt-[100%] z-0 relative shadow-sm rounded-lg bg-cover bg-no-repeat bg-center" style={{
+                <div className="w-full pt-[100%] z-0 relative shadow-sm rounded-lg rounded-b-none bg-cover bg-no-repeat bg-center" style={{
                     backgroundImage: "url('" + imgSrc(data.images[0],true)  + "')"
                 }}>
 
@@ -95,9 +95,9 @@ export default function ProductPos({ data, showAddToCart = false, addToCart }: {
                     </div>
                 }
             </div>
-            <div className="text-small justify-between items-center max-sm:flex-col max-sm:items-start">
-                <b className="h-11 flex font-medium items-center text-start line-clamp-2 w-full leading-4">{data.name}</b>
-                <p className="text-default-500 text-sm">{data.price} <Currency /></p>
+            <div className="text-small justify-between items-center max-sm:flex-col max-sm:items-start p-2">
+                <b className="h-11 flex font-medium items-center text-start line-clamp-2 w-full leading-4 text-foreground">{data.name}</b>
+                <p className="text-default-500 text-sm font-bold ">{data.price} <Currency /></p>
             </div>
         </div>
 

@@ -136,7 +136,7 @@ export default function Drower({
             <div className={'fixed hidden max-sm:block top-0 left-0 right-0 bottom-0 bg-[#0003] cursor-pointer'} onClick={() => {
                 setOpen(false)
             }}></div>
-            <div className={"h-full px-3 py-4 overflow-y-auto bg-gray-950 text-gray-100 relative max-sm:animate-cart_rtl"}>
+            <div className={"h-full px-3 py-4 overflow-y-auto bg-[#181818] dark:bg-[#111] text-gray-100 relative max-sm:animate-cart_rtl"}>
                 <div className='flex flex-col items-center'>
 
                     <div className="w-20 h-20 rounded-full  bg-slate-300 border-2 border-white bg-center bg-cover bg-no-repeat"
@@ -174,9 +174,6 @@ export default function Drower({
                             return null
                         })
                     }
-
-
-
                 </ul>
                 
             </div>
