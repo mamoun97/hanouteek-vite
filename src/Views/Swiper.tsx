@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperProps, SwiperRef, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import "swiper/css";
 import "swiper/css/pagination";
@@ -72,43 +72,43 @@ const DivC = styled.div`
 `
 
 
-function SwiperF({ breakpoints = {},className="",autoPlay=false, items = [], swiperProps = {},withPagination=false }: {
-    swiperProps?: any,
+function SwiperF({ breakpoints = {}, className = "", autoPlay = false, items = [], swiperProps = {}, withPagination = false }: {
+    swiperProps?: React.RefAttributes<SwiperRef> & React.PropsWithChildren<SwiperProps>,
     breakpoints?: any,
-    autoPlay?:boolean,
-    withPagination?:boolean,
+    autoPlay?: boolean,
+    withPagination?: boolean,
     items?: Array<any>,
-    className?:string
+    className?: string
 }) {
     const theme = useSelector<RootState>(state => state.theme) as ThemeSetting
-    const {i18n}=useTranslation()
+    const { i18n } = useTranslation()
     return (
-        <DivC  theme={theme.theme} className={className}>
+        <DivC theme={theme.theme} className={className}>
 
             <Swiper
-            style={{ width: '100%', height: '100%' }}
+                style={{ width: '100%', height: '100%' }}
                 key={i18n.language}
-                dir={i18n.language=="ar"?"rtl":"ltr"}
+                dir={i18n.language == "ar" ? "rtl" : "ltr"}
                 spaceBetween={30}
-                modules={[Navigation, ...withPagination?[Pagination]:[],...autoPlay?[Autoplay]:[]]}
+                modules={[Navigation, ...withPagination ? [Pagination] : [], ...autoPlay ? [Autoplay] : []]}
                 navigation
-                pagination={{ 
+                pagination={{
                     clickable: true,
                     renderBullet: function (index, className) {
-                        if(index){}
+                        if (index) { }
                         return '<span class="' + className + '"></span>';
-                      },
-                 }}
-                 onClickCapture={(e)=>{
+                    },
+                }}
+                onClickCapture={(e) => {
                     // console.log(e)
-                 }}
-                 onSwiper={(e)=>{
+                }}
+                onSwiper={(e) => {
                     // console.log(e)
-                 }}
+                }}
                 breakpoints={breakpoints}
                 className="mySwiper"
                 {...swiperProps}
-                
+
             >
                 {
                     items.map((el: any, index: any) => {

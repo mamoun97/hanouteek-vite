@@ -80,18 +80,21 @@ export default function Reviews({ id }: { id: number }) {
                                     4.5
                                 </span>}
                             </div>
+                            <div className="flex items-center gap-2 text-sm">
+                                Voir les avis
+                                {
+                                    i18n.language == "ar" ?
+                                        <IoIosArrowBack className={cn(
+                                            "h-5 w-5 transform transition-transform duration-300",
+                                            open && "-rotate-90"
+                                        )} /> :
+                                        <IoIosArrowForward className={cn(
+                                            "h-5 w-5  transform transition-transform duration-300",
+                                            open && "rotate-90"
+                                        )} />
+                                }
+                            </div>
 
-                            {
-                                i18n.language == "ar" ?
-                                    <IoIosArrowBack className={cn(
-                                        "h-5 w-5 transform transition-transform duration-300",
-                                        open && "-rotate-90"
-                                    )} /> :
-                                    <IoIosArrowForward className={cn(
-                                        "h-5 w-5  transform transition-transform duration-300",
-                                        open && "rotate-90"
-                                    )} />
-                            }
 
                         </div>
                     }
@@ -149,7 +152,7 @@ export default function Reviews({ id }: { id: number }) {
                 <ReviewsItems data={data} />
                 <div className="flex justify-center ">
                     {(data.data.length < data.totalCount && !loading) && <ActionIcon rounded="full" variant="outline" onClick={() => {
-                        setData({ 
+                        setData({
                             ...data,
                             page: data.page + 1
 

@@ -38,11 +38,11 @@ export default function Navbar({
                         <div className="grow">
 
                         </div>
-                        {
+                        {/* {
 
                             ["/dashboard","/orders"].includes(location.pathname)&&
                             <SelectPlatform/>
-                            }
+                            } */}
                         <ModeThemeButton/>
                         <button   className="text-2xl p-2 mr-2 text-gray-600 rounded cursor-pointer max-sm:inline hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700">
                             <IoIosNotifications />

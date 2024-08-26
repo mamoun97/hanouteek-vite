@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useGetProductBySlugService } from "../Api/Services"
 import Loading from "../Constants/Loading";
-import { ProductPage } from "../Pages/Product";
 import Container from "./Container";
 import IconButton from "./TailwindComponent/IconButton";
 import { MdClear } from "react-icons/md";
+import ProductPage from "./ProductPage";
 
 export default function ProductModal({ data, onClose }: { data: Product, onClose: any }) {
     const { data: product, isLoading } = useGetProductBySlugService(data.slugName ?? "")

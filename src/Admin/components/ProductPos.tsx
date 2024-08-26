@@ -7,11 +7,12 @@ import ApiConfig from "../../Api/ApiConfig";
 import { ActionIcon } from "rizzui";
 import Currency from "../../Constants/Currency";
 import ProductPageModalPos from "./ProductPageModalPos";
+import imgSrc from "../../utils/imgSrc";
 // import ProductPageModal from "./ProductPageModal";
 
 
-export default function ProductPos({ data, showAddToCart = false,addToCart }: { data: Product, showAddToCart?: boolean ,addToCart: (e: OrderFullItem) => void}) {
-   
+export default function ProductPos({ data, showAddToCart = false, addToCart }: { data: Product, showAddToCart?: boolean, addToCart: (e: OrderFullItem) => void }) {
+
     const [showQte, setShowQte] = useState(false)
     const [open, setOpen] = useState(false)
     const [qte, setQte] = useState(1)
@@ -36,12 +37,13 @@ export default function ProductPos({ data, showAddToCart = false,addToCart }: { 
             }}
         >
             <div className="overflow-visible p-0 relative ">
-                
+
                 <div className="w-full pt-[100%] z-0 relative shadow-sm rounded-lg bg-cover bg-no-repeat bg-center" style={{
-                    backgroundImage:"url('"+ApiConfig.rootUrl + "/" + data.images[0]+"')"
+                    backgroundImage: "url('" + imgSrc(data.images[0],true)  + "')"
                 }}>
 
                 </div>
+
                 {
                     showAddToCart && <div className="z-10 absolute bottom-2 right-2 flex gap-1 overflow-hidden">
                         {
@@ -65,7 +67,7 @@ export default function ProductPos({ data, showAddToCart = false,addToCart }: { 
                                         <MdRemove />
                                     </ActionIcon>
                                     <div className={`w-6 text-center min-w-6  font-bold transition-transform duration-150 ${animate ? 'scale-0' : 'scale-100'}`}>{qte}</div>
-                                    <ActionIcon variant="text" className="text-xl font-bold " size="sm" onClick={() => {
+                                    <ActionIcon variant="text" className="text-xl font-bold cursor-pointer " size="sm" onClick={() => {
                                         setAnimate(true);
                                         setTimeout(() => {
                                             setQte(qte + 1)
@@ -83,7 +85,7 @@ export default function ProductPos({ data, showAddToCart = false,addToCart }: { 
                                 </ActionIcon>
                             </>
                                 :
-                                <ActionIcon variant="solid" className="text-xl font-bold " size="sm" onClick={() => {
+                                <ActionIcon variant="solid" className="text-xl font-bold cursor-pointer" size="sm" onClick={() => {
                                     // setShowQte(true)
                                     // timer()
                                     setOpen(true)
@@ -95,7 +97,7 @@ export default function ProductPos({ data, showAddToCart = false,addToCart }: { 
             </div>
             <div className="text-small justify-between items-center max-sm:flex-col max-sm:items-start">
                 <b className="h-11 flex font-medium items-center text-start line-clamp-2 w-full leading-4">{data.name}</b>
-                <p className="text-default-500 text-sm">{data.price} <Currency/></p>
+                <p className="text-default-500 text-sm">{data.price} <Currency /></p>
             </div>
         </div>
 

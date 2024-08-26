@@ -17,20 +17,20 @@ function Footer() {
                 <div className="flex justify-center">
 
                     <div className="flex items-center w-full max-w-4xl">
-                    <Link to={"/"}>
-                        <img src={theme.theme.Logo.includes("http") ? theme.theme.Logo :
-                            ApiConfig.rootUrl + "/" + theme.theme.Logo} alt="" className="h-10 max-sm:h-6" />
-                    </Link>
-                    <div className="grow"></div>
-                    <a href="https://www.facebook.com/" target="_blank" className="text-gray-600 hover:text-primary text-4xl">
-                        <MdFacebook />
-                    </a>
-                    <a href="https://www.instagram.com/" target="_blank" className="text-gray-600 hover:text-primary text-4xl">
-                        <RiInstagramFill />
-                    </a>
-                    <a href="https://www.tiktok.com/" target="_blank" className="text-gray-600 hover:text-primary  text-4xl">
-                        <FaTiktok />
-                    </a>
+                        <Link to={"/"}>
+                            <img src={theme.theme.Logo.includes("http") ? theme.theme.Logo :
+                                ApiConfig.rootUrl + "/" + theme.theme.Logo} alt="" className="h-10 max-sm:h-6" />
+                        </Link>
+                        <div className="grow"></div>
+                        <a href="https://www.facebook.com/" target="_blank" className="text-gray-600 hover:text-primary text-4xl">
+                            <MdFacebook />
+                        </a>
+                        <a href="https://www.instagram.com/" target="_blank" className="text-gray-600 hover:text-primary text-4xl">
+                            <RiInstagramFill />
+                        </a>
+                        <a href="https://www.tiktok.com/" target="_blank" className="text-gray-600 hover:text-primary  text-4xl">
+                            <FaTiktok />
+                        </a>
                     </div>
 
 
@@ -43,10 +43,11 @@ function Footer() {
                         <ul>
                             {
                                 theme.Menu.aboutMenu.listLinks.map((el, k) => {
-                                    
-                                    return <Link to={"/" + el.Link} target={el.ExternalLink?"_blank":""}  key={k} className="text-[13px] hover:text-primary hover:underline">
-                                        <li >{el.name}</li>
-                                    </Link>
+                                    if (theme.Pages.find(item => item.slug == el.Link))
+                                        return <Link to={"/" + el.Link.replace(" ","-")} target={el.ExternalLink ? "_blank" : ""} key={k} className="text-[13px] hover:text-primary hover:underline">
+                                            <li >{el.name}</li>
+                                        </Link>
+                                    return ""
 
                                 })
                             }

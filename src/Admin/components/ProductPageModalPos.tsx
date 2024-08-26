@@ -1,9 +1,14 @@
 
-import { useGetProductBySlugService } from "../../Api/Services";
-import {  Loader, Modal } from "rizzui";
+// import { useGetProductBySlugService } from "../../Api/Services";
+import { Loader, Modal } from "rizzui";
 import { ProductOptions } from "./FormOrder/ProductOptions";
 import Currency from "../../Constants/Currency";
 import useGlobal from "../../hoock/useGlobal";
+import { useSelector } from "react-redux";
+import { RootState } from "../../Store";
+import { useEffect, useState } from "react";
+import ProductApi from "../../Api/ProductApi";
+import alertError from "../../hoock/alertError";
 
 type ProductModalProps = {
     slug: string,
@@ -17,29 +22,45 @@ type CartProps = {
     open: boolean
 }
 function ProductPageRequest({ prod }: { prod: ProductModalProps }) {
-    const global=useGlobal("?")
-    const { data: product, isLoading } = useGetProductBySlugService(prod.slug,global)
+    const global = useGlobal("?")
+    const user = useSelector<RootState>((state) => state.user) as UserAuth
+    const [product, setProduct] = useState<Product>()
+    const [loading, setLoading] = useState(false)
+    const getData = () => {
+        setLoading(true)
+        ProductApi.getProductBySlug(prod.slug, global).then(res => {
+            setProduct({
+                ...res,
+                ...user.role=="vendor"?{
+                    price:res.drop_price??res.price
+                }:{}
+            })
+            setLoading(false)
+        }).catch(err => {
+            alertError(err)
+            setLoading(false)
+        })
+    }
+    useEffect(() => {
+        getData()
+    }, [])
 
-
-
-    
-
-    if (isLoading)
+    if (loading)
         return <div className="mt-5 flex items-center justify-center ">
             <Loader className="w-16 h-16" size="lg" color="warning" />
         </div>;
 
     return <div key={prod.slug} className="">
         <div className="flex justify-center items-center flex-col">
-        <h1 className="text-lg font-bold text-center">
-            {product?.name}
-        </h1>
-        <p className=" text-center">
-            {product?.price} <Currency/>
-        </p>
+            <h1 className="text-lg font-bold text-center">
+                {product?.name ?? "FFFF"}
+            </h1>
+            <p className=" text-center">
+                {user.role == "vendor" ? product?.drop_price ?? product?.price : product?.price} <Currency />
+            </p>
         </div>
-        {product&&<ProductOptions
-        key={product.slugName}
+        {product && <ProductOptions
+            key={product.slugName}
             setValue={(e: any) => {
                 prod.addToCart(e)
                 prod.onClose(false)

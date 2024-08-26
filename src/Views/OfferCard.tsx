@@ -1,11 +1,22 @@
 
 import { useTranslation } from 'react-i18next'
 
-export default function OfferCard({prod}:{prod:ProductCart|Product}) {
+
+type PropsType={
+    prod:ProductCart|Product,
+    type?:"default"|"type1"
+
+}
+export default function OfferCard({prod,type="default"}:PropsType) {
+    if(type=="default")return <OfferCardDefault {...{prod}}/>
+    if(type=="type1")return <OfferCardType1 {...{prod}}/>
+}
+
+function OfferCardDefault({prod}:{prod:ProductCart|Product}) {
     const {t}=useTranslation()
     return (
         <div>
-            <div className="flex gap-2  items-center justify-center  mb-2  p-2 relative">
+            <div className="flex gap-2  items-center justify-start  mb-2  p-2 relative">
 
                 <div className="flex   delay-500 items-center   left-1 top-1 rtl:right-1 rtl:left-[initial] rotate-12 rtl:-rotate-12 justify-center w-16 h-16 leading-5  rounded-full text-white font-semibold flex-col"
                 >
@@ -24,6 +35,24 @@ export default function OfferCard({prod}:{prod:ProductCart|Product}) {
 
                 </div>
                 <span className="font-semibold max-w-xs  ms-1 text-[15px]  max-sm:text-sm">
+                    {(t("offreMSG") + "").replace("%PRICE%", prod.priceOffer + "").replace("%QTE%", prod.minNumberQteOffer + "")}
+                </span>
+            </div>
+        </div>
+    )
+}
+function OfferCardType1({prod}:{prod:ProductCart|Product}) {
+    const {t}=useTranslation()
+    return (
+        <div>
+            <div className="flex gap-2 border-primary border items-center justify-start  my-4   relative overflow-hidden rounded-lg">
+
+                <div className="flex bg-primary  delay-500 items-center   left-1 top-1 rtl:right-1 rtl:left-[initial]  justify-center w-16 h-16 leading-5   text-white font-semibold flex-col"
+                >
+                    
+                    <span className="text-white relative text-lg font-bold rotate-12 rtl:-rotate-12">{t("offre")}</span>
+                </div>
+                <span className="font-semibold p-2  ms-1 text-[15px]  max-sm:text-sm">
                     {(t("offreMSG") + "").replace("%PRICE%", prod.priceOffer + "").replace("%QTE%", prod.minNumberQteOffer + "")}
                 </span>
             </div>

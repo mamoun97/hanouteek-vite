@@ -495,7 +495,7 @@ export interface Theme {
     BodyPreview:         string;
     Primary:             string;
     lightPrimary:        string;
-    templateType:        "restaurant"|"store";
+    templateType:        "restaurant"|"store"|"joomla";
     darkPrimary:         string;
     Secondary:           string;
     bodyBackgroundColor: BodyBackgroundColor;

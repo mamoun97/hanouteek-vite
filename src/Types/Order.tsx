@@ -15,7 +15,7 @@ interface OrderForm {
     contact_phone: string,
     is_stopdesk: boolean,
     stopdesk_id: number,
-    address?:string,
+    address?: string,
     nots: string,
 }
 interface Order extends OrderForm {
@@ -90,6 +90,7 @@ type OrderFull = {
     price_total: number,
     price_promo: number,
     price_delivery: number,
+    price_drop?:number,
     to_commune_name: string,
     tracking: string | null,
     platform: string | null,
@@ -111,6 +112,7 @@ type OrderFull = {
     is_stopdesk?: boolean,
     ProductStock?: boolean,
     product_to_collect?: string | null,
+    min_price_drop_shipper?:number,
     address_lat?: number,
     address_lng?: number,
     time_delivery?: number,
@@ -122,6 +124,8 @@ type OrderFull = {
     duplicate: number,
     has_exchange: boolean,
     state: OrderState,
+    subStatus?: OrderSubState,
+    remark?: string,
     nots: string,
     date_delivery: null,
     created_at: string,
@@ -131,12 +135,16 @@ type OrderFull = {
         firstName: string,
         lastName: string,
         phoneNumber: string,
-        avatar:string
+        avatar: string
     },
     item: OrderFullItem[],
     states: StatesOrder[],
 
 }
+type OrderSubState = ("En attente de traitement" |
+    "Accpte" |
+    "annul" |
+    "Inoignable");
 type OrderState = (
     "pending" |
     "unresponsive" |
@@ -182,7 +190,7 @@ type StatesOrder = {
     created_at: string
 }
 interface OrdersResponse extends ResponseAtt {
-    
+
     data: OrderFull[]
 }
 type OrderOptionRequest = {
@@ -193,6 +201,8 @@ type OrderOptionRequest = {
     id?: string,
     product?: Product | null,
     state?: string | null,
+    statuses?: string[] | null,
+    subStatus?: string | null,
     to_wilaya_name?: string,
     duplicate?: boolean,
     contact_phone?: string
@@ -202,6 +212,9 @@ type UpdateStatePayload = {
     platform: string,
     comment: string,
     password: string
+}|{
+    subStatus?: OrderSubState,
+    remark?: string,
 }
 type StateItem = {
     label: string,
@@ -319,23 +332,40 @@ type TrackingItem = {
         created_at: string
     }[]
 }
-type TrackingResponse = {
-    has_more: boolean,
-    total_data: number,
-    data: TrackingItem[],
-    links: {
-        self: string
-    }
-}
-type CreateOrderResponse={
-    message:string,
-    otp:boolean,
+type TrackingResponse = OrderFull[]
+type CreateOrderResponse = {
+    message: string,
+    otp: boolean,
     order: number,
-    state:1|2
+    state: 1 | 2
 }
-type OtpModalOpen={
-    id:number,
-    phone:string
+type OtpModalOpen = {
+    id: number,
+    phone: string
+}
+type ExchangeInput = {
+    id_order_exchange: number,
+    iamge_exchange: string,
+    note_exchange: string,
+}
+type OrderAbandoned = {
+    id: number,
+    to_commune_name: string,
+    to_wilaya_name: string,
+    address: string,
+    fullName: string,
+    firstname: string,
+    duplicate: number,
+    state: boolean,
+    familyname: string,
+    email: string,
+    contact_phone: string,
+    items: string,
+    created_at: string,
+    updated_at: string
+}
+interface OrderAbandonedResponse extends ResponseAtt {
+    data: OrderAbandoned[]
 }
 
 

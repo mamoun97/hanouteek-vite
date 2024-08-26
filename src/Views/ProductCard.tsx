@@ -14,6 +14,7 @@ import { FiShoppingCart } from "react-icons/fi"
 import { useTranslation } from "react-i18next"
 import Currency from "../Constants/Currency"
 import ProductView from "./Resturant/ProductView"
+import imgSrc from "../utils/imgSrc"
 
 // import ProductView from "./Resturant/ProductView"
 
@@ -42,17 +43,17 @@ function ProductHanouteek({ data, showFull = false, className = ""
     const dispatch: AppDispatch = useDispatch();
     const [openModal, setOpenModal] = useState(false)
     const { t } = useTranslation()
-    const promo = Math.ceil(100 - data.price * 100 / data.CompareAtPrice)
+    const promo = !!data.CompareAtPrice?Math.ceil(100 - data.price * 100 / data.CompareAtPrice):0
     return <>
         <div className={"bg-white group cursor-pointer relative cardProd " + className}>
 
-            <div className={`relative  pt-[100%]  overflow-hidden group`}>
+            <div className={`relative  pt-[100%]  overflow-hidden group `}>
                 <Link to={"/product/" + data.slugName}>
 
                     <div className="absolute top-0 left-0 right-0 bottom-0 group/img">
                         <LazyLoad className={
                             "w-full h-auto max-h-full object-fill " + (data.images.length >= 2 ? "group-hover/img:hidden" : "")
-                        } src={ApiConfig.rootUrl + "/" + data.images[0]} />
+                        } src={imgSrc(data.images[0],true)} />
                         {
                             data.images.length >= 2 &&
                             <LazyLoad className={
@@ -108,8 +109,8 @@ function ProductHanouteek({ data, showFull = false, className = ""
                     style={{
                         backgroundColor: theme.theme.Primary
                     }}>
-                    - {
-                        promo
+                    {
+                        -promo
                     } %
                 </div> : null
             }

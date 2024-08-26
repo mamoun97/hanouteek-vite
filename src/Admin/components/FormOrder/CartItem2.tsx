@@ -2,6 +2,7 @@ import { MdDeleteOutline } from "react-icons/md";
 
 import ApiConfig from "../../../Api/ApiConfig";
 import Qte from "../../../Views/Qte";
+import imgSrc from "../../../utils/imgSrc";
 
 
 
@@ -18,7 +19,7 @@ export default function CartItem2({ data, index, cart,
 
             <div className={`bg-cover cursor-pointer bg-no-repeat bg-center w-14 h-14 min-w-[56px] rounded-md mt-2 sticky 
             top-[60px]`}
-                style={{ backgroundImage: "url('" + ApiConfig.rootUrl + "/" + data.product?.images[0] + "')" }} >
+                style={{ backgroundImage: "url('" + imgSrc( data.product?.images[0],true) + "')" }} >
                 <div className="w-5 h-5 text-[12px] font-medium rounded-full bg-primary text-white absolute bottom-[2px] right-[2px] flex items-center justify-center">
                     {data.qte}
                 </div>

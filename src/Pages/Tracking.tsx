@@ -5,13 +5,22 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import OrderApi from "../Api/OrderApi";
 import { useTranslation } from "react-i18next";
-import { Input } from "rizzui";
+import { Avatar, Button, Input, Loader, Text, Tooltip } from "rizzui";
 import { IoSearchOutline } from "react-icons/io5";
-import { Toaster } from "react-hot-toast";
-import { MdErrorOutline, MdLocalPhone } from "react-icons/md";
+import toast, { Toaster } from "react-hot-toast";
+import { MdContentCopy, MdLocalPhone } from "react-icons/md";
 import { TbCubeSend } from "react-icons/tb";
-import statesColor from "../Admin/Const/statesColor";
 import moment from "moment";
+import Container from "../Views/Container";
+import ExchangeFormModal from "../Views/ExchangeFormModal";
+import StateChange from "../Admin/components/StateChangeButton";
+import getPlatformUrl from "../Constants/Platform";
+import CopyText from "../Constants/CopyText";
+import { FaExchangeAlt } from "react-icons/fa";
+function formatPhoneNumber(phoneNumber: string) {
+    const localNumber = phoneNumber.replace(/^(\+\d{3})(\d{9})$/, '0$2');
+    return localNumber.replace(/(\d{4})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4');
+}
 const validationS = (dt: Erros) => Yup.object().shape({
     phone: Yup.string()
         .matches(
@@ -28,33 +37,19 @@ type InputData = {
 }
 export default function Tracking() {
     const { t, i18n } = useTranslation()
-    const [data, setData] = useState<TrackingResponse | null>(null)
+    const [data, setData] = useState<TrackingResponse | undefined>(undefined)
     const [loading, setLoading] = useState<boolean>(false)
     const formik = useFormik({
         initialValues: {
             phone: ""
         },
 
-        onSubmit: (values: InputData) => {
-            if (values) { }
-            setData(null)
-            setLoading(true)
+        onSubmit: (_: InputData) => {
 
-            OrderApi.tracking({
-                phone: "+213" + parseInt(values.phone)
-            }).then((res) => {
-                setData(res)
-                setLoading(false)
-            }).catch((err: any) => {
-                alertError(err)
-                setData({
-                    data: [],
-                    has_more: false,
-                    links: { self: "" },
-                    total_data: 0
-                })
-                setLoading(false)
-            })
+            setData(undefined)
+            setLoading(true)
+            getData()
+
 
         },
 
@@ -63,6 +58,24 @@ export default function Tracking() {
             phone_op: t("phone_op")
         }),
     });
+    const getData = () => {
+        OrderApi.tracking({
+            phone: "+213" + parseInt(formik.values.phone)
+        }).then((res) => {
+            setData(res)
+            setLoading(false)
+        }).catch((err: any) => {
+            alertError(err)
+            setData(undefined)
+            setLoading(false)
+        })
+    }
+    const isLessThanThreeDays = (date:string) => {
+        const startDate = moment();
+        const endDate = moment(date);
+        const differenceInDays = startDate.diff(endDate, 'days');
+        return differenceInDays < 3; 
+    }
     return (
         <form onSubmit={formik.handleSubmit}>
 
@@ -74,7 +87,7 @@ export default function Tracking() {
                 <p className="text-center max-w-md text-sm">
                     {t('tracking_subtitle')}
                 </p>
-                <div className="flex items-center max-w-xs w-full">
+                <div className="flex items-center flex-col  max-w-xs w-full">
                     <Input
 
                         id="contact_phone"
@@ -87,11 +100,8 @@ export default function Tracking() {
                         }
                         suffix={
                             loading ?
-                                <svg aria-hidden="true" role="status" className="inline scale-125 w-4 h-4  text-primary animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />
-                                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor" />
-                                </svg>
-                                : <IoSearchOutline className="ms-3 w-5 h-5 cursor-pointer" onClick={formik.handleSubmit} />
+                            <Loader />
+                                : <IoSearchOutline className="ms-3 w-5 h-5 cursor-pointer" onClick={() => formik.handleSubmit} />
                         }
 
 
@@ -115,119 +125,140 @@ export default function Tracking() {
 
 
                 </div>
-                {
-                    data && data.data.length != 0 && <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
-                        <table className="w-full text-sm   text-gray-500 dark:text-gray-400">
-                            <caption className="text-center p-5 text-lg font-semibold   text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                                {t("all_colis")}
-                            </caption>
-                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                <tr>
-                                    <th scope="col" className="px-6 py-3">
-                                        {t("products_list")}
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        {t("stopdesk")}
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        {t("address")}
-                                    </th>
+
+            </div>
+            {!!data?.length && <Container>
+                <Table header={<>
+                    {[t("id"), t("date"), t("state"), t("phone"), t("fullname"), t("wilaya"), t("commune"), t("platform"), t("tracking"), ""].map((header, index) => (
+                        <th
+                            key={index}
+                            className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
+                        >
+                            <p className="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70 text-center">
+                                {header}
+                            </p>
+                        </th>
+                    ))}
+                </>}>
+                    {
+                        data.map((el, index) => (
+                            <tr key={index}>
+                                <td className="p-4 border-b border-blue-gray-50">
+                                    <div className="flex justify-center">
+                                        # {el.id}
+                                    </div>
+                                </td>
+                                <td className="p-4 border-b border-blue-gray-50">
+                                    <div className="flex justify-center">
+                                        <Text className="whitespace-nowrap   flex flex-col items-center">
+                                            <span className="text-[12px] font-bold">{moment(el.created_at).format("YYYY-MM-DD")}</span>
+                                            <span className="text-[12px] ">{moment(el.created_at,).fromNow()}</span>
+                                        </Text>
+                                    </div>
+                                </td>
+                                <td className="p-4 border-b border-blue-gray-50 ">
+                                    <div className="flex justify-center">
+                                        <StateChange readOnly={true} data={el} afterChange={() => { }} />
+                                    </div>
+                                </td>
+                                <td className="p-4 border-b border-blue-gray-50 text-sm font-bold">
+                                    <div className="flex justify-center " dir="ltr">
+                                        {formatPhoneNumber(el.contact_phone)}
+                                    </div>
+                                </td>
+                                <td className="p-4 border-b border-blue-gray-50">
+                                    <div className="flex justify-center text-sm">
+                                        {el.firstname} {el.familyname}
+                                    </div>
+                                </td>
 
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    data.data.map((item, index) => {
-                                        return <>
-                                            <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                                <th className="px-6 max-w-[240px] align-top py-4 font-medium text-gray-900  dark:text-white">
-                                                    <div className="">
-                                                        <p className="max-w-sm sticky top-0">{item.product_list}</p>
-                                                    </div>
-                                                </th>
-                                                <td className="px-6 py-4 align-top">
-                                                    <div className="relative h-full">
-                                                        <p className="">{item.stopdesk_name}</p>
-                                                    </div>
-                                                </td>
-                                                <td className="px-6 py-4 align-top">
-                                                    <p className="">{item.current_wilaya_name} , {item.current_commune_name}</p>
-                                                </td>
+                                <td className="p-4 border-b border-blue-gray-50">
+                                    <div className="flex justify-center">
+                                        {el.to_wilaya_name}
+                                    </div>
+                                </td>
+                                <td className="p-4 border-b border-blue-gray-50">
+                                    <div className="flex justify-center">
+                                        {el.to_commune_name}
+                                    </div>
+                                </td>
+                                <td className="p-4 border-b border-blue-gray-50 ">
+                                    <div className="flex justify-center">
+                                        {el.platform ? <>
+                                            <div>
+                                                <Avatar name=""
+                                                    className="ring-2 ring-primary ring-offset-background ring-offset-2"
+                                                    src={getPlatformUrl(el.platform)} />
+                                            </div>
 
-                                            </tr>
-                                            <tr>
-                                                <td className="px-6 py-3 align-top bg-white border-b dark:bg-gray-800 dark:border-gray-700 font-medium text-gray-900  dark:text-white">
-                                                    {t("date_state")}
-                                                </td>
-                                                <td className="px-6 py-4 " colSpan={2}>
-                                                    <ol className="relative border-s border-gray-200 dark:border-gray-700">
-
-                                                        {
-                                                            item.timeline.map((el, i) => {
-                                                                return <li className="mb-10 ms-4" key={i}>
-                                                                    <div className="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                                                    <time className="mb-2 text-sm  leading-none text-gray-400 dark:text-gray-500 font-semibold">{moment(el.created_at).format("yyyy-MM-DD HH:mm")}</time>
-                                                                    <div className="mt-2">
-                                                                        <span
-                                                                            className={" whitespace-nowrap text-center capitalize rounded-full p-1 px-2 cursor-pointer w-auto  text-[13px] font-semibold border py-1 !text-[" + statesColor[item?.last_status ?? ""] + "]"}
-                                                                            style={{
-                                                                                color: statesColor[el?.state ?? ""],
-                                                                                borderColor: statesColor[el?.state ?? ""] + "26",
-                                                                                backgroundColor: statesColor[el?.state ?? ""] + "22"
-                                                                            }} >
-                                                                            {el.state}
-                                                                        </span>
-                                                                    </div>
-
-                                                                </li>
-                                                            })
-                                                        }
-
-                                                    </ol>
-                                                </td>
-                                            </tr>
                                         </>
-                                    })
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                }
-                {
-                    data && data.data.length == 0 && <>
-                        <MdErrorOutline className="mt-3 w-20 h-20 text-red-600" />
-                        <p className="capitalize">{t("nocolis")}</p>
-                    </>
-                }
-            </div>
+                                            : <span className="text-sm text-gray-400 font-semibold whitespace-nowrap">{t("not_exist")}</span>}
+                                    </div>
+                                </td>
+                                <td className="p-4 border-b border-blue-gray-50">
+
+                                    <div className="flex justify-center">
+                                        {el.tracking ? <Text className="mb-0.5 whitespace-nowrap !text-sm font-medium bg-green-100 leading-3 rounded-full text-green-700 p-2 py-1 cursor-pointer flex items-center"
+                                            onClick={() => { CopyText(el.tracking ?? ""); toast.success(t("copied_text")) }}>
+                                            {el.tracking}
+                                            <div className="me-1"></div>
+                                            <MdContentCopy />
+                                        </Text> : <Text className=" !text-sm whitespace-nowrap font-medium bg-red-100  rounded-full text-red-700 p-2 py-1">
+                                            {t("not_exist")}
+                                        </Text>}
+                                    </div>
+                                </td>
+                                <td className="p-4 border-b border-blue-gray-50">
+
+                                    <div className="flex justify-center">
+                                        {(isLessThanThreeDays(el.updated_at)&&(el.state == "Livré" || el.state == "payed" ))&& <ExchangeFormModal
+                                            action={<Button className="flex gap-2" size="lg">
+                                                {t("change")}
+
+                                                <FaExchangeAlt />
+                                            </Button>}
+                                            data={el}
+                                            afterChange={() => {
+                                                getData()
+                                            }}
+                                        />}
+                                    </div>
+                                </td>
+                            </tr>
+                        ))
+                    }
+                </Table>
+            </Container>}
 
 
 
 
 
-            <div className="p-4">
-                {/* <ol className="relative border-s border-gray-200 dark:border-gray-700">
-                    <li className="mb-10 ms-4">
-                        <div className="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                        <time className="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">February 2022</time>
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Application UI code in Tailwind CSS</h3>
-                        <p className="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">Get access to over 20+ pages including a dashboard layout, charts, kanban board, calendar, and pre-order E-commerce & Marketing pages.</p>
-                        <a href="#" className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-200 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">Learn more <svg className="w-3 h-3 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                        </svg></a>
-                    </li>
-                    <li className="mb-10 ms-4">
-                        <div className="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                        <time className="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">March 2022</time>
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Marketing UI design in Figma</h3>
-                        <p className="text-base font-normal text-gray-500 dark:text-gray-400">All of the pages and components are first designed in Figma and we keep a parity between the two versions even as we update the project.</p>
-                    </li>
-
-                </ol> */}
-            </div>
 
             <Toaster position="top-center" />
         </form >
     )
 }
+
+
+
+function Table({ header, children }: { header: any, children: React.ReactNode }) {
+    return (
+        <div className="flex w-full items-center justify-center ">
+            <div className="p-6  px-0 overflow-auto">
+                <table className="w-full min-w-max table-auto text-left">
+                    <thead>
+                        {header}
+                    </thead>
+                    <tbody>
+                        {children}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    );
+};
+
+

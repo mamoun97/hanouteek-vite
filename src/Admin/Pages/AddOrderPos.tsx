@@ -26,8 +26,12 @@ type ProductsTotal = {
     data: Product[],
     total: number
 }
-
-export default function AddOrderPos() {
+type DropData = {
+    openForm: boolean,
+    setOpenForm: (e: boolean) => void,
+    setDataDrop: (e: any) => void
+}
+export default function AddOrderPos({ dropData }: { dropData?: DropData }) {
     const [openModal, setOpenModal] = useState(false)
 
     const user = useSelector<RootState>((state) => state.user) as UserAuth
@@ -38,14 +42,15 @@ export default function AddOrderPos() {
     const globalQue = useGlobal("?")
     const [dataOrder, setDataOrder] = useState<OrderFull>({
         ...initialDataOrder,
-        to_commune_name: "oran",
-        to_wilaya_name: "oran",
-        firstname: "Boutique",
-        fullName: "Boutique",
-        familyname: "Boutique",
-        contact_phone: "0" + parseInt(user.phoneNumber),
-        soldFromTheStore: true,
-
+        ...dropData ? {} : {
+            to_commune_name: "oran",
+            to_wilaya_name: "oran",
+            firstname: "Boutique",
+            fullName: "Boutique",
+            familyname: "Boutique",
+            contact_phone: "0" + parseInt(user.phoneNumber),
+            soldFromTheStore: true,
+        }
     })
     const { data: categs, isLoading: loadingCategs } = useGetAllCategoriesService(50, 1, {}, globalAnd)
     const [page, setPage] = useState(1)
@@ -57,12 +62,17 @@ export default function AddOrderPos() {
     const [cart, setCart] = useState<OrderFullItem[]>(
         []
     )
-    const limit = 16
+    const limit = 100
     const getData = () => {
         setLoading(true)
-        ProductApi.getAllByFilter(`?limit=${limit}&page=${page}${selectCateg ? "&categoryId=" + selectCateg.id : ""}`, globalAnd).then(res => {
+        ProductApi.getAllByFilterAssociate(`?limit=${limit}&page=${page}${dropData ? "&dropshipping=true" : ""}${selectCateg ? "&categoryId=" + selectCateg.id : ""}`, globalAnd).then(res => {
             setProducts({
-                data: [...products.data, ...res.data],
+                data: [
+                    ...products.data, 
+                    ...res.data.map(el => {
+                        return { ...el, price: dropData ? el.drop_price ?? el.price : el.price }
+                    })
+                ],
                 total: res.totalCount
             })
 
@@ -89,12 +99,6 @@ export default function AddOrderPos() {
         createOrder()
     }
     const createOrder = () => {
-        // console.log({
-        //     ...dataOrder,
-        //     item: cart,
-        //     contact_phone: "+213" + parseInt(dataOrder.contact_phone),
-        // })
-        // return
         OrderApi.createOrderAssociate({
             ...dataOrder,
             item: cart,
@@ -117,17 +121,19 @@ export default function AddOrderPos() {
     return (
         <form onSubmit={handleSubmit}>
             <div className="flex gap-2 items-center">
-                <Link to={"/dashboard"}>
+                {dropData ? null : <Link to={"/dashboard"}>
                     <ActionIcon variant="flat" size="lg" className="text-lg">
                         <IoArrowBackOutline />
                     </ActionIcon>
-                </Link>
+                </Link>}
                 <h1 className="text-2xl font-semibold">Ajouter une commande</h1>
             </div>
             <div className="grid grid-cols-6 max-[910px]:grid-cols-2 gap-2">
                 <div className="col-span-4 max-[1080px]:col-span-3 mt-2">
 
-                    <ProductSelect setValue={setSelectProduct} isSearch={true} />
+                    <div className="relative z-30">
+                        <ProductSelect setValue={setSelectProduct} isSearch={true} />
+                    </div>
                     <div className="flex flex-col gap-1 py-1">
                         {
                             categs?.data && <TabC data={[
@@ -226,14 +232,14 @@ export default function AddOrderPos() {
                     </div>
                 </div>
                 <div className="col-span-2 max-[1080px]:col-span-3 max-sm:col-span-2 ">
-                    <div className="bg-gray-50 mt-[33px] rounded-md p-5 sticky top-3 border border-gray-200 dark:bg-[#222] dark:border-[#444]">
+                    <div className={`bg-gray-50 mt-[33px] rounded-md p-5 sticky ${dropData ? "top-16" : "top-3"} border border-gray-200 dark:bg-[#222] dark:border-[#444]`}>
                         <h1 className="text-center  text-xl font-bold my-4">Cart</h1>
                         <div className="flex flex-col gap-2">
                             {
                                 cart.map((el, k) => {
                                     return <CartItem2 data={{
                                         ...el
-
+                                        
                                     }} index={k} {...{ cart, setCart }} />
                                 })
                             }
@@ -251,38 +257,51 @@ export default function AddOrderPos() {
                                 (getTotal()).toFixed(2)
                             } <small className="font-medium">DZD</small></span>
                         </div>
-                        <div className="border-b border-dashed border-gray-300 my-3"></div>
-                        <Input
-                            label="Phone"
-                            inputMode="tel"
-                            name="phone"
-                            autoComplete="off"
-                            className=""
-                            value={dataOrder.contact_phone}
-                            onChange={(e) => {
-                                if ((!/^[0-9]{0,10}$/.test(e.target.value))) {
-                                    return
-                                }
-                                else
-                                    setDataOrder({
+                        {
+                            dropData ? <>
+                                <Button className="mt-4 w-full" type="button" onClick={() => {
+                                    dropData.setDataDrop({
                                         ...dataOrder,
-                                        contact_phone: e.target.value
+                                        item: cart
                                     })
-                            }}
-                        />
-                        <Input
-                            suffix={
-                                <Button className="rounded-l-none" type="button">Appliquer</Button>
-                            }
-                            prefix={
-                                <span className="text-gray-500 font-semibold text-[12px]">Code promo</span>
-                            }
-                            inputClassName="pe-0"
-                            className="mt-4"
-                            label=""
-                        />
+                                    dropData.setOpenForm(true)
+                                }}>Add Command</Button>
+                            </> : <>
+                                <div className="border-b border-dashed border-gray-300 my-3"></div>
+                                <Input
+                                    label="Phone"
+                                    inputMode="tel"
+                                    name="phone"
+                                    autoComplete="off"
+                                    className=""
+                                    value={dataOrder.contact_phone}
+                                    onChange={(e) => {
+                                        if ((!/^[0-9]{0,10}$/.test(e.target.value))) {
+                                            return
+                                        }
+                                        else
+                                            setDataOrder({
+                                                ...dataOrder,
+                                                contact_phone: e.target.value
+                                            })
+                                    }}
+                                />
+                                <Input
+                                    suffix={
+                                        <Button className="rounded-l-none" type="button">Appliquer</Button>
+                                    }
+                                    prefix={
+                                        <span className="text-gray-500 font-semibold text-[12px]">Code promo</span>
+                                    }
+                                    inputClassName="pe-0"
+                                    className="mt-4"
+                                    label=""
+                                />
 
-                        <Button className="mt-4 w-full" type="submit" isLoading={loading}>Ajouter</Button>
+                                <Button className="mt-4 w-full" type="submit" isLoading={loading}>Ajouter</Button>
+                            </>
+                        }
+
 
 
                     </div>

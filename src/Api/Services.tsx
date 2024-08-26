@@ -40,6 +40,12 @@ export const useGetAllCategoriesService = (limit: number, offset: number,op:any=
     return data
 }
 
+// Get All Categories by Filter
+export const useGetAllCategoriesFilterService = (filter:string,op:any={},db?:string) => {
+    const data = useSWR<CategoriesResponse>(`/tenant/category?${filter}${ApiConfig.db}`+db, () => CategorieApi.getAllCategoriesFilter(filter,db), {...options,...op})
+    return data
+}
+
 // Get All Products by limit & offset
 export const useGetAllProductsService = (limit: number, offset: number,op:any={},db?:string) => {
     const data = useSWR<ProductsResponse>("/tenant/product/all?page="+offset+"&limit="+limit+db, () => ProductApi.getAll(limit, offset,db), {...options,...op});
@@ -66,7 +72,7 @@ export const useGetAllProductsByFilterService = (filter:string,db?:string) => {
 }
 
 // Get Product By Slug name
-export const useGetProductBySlugService = (slug: string,db?:string) => {
+export const useGetProductBySlugService = (slug: string,db?:string,) => {
     const data = useSWR("/tenant/product/find-one-by-slug/" + slug+db, () => ProductApi.getProductBySlug(slug,db), options)
     return data
 }
@@ -103,6 +109,11 @@ export const useGetAllOrdersService = (params:string,db?:string) => {
     const data = useSWR<OrdersResponse>("orders/"+params+db, () => OrderApi.getAll(params,db), options);
     return data
 }
+//orderAbandoned service 
+export const useGetOrderAbandonedService = (params:string,db?:string) => {
+    const data = useSWR("orderAbandoned/"+params+db, () => OrderApi.orderAbandoned(params,db), options);
+    return data
+}
 export const useGetAllOffers=(filter:string)=>{
   
     const data = useSWR("/tenant/offer"+filter, () => OfferApi.getAll(filter), {...options,...{}});
@@ -127,5 +138,12 @@ export const useGetStatisticsService = (dt:{startDate:string,endDate:string},db?
     const data = useSWR(
         `/tenant/statistics/all?startDate=${dt.startDate}&endDate=${dt.endDate}`+(db??ApiConfig.db)
         , () => AssociateApi.statistics(dt,db), options);
+    return data
+}
+
+// Get All  associate users
+export const useGetAllAssociateService=(filter:string,db?:string)=>{
+  
+    const data = useSWR("/tenant/associate/all"+filter+(db??ApiConfig.db), () => AssociateApi.getAll(filter), {...options,...{}});
     return data
 }

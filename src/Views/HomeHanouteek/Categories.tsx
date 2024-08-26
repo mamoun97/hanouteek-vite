@@ -9,7 +9,8 @@ import images from "../../assets"
 
 export default function Categories() {
     const isHanouteek=window.location.host.includes("hanouteek.com");
-    const { data: cats, isLoading } = useGetAllCategoriesService(isHanouteek?3:4, 0, ApiConfig.swrStop)
+    // const { data: cats, isLoading } = useGetAllCategoriesService(isHanouteek?3:4, 0, ApiConfig.swrStop)
+    const { data: cats, isLoading } = useGetAllCategoriesService(4, 0, ApiConfig.swrStop)
     const { t } = useTranslation()
     return (
         <div className="grid grid-cols-2 gap-2 max-sm:grid-cols-1 my-6">
@@ -20,7 +21,7 @@ export default function Categories() {
                 cats?.data.map((el, k) => {
 
                     return <> 
-                        {
+                        {/* {
                             (k == 0&&isHanouteek)
                             && <div key={k + "Quincaillerie"} className={`z-0 col-span-1 relative overflow-hidden cursor-pointer pt-[70%] group`}>
 
@@ -36,7 +37,7 @@ export default function Categories() {
                                     </span>
                                 </Link>
                             </div>
-                        }
+                        } */}
                         <div key={k} className={`z-0 col-span-1 relative overflow-hidden cursor-pointer pt-[70%] group`}>
 
                             <div className={`group-hover:scale-110 bg-cover bg-no-repeat bg-center absolute top-0 left-0 right-0 bottom-0 

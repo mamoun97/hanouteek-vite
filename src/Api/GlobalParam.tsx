@@ -15,11 +15,18 @@ const httpAuth =(token:string)=> axios.create({
     Authorization:"Bearer "+token
  }
 })
+const httpAuthUpload =(token:string)=> axios.create({
+  baseURL: ApiConfig.url,
+  headers: {
+    "Content-type": "multipart/form-data",
+    Authorization:"Bearer "+token
+ }
+})
 
 
 
 const req = {
-  http,httpAuth
+  http,httpAuth,httpAuthUpload
 }
 
 export default req;

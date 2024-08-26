@@ -2,47 +2,31 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { useGetAllCategoriesService, useGetAllProductsByFilterService } from "../Api/Services";
 import Container from "../Views/Container";
 import Radio from "../Views/Flowbit/Radio";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ProductCard from "../Views/ProductCard";
 import Loading from "../Constants/Loading";
 import CartEmpty from "../Views/CartEmpty";
 import { useTranslation } from "react-i18next";
-import { Input, NumberInput } from "rizzui";
-import { breakPointsProduct } from "../Constants";
-import SwiperF from "../Views/Swiper";
-import Collapse from "../Views/Collapse";
-import { FaFilter } from "react-icons/fa";
+import { Accordion, Input, NumberInput } from "rizzui";
+
 import { FiFilter } from "react-icons/fi";
 import useMediaQuery from "../hoock/useMediaQuery";
+import getFilter from "../utils/getFilter";
+import { IoIosArrowDown } from "react-icons/io";
 // import ProductView from "../Views/Resturant/ProductView";
 
 type Param = {
     id?: number | null,
     idSub?: number | null
 }
-type OptionsFilter = {
-    limit: number,
-    page: number,
-    categoryId: number | null,
-    minPrice: number | null,
-    maxPrice: number | null
-}
-const getFilter = (options: OptionsFilter) => {
-    let f = "";
-    f += `?limit=${options.limit}`
-    f += `&page=${options.page}`
-    f += `${options.categoryId ? "&categoryId=" + options.categoryId : ""}`
-    f += `${options.minPrice ? "&minPrice=" + options.minPrice : ""}`
-    f += `${options.maxPrice ? "&maxPrice=" + options.maxPrice : ""}`
-    return f;
-}
+
 export default function Ctegories() {
-    const {width}=useMediaQuery()
+    const { width } = useMediaQuery()
     const location = useLocation()
     const p = useParams()
     const { t } = useTranslation();
     const [param, setParam] = useState<Param>({ id: null, idSub: null })
-
+    const refScroll=useRef<HTMLDivElement | null>(null)
     const [options, setOptions] = useState<OptionsFilter>({
         limit: 15,
         page: 1,
@@ -69,14 +53,18 @@ export default function Ctegories() {
         setFilter(getFilter(options))
     }, [options])
 
+    useEffect(() => {
+        if(refScroll.current)
+            window.scroll({ top: refScroll.current.getBoundingClientRect().top + window.scrollY - 56, behavior: 'smooth' });
+    },[categs,options])
 
     const filterView = useMemo(() => {
-        return categs?.data ? <div className="bg-white rounded-md p-3 py-4 tracking-[1px]" key={"k"+param}>
+        return categs?.data ? <div className="bg-white rounded-md p-3 py-4 tracking-[1px]" key={"k" + param}>
             <h1>{t("categs")}</h1>
             <div className="border border-gray-100 my-3"></div>
-            
+
             <Link to={"/categories"} className="flex items-center p-1 cursor-pointer" >
-                <Radio id="cc" checked={param.id == null}  name={"categ"+param.id??"1"} />
+                <Radio id="cc" checked={param.id == null} name={"categ" + param.id ?? "1"} />
                 <div className="me-2"></div>
                 <span className="text-sm font-semibold">{t("all")}</span>
             </Link>
@@ -84,14 +72,14 @@ export default function Ctegories() {
                 categs?.data.map((el, k) => {
 
                     let checked1 = param.id == el.id
-                    
-                    return <div className="mt-2" key={param.id+"-"+el.id+"-"+k} >
-                        <Link  to={"/categories/" + el.id} className="group flex items-center p-1 cursor-pointer" >
-                            <Radio id="cc" checked={checked1} name={"categ"+param.id??"1"} />
-                           
+
+                    return <div className="mt-2" key={param.id + "-" + el.id + "-" + k} >
+                        <Link to={"/categories/" + el.id} className="group flex items-center p-1 cursor-pointer" >
+                            <Radio id="cc" checked={checked1} name={"categ" + param.id ?? "1"} />
+
                             <div className="me-2"></div>
                             <span className="text-sm font-semibold group-hover:underline">{el.name}</span>
-                            
+
                         </Link>
                         <div className="ps-2">
                             {
@@ -143,7 +131,7 @@ export default function Ctegories() {
                 />
             </div>
         </div> : ""
-    },[prods, param.id])
+    }, [prods, param.id, categs])
 
     return (
         <Container className="mt-5">
@@ -152,7 +140,7 @@ export default function Ctegories() {
                     {
                         loadingCategs && Loading.categoriesMenu
                     }
-                    {width>640?<div className="max-sm:hidden">
+                    {/* {width>640?<div className="max-sm:hidden">
                         {filterView }
                     </div>
                     :<div className="hidden max-sm:block">
@@ -164,15 +152,38 @@ export default function Ctegories() {
                         } defaultOpen={false} className="bg-white"  >
                             {filterView}
                         </Collapse>
-                    </div>}
-
+                    </div>
+                    } */}
+                    <Accordion
+                        key={"item.title"}
+                        defaultOpen={width>640}
+                        className=" border   rounded-md"
+                    >
+                        <Accordion.Header className="bg-gray-100">
+                            {
+                                ({ open }: { open: boolean }) => (
+                                    <div className="flex py-4 gap-2 p-2 items-center font-semibold">
+                                        <FiFilter />
+                                        Filter
+                                        <div className="grow"></div>
+                                        <IoIosArrowDown className={"transition-transform " + (open ? "rotate-[-180deg]" : "")} />
+                                    </div>
+                                )
+                            }
+                        </Accordion.Header>
+                        <Accordion.Body className="p-2">
+                            {filterView}
+                        </Accordion.Body>
+                    </Accordion>
 
 
                 </div>
 
                 <div className="col-span-3 max-md:col-span-1">
+                    <div ref={refScroll}></div>
                     {loadingProds && Loading.categoriesProducts}
-                    <div className="grid grid-cols-3 gap-3 max-md:grid-cols-2 max-sm:hidden">
+                    
+                    <div className="grid grid-cols-3 gap-3 max-md:grid-cols-2 ">
                         {
 
                             prods?.data.map((el, k) => {
@@ -188,7 +199,7 @@ export default function Ctegories() {
                             </div>
                         }
                     </div>
-                    <div className="hidden max-sm:block">
+                    {/* <div className="hidden max-sm:block">
                         {prods?.data && <SwiperF
                             breakpoints={breakPointsProduct}
 
@@ -202,7 +213,7 @@ export default function Ctegories() {
                                 })
                             }
                         />}
-                    </div>
+                    </div> */}
                     <div>
 
                         <div className="lg:w-1/2 xl:w-1/3 mx-auto">

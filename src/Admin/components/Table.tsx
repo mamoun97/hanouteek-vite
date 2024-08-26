@@ -25,8 +25,7 @@ const tableStyles = {
 
 type RCTableProps = ExtractProps<typeof Table>;
 
-export interface TableProps
-  extends Omit<RCTableProps, "className" | "emptyText"> {
+export interface TableProps extends Omit<RCTableProps, "className" | "emptyText"> {
   emptyText?: React.ReactElement;
   variant?: keyof typeof tableStyles.variants;
   striped?: boolean;

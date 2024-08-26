@@ -5,6 +5,7 @@ import ApiConfig from '../../Api/ApiConfig';
 import useClickOutside from '../../hoock/ClickOutSide';
 import { MdSearch } from 'react-icons/md';
 import useGlobal from '../../hoock/useGlobal';
+import imgSrc from '../../utils/imgSrc';
 
 
 
@@ -52,7 +53,7 @@ export default function ProductSelect({ setValue = () => { }, nameProduct = "", 
                                 setValue(el)
                             }}>
                                 <div className="h-7 w-7 min-w-[28px] rounded-full bg-center bg-cover bg-no-repeat"
-                                    style={{ backgroundImage: "url('" + ApiConfig.rootUrl + "/" + el.images[0] + "')" }}></div>
+                                    style={{ backgroundImage: "url('" + imgSrc(el.images[0],true) + "')" }}></div>
                                 <div className="me-2"></div>
                                 <h1 className='text-sm font-semibold'>{el.name}</h1>
                             </div>

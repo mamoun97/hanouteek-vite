@@ -45,3 +45,37 @@ export const associatStates:StateItem[]=[
     { label: "Returns", value: "returns", description: "" },
     { label: "Canceled", value: "canceled", description: "" }
 ]
+
+
+export const Substates = [
+    { label: "En attente de traitement", value: "En attente de traitement", description: "" },
+    { label: "Accpte", value: "Accpte", description: "" },
+    { label: "annul", value: "annul", description: "" },
+    { label: "Inoignable", value: "Inoignable", description: "" },
+];
+export const GestionStatus:StateItem[] = [
+    { label: "En localisation", value: "En localisation", description: "" },
+    { label: "Reçu à Wilaya", value: "Reçu à Wilaya", description: "" },
+    { label: "En attente du client", value: "En attente du client", description: "" },
+    { label: "Tentative échouée", value: "Tentative échouée", description: "" },
+];
+export const returnStates= [
+    { label: "default",  value: "", description: "" },
+    { label: "Return Ok", value: "Return Ok", description: "" },
+    { label: "On hold", value: "On hold", description: "" },
+];
+
+
+export const orderStates={
+    default:states,
+    failed:GestionStatus,
+    associate_sav:[
+        { label: "Not Answered - 1st Attempt", value: "not Answered - 1st Attempt", description: "" },
+        { label: "not Answered - 2nd Attempt", value: "not Answered - 2nd Attempt", description: "" },
+        { label: "not Answered - 3rd Attempt", value: "not Answered - 3rd Attempt", description: "" },
+    ],
+    associate_stock:[
+        { label: "prepared" , value: "prepared" , description: "" },
+    ]
+
+}

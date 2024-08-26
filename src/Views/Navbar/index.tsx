@@ -32,6 +32,7 @@ export default function Navbar() {
         theme.theme.HomePage.HomePageSections[0].type == "slider"
     ) &&
         !ApiConfig.isHanouteek ? "restaurant" : "store";
+
     return (type == "restaurant" && location.pathname == "/") ? <NavbarResturant slider={theme.theme.HomePage.HomePageSections[0]} /> : <NavbarDefault />
     // return <NavbarDefault/>
 }
@@ -46,13 +47,21 @@ function NavbarDefault() {
             text: t("categs"),
             src: "/categories"
         },
+        // {
+        //     text: t("contact"),
+        //     src: "#"
+        // },
         {
-            text: t("contact"),
-            src: "#"
-        },
-        {
-            text: t("tracking"),
+            text: t("tracking_title"),
             src: "/tracking"
+        },
+        // {
+        //     text: t("product_exchange"),
+        //     src: "/order-exchange"
+        // },
+        {
+            text: t("our_shops"),
+            src: "/our-shops"
         },
     ]
     // const [openCart, setOpenCart] = useState(false)
@@ -93,6 +102,7 @@ function NavbarDefault() {
                     <select className={`${Classes.input} h-12 group
                     min-w-[100px] !border-transparent outline-none !shadow-none p-1 focus:ring-0
                         `}
+                        value={i18n.language}
                         onChange={(e) => {
                             i18n.changeLanguage(e.target.value)
                         }}
@@ -119,10 +129,10 @@ function NavbarDefault() {
                 <div className="border-b border-gray-100"></div>
             </Container>
             <div className={fixed ? "z-10 top-0 left-0 right-0 shadow-sm bg-white fixed" : ""}>
-                <Container className={"flex items-center h-14 mx-auto  "}>
+                <Container className={"flex items-center h-14 mx-auto  relative "}>
                     <Link to={"/"}>
                         <img src={ApiConfig.rootUrl + "/" + theme.theme.Logo}
-                            className="h-7 max-md:h-5 max-[400px]:hidden" alt="" />
+                            className="h-6 max-[986px]:h-5 max-md:h-5 max-[400px]:hidden" alt="" />
                         <img src={ApiConfig.rootUrl + "/" + theme.theme.favicon}
                             className="hidden h-8 max-[400px]:block" alt="" />
                     </Link>
@@ -170,11 +180,11 @@ function MenuDesktop({ links, className = "" }: {
 }) {
 
 
-    return <div className={"flex items-center max-md:hidden h-full " + className}>
+    return <div className={"flex justify-center items-center max-[866px]:hidden h-full absolute  left-1/2   -translate-x-1/2  " + className}>
         {
             links?.map((el, k) => {
-                return <React.Fragment key={k}>
-                    <LinkSS to={el.src} >
+                return <React.Fragment key={k} >
+                    <LinkSS to={el.src} className="max-[940px]:text-sm">
                         {el.text}
                     </LinkSS>
                     {k < links.length - 1 && <div className="me-4"></div>}
@@ -191,7 +201,7 @@ function MenuMobile({ links }: {
 
     return <>
         <div className="me-2"></div>
-        <IconButton className="  text-base font-bold hidden max-md:flex " onClick={() => setOpen(!open)}>
+        <IconButton className="  text-base font-bold hidden max-[866px]:flex " onClick={() => setOpen(!open)}>
             <MdMenu className="text-2xl" />
         </IconButton>
         {open && <MenuAnimation childClassName='overflow-hidden hidden max-md:block max-w-xs' onClose={() => setOpen(false)}>
@@ -221,13 +231,14 @@ function LinkSS({ to, children, onClick = () => { }, className = "" }: { to: str
 
     const location = useLocation()
     const active = location.pathname == "/" ? to == "/" : (to != "/" ? location.pathname.includes(to) : false);
-    return <Link onClick={onClick} className={`text-base h-full uppercase flex items-center relative 
-    font-medium group
-    ${className} ${active ? "after:scale-x-100" : ""}`}
+    return <Link onClick={onClick} className={`text-base h-full ${ApiConfig.isJoomla?"":"uppercase"} flex items-center relative 
+    font-medium group whitespace-nowrap
+    ${className} `}
         to={to}>
 
         {children}
         <div className={`
+        ${active ? "after:!scale-x-100" : ""}
         absolute bottom-0 transition-all right-0 left-0 scale-x-0 group-hover:scale-x-100 h-[2px] bg-primary 
         `} ></div>
     </Link>

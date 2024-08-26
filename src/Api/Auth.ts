@@ -13,8 +13,8 @@ const signOut = async (): Promise<any> => {
     return data
 }
 
-const signInClient = async (dt: { email: string, password: string }): Promise<UserAuth> => {
-    const { data } = await req.http.post("/tenant/client/signin" + ApiConfig.dbq, dt);
+const signInClient = async (dt: { phoneNumber: string, password: string }): Promise<ClientAuth> => {
+    const { data } = await req.http.post("/tenant/client/login" + ApiConfig.dbq, dt);
     return data
 }
 const signOutClient = async (): Promise<any> => {

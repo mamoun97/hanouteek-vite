@@ -30,7 +30,7 @@ export default function Form({
     setDelivery
 }: FormProps) {
     const global = useSelector<RootState>((state) => state.global) as GlobalS
-
+    const user = useSelector<RootState>((state) => state.user) as UserAuth
     const [selectProduct, setSelectProduct] = useState<Product | null>(null)
     const [selectedWilaya, setSelectedWilaya] = useState<Wilaya | null>(null)
     const [selectedCommune, setSelectedCommune] = useState<Commune | null>(null)
@@ -79,7 +79,7 @@ export default function Form({
 
     return (
         <div className="flex gap-2 flex-col">
-            <Card title="Select Product">
+            {user.role!="vendor"&&<Card title="Select Product">
                 <ProductSelect setValue={setSelectProduct} />
                 {
                     selectProduct && <div key={selectProduct.slugName}>
@@ -98,7 +98,7 @@ export default function Form({
                             }} />
                     </div>
                 }
-            </Card>
+            </Card>}
 
 
             <Card title="User Information">
@@ -320,7 +320,7 @@ export default function Form({
                 </div>
                 </Card>}
 
-            <Card title="Shipping">
+            {user.role!="vendor"&&<Card title="Shipping">
                 <div className="flex flex-col gap-2">
                     <Checkbox
                         label="Vendu depuis le magasin"
@@ -363,7 +363,7 @@ export default function Form({
                         }}
                     />
                 </div>
-            </Card>
+            </Card>}
             <Card title="Note">
                 <Textarea
                     label="Note"

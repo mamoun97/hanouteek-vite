@@ -44,14 +44,10 @@ export function ProductOptions({ data, setValue }:
     }
 
     return <div className="p-4 border border-gray-100 dark:border-[#444] dark:bg-[#222] mt-3  rounded-lg  ">
-        {/* <h1>{data.name}</h1> */}
+        
         <div className="flex gap-2 flex-col">
 
-            {/* <div className={`bg-cover cursor-pointer bg-no-repeat bg-center w-20 h-20 min-w-[80px] rounded-md mt-2 sticky 
-            `}
-                style={{ backgroundImage: "url('" + ApiConfig.rootUrl + "/" + data.images[0] + "')" }} >
-
-            </div> */}
+            
 
 
             <div>

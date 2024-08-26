@@ -14,30 +14,19 @@ import { AxiosError } from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 type LoginInfo = {
-    email: string,
+    phone: string,
     password: string
 }
 
 const validationS = Yup.object().shape({
-    password: Yup.string().min(0, ""),
-    email: Yup.string().email().required()
+    password: Yup.string().min(0, "").required("requis"),
+    phone: Yup.string()
+    .matches(
+        /^0[567][0-9]{8}$/,
+        "téléphone invalide"
+    ).required("requis")
 });
-const client: UserAuth = {
-    id: 23,
-    firstName: "Amine",
-    lastName: "Cherif",
-    email: "amine974@gmail.com",
-    phoneNumber: "665584456",
-    address: "ORAN",
-    role: "associate",
-    avatar: "22-1718206645219-681670605.webp",
-    active: true,
-    socketId: null,
-    isOnline: false,
-    created_at: "2024-06-07T09:16:15.382Z",
-    updated_at: "2024-07-07T14:10:56.000Z",
-    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIzLCJlbWFpbCI6ImFtaW5lOTc0QGdtYWlsLmNvbSIsImlhdCI6MTcyMDM2MTU2MSwiZXhwIjoxNzUxNDY1NTYxfQ.QHhxb94GRlU0qmu0La4nFutlIX10tlFySgH-2PJseSA", "md5": "336986e35f2560c2875fe709e2835ede721b1ccd1f45fe020966ea7111827b1d"
-}
+
 export default function LoginButton() {
     const [modalState, setModalState] = useState(false);
     const theme = useSelector<ThemeSetting>(state => state.theme) as ThemeSetting
@@ -47,7 +36,7 @@ export default function LoginButton() {
     const [loading, setLoading] = useState(false)
     const formik = useFormik({
         initialValues: {
-            email: "",
+            phone: "",
             password: ""
         },
 
@@ -62,9 +51,13 @@ export default function LoginButton() {
     const loginService = async (values: LoginInfo, isLoginFromUrl?: boolean) => {
         try {
             setLoading(true)
-            // const data = await AuthApi.signInClient(values)
-            const data = client
-            if (values.email==data.email&&values.password=="123456") {
+            const data = await AuthApi.signInClient({
+                password:values.password,
+                phoneNumber:"+213"+parseInt(values.phone)
+            })
+           
+            // const data = client
+            if (data.id) {
 
                 dispatch(changeClient({
                     ...data
@@ -72,7 +65,7 @@ export default function LoginButton() {
 
                 setModalState(false)
             }else
-            toast.error("email or password not valid")
+            toast.error("téléphone ou mot de passe non valide")
             setLoading(false)
 
 
@@ -116,7 +109,7 @@ export default function LoginButton() {
                                 dispatch(changeClient(null))
                                 navigate("/")
                             }}>
-                                Sign Out
+                                Se déconnecter
                             </Dropdown.Item>
                         </div>
                     </Dropdown.Menu>
@@ -125,7 +118,7 @@ export default function LoginButton() {
                     setModalState(true)
                 }} >
                     <RiUserLine className="text-lg" />
-                    Se connecter
+                    <span className='max-[950px]:hidden'></span>
                 </Button>}
 
             <Modal isOpen={modalState} onClose={() => setModalState(false)}>
@@ -148,28 +141,32 @@ export default function LoginButton() {
                                     className="h-9 max-md:h-5 max-[400px]:hidden" alt="" />
                                 <h1 className='text-2xl font-bold'>Se connecter</h1>
                                 <p className='text-center'>
-                                    Saisissez votre adresse e-mail ou numéro de téléphone pour vous connecter
+                                    Saisissez votre  téléphone pour vous connecter
                                 </p>
                             </div>
                             <Input
-                                label="Email"
+                                label={"N° téléphone"}
                                 size="lg"
-                                placeholder='Enter your email'
+                                name='phone'
+                                placeholder='Entrez votre téléphone'
                                 className="col-span-2"
-                                value={formik.values.email}
+                                type='tel'
+                                value={formik.values.phone}
                                 onChange={(e) => {
                                     formik.setValues({
                                         ...formik.values,
-                                        email: e.target.value
+                                        phone: e.target.value
                                     })
                                 }}
+                                error={formik.touched.phone&&formik.errors.phone?formik.errors.phone:""}
                                 onBlur={formik.handleBlur}
                             />
 
                             <Password
-                                label="Password"
+                                label="Mot de pass"
                                 size="lg"
-                                placeholder='Enter your password'
+                                name='password'
+                                placeholder='Entrez votre mot de passe'
                                 className="col-span-2"
                                 value={formik.values.password}
                                 onChange={(e) => {
@@ -178,6 +175,7 @@ export default function LoginButton() {
                                         password: e.target.value
                                     })
                                 }}
+                                error={formik.touched.password&&formik.errors.password?formik.errors.password:""}
                                 onBlur={formik.handleBlur}
                             />
 
@@ -188,7 +186,7 @@ export default function LoginButton() {
                                 className="col-span-2 mt-2"
                             // onClick={() => setModalState(false)}
                             >
-                                Submit
+                                Soumettre
                             </Button>
                         </div>
                     </form>

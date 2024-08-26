@@ -7,29 +7,31 @@ import {
     Textarea
 } from "rizzui";
 import { IoSave } from "react-icons/io5";
-import { associatStates } from "../Const/states";
-import statesColor from "../Const/statesColor";
+import { associatStates, returnStates, Substates } from "../Const/states";
+import statesColor, { subStatesColor } from "../Const/statesColor";
 import OrderApi from "../../Api/OrderApi";
 
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
-import { RootState } from "../../Store";
-import { GlobalS } from "../../Store/globalSlice";
+import useGlobal from "../../hoock/useGlobal";
 
-export default function StateChange({ data,afterChange=()=>{} }: { data: OrderFull,afterChange?:any }) {
-   
+export default function StateChange({ data, afterChange = () => { }, readOnly = false, type = "default" }: { data: OrderFull, afterChange?: any, readOnly?: boolean, type?: OrderProsType }) {
+
     const [modalState, setModalState] = useState(false);
     const [loading, setLoading] = useState(false);
     const [dataReq, setDataReq] = useState({
         comment: "",
         password: "",
         platform: "",
-        state: data.state
+        state: data.state,
     })
-    const global = useSelector<RootState>((state) => state.global) as GlobalS
+    const [dataReqFailed, setDataReqFailed] = useState({
+        remark: "",
+        subStatus: data.subStatus,
+    })
+    const global = useGlobal("?")
     const updateState = () => {
         setLoading(true)
-        OrderApi.updateState(data.id, dataReq,global?.platform?"?"+global.platform:undefined).then(_ => {
+        OrderApi.updateState(data.id, type=="failed"?dataReqFailed:dataReq, global).then(_ => {
             afterChange()
             setModalState(false)
             setLoading(false)
@@ -39,58 +41,93 @@ export default function StateChange({ data,afterChange=()=>{} }: { data: OrderFu
         }
         )
     }
-    useEffect(()=>{
+    const updateSubState = () => {
+        
+    }
+    useEffect(() => {
         setDataReq({
             comment: "",
             password: "",
             platform: "",
             state: data.state
         })
-    },[data])
+        setDataReqFailed({
+            remark: "",
+            subStatus: data.subStatus
+        })
+    }, [data])
     return (
         <>
-            <div onClick={() => setModalState(true)}
-                className={"whitespace-nowrap capitalize rounded-full p-1 px-2 cursor-pointer  text-[13px] font-semibold border py-1 !text-[" + statesColor[data?.state ?? ""] + "]"}
-                style={{
-                    color: statesColor[data?.state ?? ""],
-                    borderColor: statesColor[data?.state ?? ""]+"26",
-                    backgroundColor: statesColor[data?.state ?? ""] + "22"
-                }} >
-                {data.state}
+            <div onClick={readOnly ? () => { } : () => setModalState(true)}
+                className={"whitespace-nowrap capitalize rounded-full p-1 px-2   text-[13px] font-semibold border py-1 !text-[" + statesColor[data?.state ?? ""] + "] " + (readOnly ? "" : "cursor-pointer")}
+                style={
+                    type=="failed" ? {
+                        color: subStatesColor[data?.subStatus ?? ""],
+                        borderColor: subStatesColor[data?.subStatus ?? ""] + "26",
+                        backgroundColor: subStatesColor[data?.subStatus ?? ""] + "22"
+                    } : {
+                        color: statesColor[data?.state ?? ""],
+                        borderColor: statesColor[data?.state ?? ""] + "26",
+                        backgroundColor: statesColor[data?.state ?? ""] + "22"
+                    }
+                } >
+                {type=="failed" ? data.subStatus : data.state}
             </div>
             <Modal isOpen={modalState} onClose={() => setModalState(false)}>
                 <div className="m-auto px-7 pt-6 pb-8">
                     <div className="mb-7 flex items-center justify-between">
                         <h1 className="text-lg font-semibold">Change state</h1>
                     </div>
-                    <div className="flex flex-col gap-2">
-                        <Select
-                            label="Select state"
-                            value={{label:dataReq.state,value:dataReq.state}}
-                            onChange={(e: typeof associatStates[0]) => {
+                    {
+                        type!="default" ? <div className="flex flex-col gap-2">
+                            <Select
+                                label="Select sub State"
+                                value={{ label: dataReqFailed.subStatus, value: dataReqFailed.subStatus }}
+                                onChange={(e: typeof Substates[0]) => {
 
-                                setDataReq({
-                                    ...dataReq,
-                                    state: e.value
-                                })
-                            }}
-                            options={associatStates}
-                        />
-                        <Password
-                            label="Password"
-                            value={dataReq.password}
-                            onChange={e=>setDataReq({...dataReq,password:e.target.value})}
-                        />
-                        <Textarea
-                            label="Comment"
-                            value={dataReq.comment}
-                            onChange={e=>setDataReq({...dataReq,comment:e.target.value})}
-                            rows={2} />
-                        <Select
-                            label="Company delivery"
-                            options={[]}
-                        />
-                    </div>
+                                    setDataReqFailed({
+                                        ...dataReqFailed,
+                                        subStatus: e.value as OrderSubState
+                                    })
+                                }}
+                                options={type=="failed"?Substates:returnStates}
+                            />
+
+                            <Textarea
+                                label="Remark"
+                                value={dataReqFailed.remark}
+                                onChange={e => setDataReqFailed({ ...dataReqFailed, remark: e.target.value })}
+                                rows={2} />
+
+                        </div> : <div className="flex flex-col gap-2">
+                            <Select
+                                label="Select state"
+                                value={{ label: dataReq.state, value: dataReq.state }}
+                                onChange={(e: typeof associatStates[0]) => {
+
+                                    setDataReq({
+                                        ...dataReq,
+                                        state: e.value
+                                    })
+                                }}
+                                options={associatStates}
+                            />
+                            <Password
+                                label="Password"
+                                value={dataReq.password}
+                                onChange={e => setDataReq({ ...dataReq, password: e.target.value })}
+                            />
+                            <Textarea
+                                label="Comment"
+                                value={dataReq.comment}
+                                onChange={e => setDataReq({ ...dataReq, comment: e.target.value })}
+                                rows={2} />
+                            <Select
+                                label="Company delivery"
+                                options={[]}
+                            />
+                        </div>
+                    }
                     <div className="flex justify-end mt-3 gap-2">
                         <Button
                             type="submit"
@@ -104,7 +141,10 @@ export default function StateChange({ data,afterChange=()=>{} }: { data: OrderFu
                             type="submit"
                             className=" flex gap-2"
                             onClick={() => {
-                                updateState()
+                                if (type=="failed")
+                                    updateSubState()
+                                else
+                                    updateState()
                             }}
                             isLoading={loading}
                         >

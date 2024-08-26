@@ -1,12 +1,7 @@
 const orderCols= [
     {
-        label:"checked",
-        value:"checked",
-        check:true
-    },
-    {
-        label:"id",
-        value:"id",
+        label:"action",
+        value:"actions",
         check:true
     },
     {
@@ -27,6 +22,11 @@ const orderCols= [
     {
         label:"to_commune_name",
         value:"to_commune_name",
+        check:true
+    },
+    {
+        label:"Associate",
+        value:"associate",
         check:true
     },
     {
@@ -54,10 +54,6 @@ const orderCols= [
         value:"created_at",
         check:true
     },
-    {
-        label:"action",
-        value:"action",
-        check:true
-    },
+    
 ]
 export default orderCols

@@ -29,6 +29,8 @@ import CheckoutResturant from "./CheckoutResturant";
 import images from "../assets";
 import { ThemeSetting } from "../Types/ThemeSetting";
 import OtpModal from "../Views/OtpModal";
+import alertError from "../hoock/alertError";
+import Gift from "../Views/Gift";
 
 
 type ModeLivraisan = {
@@ -113,7 +115,53 @@ function CheckoutDefault() {
     }
     const [modeDelivery, setModeDelivery] = useState<ModeLivraisan[]>([])
     const [loading, setLoading] = useState<boolean>(false)
-
+    const getOrder = (): Order => {
+        const m = modeDelivery?.find(el => el.check)
+        return {
+            price_items: getSubTotal(cart),
+            price_total: getTotal(cart),
+            price_promo: 0,
+            price_delivery: m?.cost ?? 0,
+            to_commune_name: formik.values.to_commune_name,
+            to_wilaya_name: formik.values.to_wilaya_name,
+            address: "",
+            fullName: formik.values.fullName,
+            firstname: formik.values.fullName,
+            familyname: formik.values.fullName,
+            email: "",
+            contact_phone: "+213" + parseInt(formik.values.contact_phone),
+            weight: "0",
+            couponCode: promoCode,
+            width: 0,
+            height: 0,
+            length: 0,
+            do_insurance: false,
+            freeshipping: false,
+            is_stopdesk: m?.value ? true : false,
+            stopdesk_id: m?.value ? m.value.center_id ?? 0 : 0,
+            has_exchange: false,
+            CompareAtPrice: 0,
+            address_lat: 0,
+            address_lng: 0,
+            time_delivery: 0,
+            nots: formik.values.nots,
+            item: cart.items.map(el => {
+                return {
+                    name: el.name,
+                    price_total: el.price,
+                    price_item: el.price,
+                    color: el.checkData.color?.value ?? "",
+                    size: el.checkData.size?.value ?? "",
+                    qte: el.qte,
+                    cancelled: false,
+                    product: {
+                        id: el.id,
+                        //image name for abondent
+                    }
+                }
+            })
+        }
+    }
     const formik = useFormik({
         initialValues,
 
@@ -124,50 +172,8 @@ function CheckoutDefault() {
                 return
             }
             setLoading(true)
-            const m = modeDelivery?.find(el => el.check)
-            let dt: Order = {
-                price_items: getSubTotal(cart),
-                price_total: getTotal(cart),
-                price_promo: 0,
-                price_delivery: m?.cost ?? 0,
-                to_commune_name: formik.values.to_commune_name,
-                to_wilaya_name: formik.values.to_wilaya_name,
-                address: "",
-                fullName: formik.values.fullName,
-                firstname: formik.values.fullName,
-                familyname: formik.values.fullName,
-                email: "",
-                contact_phone: "+213" + parseInt(formik.values.contact_phone),
-                weight: "0",
-                couponCode: "",
-                width: 0,
-                height: 0,
-                length: 0,
-                do_insurance: false,
-                freeshipping: false,
-                is_stopdesk: m?.value ? true : false,
-                stopdesk_id: m?.value ? m.value.center_id ?? 0 : 0,
-                has_exchange: false,
-                CompareAtPrice: 0,
-                address_lat: 0,
-                address_lng: 0,
-                time_delivery: 0,
-                nots: formik.values.nots,
-                item: cart.items.map(el => {
-                    return {
-                        name: el.name,
-                        price_total: el.price,
-                        price_item: el.price,
-                        color: el.checkData.color?.value ?? "",
-                        size: el.checkData.size?.value ?? "",
-                        qte: el.qte,
-                        cancelled: false,
-                        product: {
-                            id: el.id
-                        }
-                    }
-                })
-            }
+            // 
+            let dt: Order = getOrder()
             // console.log(dt)
             // setLoading(false)
             // return
@@ -256,7 +262,7 @@ function CheckoutDefault() {
             setErrors({ ...errors, deliveryError: "" })
             let ml: ModeLivraisan[] = [];
             let p = cartHasDelivery();
-            if (priceDelivery?.priceDeliveryHome == 200) {
+            if (priceDelivery?.priceDeliveryHome == 350) {
                 ml.push({
                     title: t("del_waslet"),
                     check: true,
@@ -401,9 +407,26 @@ function CheckoutDefault() {
     }
     const getTotal = (c: Cart) => {
         let t = modeDelivery.find(el => el.check)?.cost ?? 0;
-        return getSubTotal(c) + t
+        return getSubTotal(c) + t - promoPrice
 
     }
+    const [loadingPromo, setLoadingPromo] = useState(false)
+    const [promoCode, setPromoCode] = useState("")
+    const [promoPrice, setPromoPrice] = useState(0)
+    const [promoModal, setPromoModal] = useState(false)
+    const apply = () => {
+        setLoadingPromo(true)
+        ProductApi.applyPromo(promoCode, getOrder()).then((res) => {
+            setPromoModal(true)
+            setPromoPrice(res.price_promo)
+            setLoadingPromo(false)
+        }).catch((err: any) => {
+            setPromoPrice(0)
+            alertError(err)
+            setLoadingPromo(false)
+        })
+    }
+
 
     return (
         <Container className="mt-3 mb-3">
@@ -486,7 +509,7 @@ function CheckoutDefault() {
                             <div className="col-span-4 max-md:col-span-5 max-sm:col-span-10 relative">
                                 <div className="bg-gray-50 rounded-md p-5 pt-12 sticky top-[60px] border border-gray-200">
                                     <h1 className="text-center  text-xl font-bold mb-6">{t("your_command")}</h1>
-                                    
+
                                     <div className="flex flex-col gap-2">
                                         {
                                             cart.items.map((el, k) => {
@@ -502,7 +525,16 @@ function CheckoutDefault() {
                                     <div className="border border-dotted border-gray-300 mt-2 mb-3"></div>
                                     <div ref={ref.modeDelivery}></div>
                                     <div className="text-red-600 font-semibold animate-vibre">{errors.deliveryRequire}</div>
-                                    <div className="flex font-medium">
+                                    {promoPrice ? <>
+                                        <div className="flex mt-3 items-center">
+                                            <h1 className=" font-medium">Promo price</h1>
+                                            <div className="grow"></div>
+                                            <span className="font-semibold">-{promoPrice} <Currency /></span>
+                                        </div>
+
+
+                                    </> : ""}
+                                    <div className="flex font-medium items-center">
                                         {t("delivery_mode")}
                                     </div>
                                     <div>
@@ -518,21 +550,37 @@ function CheckoutDefault() {
                                                         return { ...item, check: i == k }
                                                     }))
                                                 }}>
-                                                    <Radio id="modL" type="checkbox" checked={el.check} onChange={() => { }} />
-                                                    <div className="me-2"></div>
-                                                    <span className="text-sm group-hover:underline me-1 flex flex-col items-start gap-">
-                                                        {el.title}
-                                                        {
-                                                            !!el.isWaslet && <div className="flex items-center gap-2">
-                                                                {i18n.language == "ar" ? "عبر" : "via"}
-                                                                <img src={images.waslet} style={{ height: "24px" }} alt="" />
+                                                    {
+                                                        !!el.isWaslet ? <div className="w-full">
+                                                            <div className="flex items-center gap-1 text-sm group-hover:underline">
+                                                                <Radio id="modL" type="checkbox" checked={el.check} onChange={() => { }} />
+                                                                <span className=" me-1 flex flex-col items-start gap-">
+                                                                    {el.title} {i18n.language == "ar" ? "عبر" : "avec"}
+                                                                </span>
+                                                                <div className="grow"></div>
+                                                                <div className="flex items-center whitespace-nowrap gap-2">
+                                                                    
+                                                                    <img src={images.waslet} style={{ height: "42px" }} alt="" />
+                                                                </div>
                                                             </div>
-                                                        }
-                                                    </span>
+
+                                                            <div className="flex justify-end">
+                                                                <span>{el.cost?.toFixed(2)}<Currency /></span>
+                                                            </div>
 
 
-                                                    <div className="grow me-2"></div>
-                                                    <span>{el.cost?.toFixed(2)}<Currency /></span>
+                                                        </div> : <>
+                                                            <Radio id="modL" type="checkbox" checked={el.check} onChange={() => { }} />
+                                                            <div className="me-2"></div>
+                                                            <span className="text-sm group-hover:underline me-1 flex flex-col items-start gap-">
+                                                                {el.title}
+
+                                                            </span>
+                                                            <div className="grow me-2"></div>
+                                                            <span>{el.cost?.toFixed(2)}<Currency /></span>
+                                                        </>
+                                                    }
+
                                                 </div>
                                             })
                                         }
@@ -544,11 +592,13 @@ function CheckoutDefault() {
                                         {t("cahch_ondeliv")}
                                     </div>
 
-                                   
+
                                     <Input
-                                        
+
                                         suffix={
-                                            <ButtonR className="ltr:rounded-l-none rtl:rounded-r-none" type="button">{t("apply")}</ButtonR>
+                                            <ButtonR onClick={() => {
+                                                apply()
+                                            }} isLoading={loadingPromo} className="ltr:rounded-l-none rtl:rounded-r-none" type="button">{t("apply")}</ButtonR>
                                         }
                                         prefix={
                                             <span className="text-gray-500 font-semibold text-[12px]">{t("promo_code")}</span>
@@ -556,15 +606,19 @@ function CheckoutDefault() {
                                         placeholder={t("enter_promo")}
                                         inputClassName="pe-0"
                                         className="mt-4"
+                                        onChange={(e) => {
+                                            setPromoCode(e.target.value)
+                                        }}
+                                        value={promoCode}
                                         label=""
                                     />
-                                     {/* <div className="border border-dotted border-gray-300 mt-3 mb-2"></div> */}
+                                    {/* <div className="border border-dotted border-gray-300 mt-3 mb-2"></div> */}
                                     <div className="flex mt-3 items-center">
                                         <h1 className="text-lg font-bold uppercase">{t("total")}</h1>
                                         <div className="grow"></div>
                                         <span className="font-semibold text-2xl">{getTotal(cart).toFixed(2)} <small className="font-medium"><Currency /></small></span>
                                     </div>
-                                    
+
                                     <Button
                                         type="submit"
                                         isLoading={loading}
@@ -692,7 +746,11 @@ function CheckoutDefault() {
             <Toaster position="top-center" />
 
 
-
+            {promoModal && <Modal isOpen={promoModal} onClose={() => setPromoModal(false)}>
+                <div className="m-auto px-7 pt-6 pb-8 flex items-center justify-center flex-col gap-4">
+                    <Gift promo={promoPrice} />
+                </div>
+            </Modal>}
 
 
 

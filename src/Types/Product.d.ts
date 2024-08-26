@@ -51,6 +51,8 @@ declare global {
         price: number,
         CompareAtPrice: number,
         pricePromo: number,
+        drop_price?:number,
+        is_drop_shipping:boolean,
         stock: number,
         discount: number,
         ProductColor: string,
@@ -60,6 +62,7 @@ declare global {
         minNumberQteOffer: number | null,
         sub_description: string,
         category: {
+            id:number,
             name: string
         },
         Reviews: Array<any>,
@@ -69,8 +72,43 @@ declare global {
         deliveryCostToTheHome: number | null,
         deliveryCostToTheOffice: number | null,
         specificPriceDelivery: boolean,
-        originalPrice:number,
+        originalPrice: number,
         oldPrice?: number
+    }
+    interface ProductFull extends Product {
+        range: null | string,
+        stage: null | string,
+        position: null | string,
+        sold_out: number,
+        weight: string,
+        width: number,
+        height: number,
+        length: number,
+        underStock: true,
+        limitAlert: number,
+        limitAlertOne: number,
+        limitAlertTwo: number,
+        note: null | string,
+        supplier: null,
+        meta: null,
+        deliveryPrices: {
+            id:number,
+            deliveryCostToTheHome:number,
+            deliveryCostToTheOffice:number,
+            city:{
+                id:number,
+                name:string
+            }
+        }[],
+        historic: [],
+        box: null,
+        RelatedProducts?: number[],
+        showTitle: boolean,
+        showInPage: boolean,
+        showImages: boolean,
+        showPriceDiscount: boolean,
+        showPriceTotal: boolean,
+        showCountdown: boolean,
     }
 
     interface ProductsResponse extends ResponseAtt {
@@ -142,8 +180,16 @@ declare global {
             id: number
         }
     }
-    type ExistingOfferPropsRequest={
-        data:ExistingOfferProps[]
+    type ExistingOfferPropsRequest = {
+        data: ExistingOfferProps[]
+    }
+    type ProductOptionRequest = {
+        limit: number,
+        page: number,
+        sort: string,
+        categoryId?: number,
+        state?: boolean,
+        trash?: true,
     }
 }
 

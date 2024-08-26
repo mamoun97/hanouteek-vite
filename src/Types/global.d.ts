@@ -4,3 +4,57 @@ interface ResponseAtt {
     totalCount: number
     hasMore: boolean
 }
+
+type OptionsFilter = {
+    limit: number,
+    page: number,
+    categoryId: number | null,
+    minPrice: number | null,
+    maxPrice: number | null
+}
+
+type SubFormProps = {
+    data: ProductFull,
+    setData: (e: ProductFull) => void,
+    footer?: any
+}
+
+type ProductFormErrors = [
+    boolean,
+    boolean,
+    boolean,
+    boolean,
+    boolean,
+    boolean,
+    boolean,
+]
+
+
+interface Associate {
+    id: number,
+    firstName: string,
+    lastName: string,
+    email: string,
+    phoneNumber: string,
+    address: string,
+    role: string,
+    avatar: string,
+    active: boolean,
+}
+interface AssociateFull extends Associate {
+    
+    socketId?: null,
+    isOnline: boolean,
+    created_at: string,
+    updated_at: string
+}
+interface AssociateResponse extends ResponseAtt {
+
+    data: Array<AssociateFull>
+}
+type AssociateOptionRequest={
+    limit: number,
+    page: number,
+}
+
+type OrderProsType="default"|"failed"|"return"

@@ -14,5 +14,35 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
+  .arrow-anim {
+    
+    
+    cursor: pointer;
 
+}
+
+.arrow-anim span {
+  animation: animate 2s infinite;
+}
+.arrow-anim span:nth-child(2) {
+  animation-delay: -0.2s;
+}
+
+.arrow-anim span:nth-child(3) {
+  animation-delay: -0.4s;
+}
+
+@keyframes animate {
+    0% {
+        opacity: 0;
+        transform: rotate(45deg) translate(-10px, -10px);
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: rotate(45deg) translate(10px, 10px);
+    }
+}
 

@@ -4,9 +4,10 @@ import styled from "styled-components"
 
 import SwiperF from './Swiper';
 import LazyLoad from "./LazyLoad.jsx"
-import ApiConfig from '../Api/ApiConfig';
+import imgs from '../assets/index.js';
 import Swiper from 'swiper';
 import { useTranslation } from 'react-i18next';
+import imgSrc from '../utils/imgSrc.js';
 
 const DivC = styled.div`
 
@@ -94,12 +95,20 @@ figure.iiz{
   max-height: 100%;
 }
 `
+type TypeType = "default" | "type1"
+function ProductZoom({ data, detect = null, type = "default" }: {
+    data: Product,
+    type?: TypeType,
+    detect?: string | null
+}) {
+    if (type == "default") return <ProductZoomDefault {...{ data, detect }} />
+    if (type == "type1") return <ProductZoomType1 {...{ data, detect }} />
+}
 
-function ProductZoom({ data, detect=null }: {
+function ProductZoomDefault({ data, detect = null }: {
     data: Product,
     detect?: string | null
 }) {
-
     const { i18n } = useTranslation()
     const images = [
         ...data.images,
@@ -116,61 +125,190 @@ function ProductZoom({ data, detect=null }: {
     useEffect(() => {
         setCount(count + 1)
     }, [i18n.language])
-    const z = <SwiperF
-        swiperProps={{
-            onSwiper: (swiper: any) => setSwiper(swiper)
-        }}
-        withPagination={true}
-        breakpoints={
-            {
-                0: {
-                    slidesPerView: 1,
-                    spaceBetween: 0
-                },
-                8000: {
-                    slidesPerView: 1,
-                    spaceBetween: 0
+    return <DivC key={data.id}>
+        <SwiperF
+            swiperProps={{
+                onSwiper: (swiper: any) => setSwiper(swiper)
+            }}
+            withPagination={true}
+            breakpoints={
+                {
+                    0: {
+                        slidesPerView: 1,
+                        spaceBetween: 0
+                    },
+                    8000: {
+                        slidesPerView: 1,
+                        spaceBetween: 0
+                    }
                 }
             }
-        }
-        items={
-            images.map((el, index) => {
-                let src = ApiConfig.rootUrl + "/" + el
-                return <div key={index}>
-                    <div style={{ position: "relative", paddingTop: "100%", width: "100%", height: 0 }} className="d-flex align-items-center justify-content-center responsive-img">
-                        <div className='pa'>
-                            <LazyLoad
-                                key={index}
-                                alt={data.name}
-                                src={src}
-                                height={"100%"}
-                                onClick={() => {
+            items={
+                (images.length ? [...images] : [imgs.img_notfound]).map((el, index) => {
 
-                                }}
-                            />
+                    return <div key={index}>
+                        <div style={{ position: "relative", paddingTop: "100%", width: "100%", height: 0 }} className="d-flex align-items-center justify-content-center responsive-img">
+                            <div className='pa'>
+                                <LazyLoad
+                                    key={index}
+                                    alt={el != imgs.img_notfound ? imgSrc(el, true) : imgs.img_notfound}
+                                    src={el != imgs.img_notfound ? imgSrc(el, true) : imgs.img_notfound}
+                                    height={"100%"}
+                                    onClick={() => {
+
+                                    }}
+                                />
+                            </div>
+
                         </div>
-
                     </div>
-                </div>
-            })
-        }
-    />
-
-
-
-
-
-
-    return <DivC> {
-        count % 2 == 0 ? <div className='relative'>
-            {z}
-
-        </div> : z}
-        {/* <div className="absolute top-0 left-0 right-0 z-30">
-            {
-                data.hasOffer && <OfferCard prod={data} />
+                })
             }
-        </div> */}
+        />
+    </DivC>
+}
+function ProductZoomType1({ data, detect = null }: {
+    data: Product,
+    detect?: string | null
+}) {
+    const { i18n } = useTranslation()
+    const images = [
+        ...data.images,
+        ...data.attribute.options.filter(el => !!el.image)?.map((el) => el.image)
+    ]
+    const [activeIndex, setActiveIndex] = useState<number>(0);
+    const [swiper, setSwiper] = useState<Swiper | null>(null);
+    const [swiper2, setSwiper2] = useState<Swiper | null>(null);
+    useEffect(() => {
+
+        if (!!detect) {
+            setActiveIndex(images.indexOf(detect))
+            swiper?.slideTo(images.indexOf(detect), 500)
+            swiper2?.slideTo(images.indexOf(detect), 500)
+        }
+    }, [detect])
+    const [count, setCount] = useState(0)
+    useEffect(() => {
+        setCount(count + 1)
+    }, [i18n.language])
+    const handleThumbnailClick = (index: number) => {
+        setActiveIndex(index)
+        swiper2?.slideTo(index, 500);
+        swiper?.slideTo(index, 500);
+    };
+    return <DivC key={data.id}>
+        <SwiperF
+            swiperProps={{
+                onSwiper: (swiper: any) => setSwiper(swiper),
+                onSlideChange: (s) => {
+                    handleThumbnailClick(s.activeIndex)
+                }
+
+
+            }}
+            withPagination={false}
+
+            breakpoints={
+                {
+                    0: {
+                        slidesPerView: 1,
+                        spaceBetween: 0
+                    },
+                    8000: {
+                        slidesPerView: 1,
+                        spaceBetween: 0
+                    }
+                }
+            }
+            items={
+                (images.length ? [...images] : [imgs.img_notfound]).map((el, index) => {
+
+                    return <div key={index}>
+                        <div style={{ position: "relative", paddingTop: "100%", width: "100%", height: 0 }} className="d-flex align-items-center justify-content-center responsive-img rounded-xl overflow-hidden">
+                            <div className='pa rounded-t-2xl overflow-hidden'>
+                                <LazyLoad
+                                    key={index}
+                                    alt={el != imgs.img_notfound ? imgSrc(el, true) : imgs.img_notfound}
+                                    src={el != imgs.img_notfound ? imgSrc(el, true) : imgs.img_notfound}
+                                    height={"100%"}
+                                    onClick={() => {
+
+                                    }}
+                                />
+                            </div>
+
+                        </div>
+                    </div>
+                })
+            }
+        />
+        <div className='overflow-hidden rounded-b-[20px]'>
+            <SwiperF
+                swiperProps={{
+                    onSwiper: (swiper: any) => setSwiper2(swiper),
+                    onSlideChange: (s) => {
+                        handleThumbnailClick(s.activeIndex)
+                    }
+
+                }}
+
+                withPagination={false}
+
+                breakpoints={
+                    {
+                        0: {
+                            slidesPerView: 4,
+                            spaceBetween: 0
+                        },
+                        740: {
+                            slidesPerView: 5,
+                            spaceBetween: 0
+                        },
+                        830: {
+                            slidesPerView: 6,
+                            spaceBetween: 0
+                        },
+
+                        900: {
+                            slidesPerView: 6,
+                            spaceBetween: 0
+                        },
+                        1200: {
+                            slidesPerView: 6,
+                            spaceBetween: 0
+                        },
+                        8000: {
+                            slidesPerView: 6,
+                            spaceBetween: 0
+                        }
+                    }
+                }
+                items={
+                    (images.length ? [...images] : [imgs.img_notfound]).map((el, index) => {
+
+                        return <div key={index}>
+                            <div style={{ position: "relative", paddingTop: "100%", width: "100%", height: 0 }} className="d-flex align-items-center justify-content-center responsive-img">
+                                <div className={'pa  border-2 border-white opacity-80 overflow-hidden ' + (activeIndex == index ? "!border-0 !opacity-100" : "")} onClick={() => {
+                                    handleThumbnailClick(index)
+                                }}>
+                                    <LazyLoad
+                                        key={index}
+                                        alt={el != imgs.img_notfound ? imgSrc(el, true) : imgs.img_notfound}
+                                        src={el != imgs.img_notfound ? imgSrc(el, true) : imgs.img_notfound}
+                                        height={"100%"}
+
+                                        onClick={() => {
+
+                                        }}
+                                    />
+                                </div>
+
+                            </div>
+                        </div>
+                    })
+                }
+            />
+        </div>
     </DivC>
 }
 

@@ -1,5 +1,5 @@
 
-import { LuLogOut } from "react-icons/lu";
+import { LuLogOut, LuUsers } from "react-icons/lu";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { BsBoxFill } from "react-icons/bs";
 import { IoBarChartSharp } from "react-icons/io5";
@@ -9,59 +9,114 @@ import { changeUser } from "../../Store/authSlice";
 import ApiConfig from "../../Api/ApiConfig";
 import AuthApi from "../../Api/Auth";
 import { TbShoppingCartPlus } from "react-icons/tb";
+import { FaList } from "react-icons/fa";
+import { HiPhoneIncoming } from "react-icons/hi";
+import { PiKeyReturnFill } from "react-icons/pi";
 
 // const items = [
 //     {
 //         link: "/dashboard",
 //         text: "Dashboard",
-//         role: ["associate", "order_creator"],
+//         role: ["pos"],
 //         icon: IoBarChartSharp
 //     },
 //     {
 //         link: "/order/create",
 //         text: "Create order",
-//         role: [ "order_creator"],
+//         role: [ "pos"],
 //         icon: TbShoppingCartPlus
 //     },
 //     {
 //         link: "/orders",
 //         text: "Ordres",
-//         role: ["associate"],
+//         role: ["pos"],
 //         icon: BsBoxFill
 //     },
 //     {
 //         link: "/pos/order/create",
 //         text: "POS",
-//         role: ["associate","order_creator"],
+//         role: ["pos"],
 //         icon: BsBoxFill
-//     }
+//     },
+//     {
+//         link: "/products",
+//         text: "Products",
+//         role: ["pos"],
+//         icon: FaList
+//     },
+//     {
+//         link: "/users",
+//         text: "Users",
+//         role: ["pos"],
+//         icon: LuUsers
+//     },
+
 // ]
+
+
 
 const items = [
     {
         link: "/dashboard",
         text: "Dashboard",
-        role: ["associate", "order_creator","pos"],
+        role: ["associate_admin","associate", "associate_sav","order_creator", "pos","associate_stock","vendor"],
         icon: IoBarChartSharp
     },
     {
         link: "/order/create",
         text: "Create order",
-        role: [ "associate","order_creator"],
+        role: ["associate_admin","associate", "order_creator"],
         icon: TbShoppingCartPlus
+    },
+    {
+        link: "/order/create-drop",
+        text: "Create order",
+        role: ["vendor"],
+        icon: TbShoppingCartPlus
+    },
+    {
+        link: "/abandoned-carts",
+        text: "Paniers abandonnés",
+        role: ["associate_admin","associate_sav"],
+        icon: HiPhoneIncoming
     },
     {
         link: "/orders",
         text: "Ordres",
-        role: ["associate","pos"],
+        role: ["associate_admin","associate","associate_sav", "pos","associate_stock","vendor"],
         icon: BsBoxFill
+    },
+    {
+        link: "/failed-orders",
+        text: "Gestion des échecs",
+        role: ["associate_admin", "associate_sav"],
+        icon: BsBoxFill
+    },
+    {
+        link: "/return",
+        text: "Gestion des retours",
+        role: ["associate_admin", "associate_stock"],
+        icon: PiKeyReturnFill
     },
     {
         link: "/pos/order/create",
         text: "POS",
-        role: ["pos"],
+        role: ["associate_admin","pos"],
         icon: BsBoxFill
-    }
+    },
+    {
+        link: "/products",
+        text: "Products",
+        role: ["associate_admin"],
+        icon: FaList
+    },
+    {
+        link: "/users",
+        text: "Users",
+        role: ["associate_admin"],
+        icon: LuUsers
+    },
+
 ]
 export default function Drower({
     open,
@@ -70,6 +125,7 @@ export default function Drower({
     open: boolean,
     setOpen: any,
 }) {
+    
     const navigate = useNavigate()
     const location = useLocation()
     const user = useSelector<RootState>((state) => state.user) as UserAuth
@@ -122,10 +178,7 @@ export default function Drower({
 
 
                 </ul>
-                {/* <a href="https://flowbite.com/" className="flex items-center ps-2.5 mb-5">
-                <img src={ApiConfig.rootUrl + "/" + theme.theme.Logo}
-                            className="h-5 " alt="" />
-                </a> */}
+                
             </div>
         </aside>
     )

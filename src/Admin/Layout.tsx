@@ -13,6 +13,7 @@ import { ThemeProvider } from '../utils/ThemeProvider'
 import { GlobalS } from '../Store/globalSlice'
 import { useThemeService } from '../Api/Services'
 import { changeTheme } from '../Store/themeSlice'
+import { LuArrowLeftToLine, LuArrowRightFromLine } from 'react-icons/lu'
 export default function LayoutAdmin({ children }: {
   children: React.ReactNode
 }) {
@@ -74,12 +75,13 @@ export default function LayoutAdmin({ children }: {
               </div>}
               <div className='grow h-screen overflow-auto'>
                 <Navbar {...{ open, setOpen }}
-                  btnClose={null
-                  // <button onClick={() => {
-                  //   setOpenPos(!openPos)
-                  // }} className=" p-2 mr-3 text-gray-600 rounded cursor-pointer  hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700">
-                  //   <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12"> <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h14M1 6h14M1 11h7" /> </svg>
-                  // </button>
+                  btnClose={
+                  <button onClick={() => {
+                    setOpenPos(!openPos)
+                  }} className=" p-2 mr-3 max-sm:hidden text-gray-600 rounded cursor-pointer  hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700">
+                    {openPos?<LuArrowLeftToLine className="w-5 h-5" />:
+                    <LuArrowRightFromLine className="w-5 h-5" />}
+                  </button>
                 } />
                 <div className="p-5 relative max-md:p-3">
                   {children}

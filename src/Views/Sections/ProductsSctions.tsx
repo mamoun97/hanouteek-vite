@@ -25,7 +25,6 @@ export default function ProductsSctions({ data }: { data: HomePageSection }) {
       revalidateOnMount: true,
       onSuccess: (res: ProductsResponse) => {
         if (res.data) {
-          console.log(res.data)
           setDt({
             data: [...dt.data, ...res.data],
             total: res.totalCount

@@ -34,61 +34,73 @@ const data = [
         month: 'Jan',
         revenue: 5000,
         expense: 1500,
+        val:1200
     },
     {
         month: 'Feb',
         revenue: 4600,
         expense: 3798,
+        val:1200
     },
     {
         month: 'Mar',
         revenue: 5900,
         expense: 1300,
+        val:1200
     },
     {
         month: 'Apr',
         revenue: 5780,
         expense: 3908,
+        val:1200
     },
     {
         month: 'May',
         revenue: 4890,
         expense: 2500,
+        val:1200
     },
     {
         month: 'Jun',
         revenue: 8000,
         expense: 3200,
+        val:1200
     },
     {
         month: 'Jul',
         revenue: 4890,
         expense: 2500,
+        val:1200
     },
     {
         month: 'Aug',
         revenue: 3780,
         expense: 3908,
+        val:1200
     },
     {
         month: 'Sep',
         revenue: 7800,
         expense: 2800,
+        val:1200
     },
     {
         month: 'Oct',
         revenue: 5780,
         expense: 1908,
+        val:1200
     },
     {
         month: 'Nov',
         revenue: 2780,
         expense: 3908,
+        val:1200
     },
     {
         month: 'Dec',
         revenue: 7500,
         expense: 3000,
+        val:1200
     },
 ];
 
@@ -113,12 +125,13 @@ export default function SalesReport({ className }: { className?: string }) {
                 <DatePicker
                     selected={startDate}
                     onChange={(date: Date) => setStartDate(date)}
-                    dateFormat="yyyy"
-                    placeholderText="Select Year"
+                    // dateFormat="yyyy"
+                    
+                    placeholderText="Select Month"
                     showYearPicker
                     inputProps={{ variant: 'text', inputClassName: 'p-0 px-1 h-auto' }}
-                    popperPlacement="bottom-end"
-                    className="w-[100px]"
+                    // popperPlacement="bottom-end"
+                    // className="w-[100px]"
                 />
             }
             className={className}
@@ -131,8 +144,9 @@ export default function SalesReport({ className }: { className?: string }) {
                         {...(isTablet && { minWidth: '700px' })}
                     >
                         <ComposedChart
-                            data={data}
-                            barSize={isTablet ? 20 : 24}
+                            data={data.map(el=>({...el,d:el.expense+el.revenue}))}
+                            barSize={15}
+                            // barSize={isTablet ? 20 : 24}
                             className="[&_.recharts-tooltip-cursor]:fill-opacity-20 dark:[&_.recharts-tooltip-cursor]:fill-opacity-10 [&_.recharts-cartesian-axis-tick-value]:fill-gray-500 [&_.recharts-cartesian-axis.yAxis]:-translate-y-3 rtl:[&_.recharts-cartesian-axis.yAxis]:-translate-x-12 [&_.recharts-cartesian-grid-vertical]:opacity-0"
                         >
                             <defs>
@@ -157,12 +171,13 @@ export default function SalesReport({ className }: { className?: string }) {
                                     <CustomTooltip  className="[&_.chart-tooltip-item:last-child]:hidden"  />
                                 }
                             />
+                            
                             <Bar
                                 dataKey="revenue"
                                 label="Revenu"
                                 fill="#282ECA"
                                 stackId="a"
-                                shape={<RoundedBottomBar />}
+                                // shape={<RoundedBottomBar />}
                             />
                             <Bar
                                 dataKey="expense"
@@ -170,14 +185,29 @@ export default function SalesReport({ className }: { className?: string }) {
                                 label="Frais"
                                 fill="#B8C3E9"
                                 fillOpacity={0.9}
-                                shape={
-                                    <RoundedTopBar className="fill-[#B8C3E9] dark:fill-[#7c88b2]" />
-                                }
+                                // shape={
+                                //     <RoundedTopBar className="fill-[#B8C3E9] dark:fill-[#7c88b2]" />
+                                // }
+                            />
+                            <Bar
+                                dataKey="val"
+                                label="Val"
+                                fill="#FF0"
+                                stackId="a"
+                                // shape={<RoundedBottomBar />}
                             />
                             <Area
                                 type="bump"
                                 dataKey="revenue"
                                 stroke="#8200E9"
+                                strokeWidth={2}
+                                fillOpacity={1}
+                                fill="url(#salesReport)"
+                            />
+                            <Area
+                                type="bump"
+                                dataKey="d"
+                                stroke="#F80"
                                 strokeWidth={2}
                                 fillOpacity={1}
                                 fill="url(#salesReport)"

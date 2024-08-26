@@ -161,6 +161,9 @@
   .react-datepicker .react-datepicker__month-container {
     @apply px-3;
   }
+  .bg-image{
+    @apply bg-cover bg-center bg-no-repeat
+  }
 
   /* time container */
   .react-datepicker .react-datepicker__time-container {

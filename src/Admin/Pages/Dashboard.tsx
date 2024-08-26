@@ -14,14 +14,15 @@ import { MdOutlineCloudOff } from "react-icons/md";
 import { FaDollarSign } from "react-icons/fa";
 import { FiBox } from "react-icons/fi";
 import { IoStatsChart } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   const global = useSelector<RootState>((state) => state.global) as GlobalS
   const user = useSelector<RootState>((state) => state.user) as UserAuth
 
   const [option, setOptions] = useState({
-    startDate: moment().add("day").startOf("day").format(),
-    endDate: moment().endOf("day").format(),
+    startDate: moment().subtract(30, 'days').startOf('day').format(),
+    endDate: moment().endOf('day').format(),
   })
   const { data, isLoading } = useGetStatisticsService({
     startDate: moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm"),
@@ -130,8 +131,8 @@ export default function Dashboard() {
         }
         {
           data?.map((el, k) => {
-            return <div className={`p-2 h-28 border  rounded-md flex flex-col justify-center items-center `}
-              style={{
+            return <Link to={"/orders/"+el.state} className={`p-2 h-28 border  rounded-md flex flex-col justify-center items-center `}
+              style={{ 
                 backgroundColor: statesColor[el.state],
                 color: invertColor(statesColor[el.state])
               }} key={k}>
@@ -139,7 +140,7 @@ export default function Dashboard() {
                 {el.state}
               </p>
               <span className="font-bold text-2xl">{el.count}</span>
-            </div>
+            </Link>
           })
         }
 
