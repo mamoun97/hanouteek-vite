@@ -8,11 +8,7 @@ import { IoArrowBackOutline } from 'react-icons/io5'
 export default function AddOrderDrop() {
     const [openForm, setOpenForm] = useState(false)
     const [dataOrder, setDataOrder] = useState<OrderFull>(initialDataOrder)
-    const ref = useRef<HTMLDivElement | null>(null)
-    useEffect(() => {
-        if (ref.current)
-            ref.current.scrollTop = 0
-    }, [openForm])
+   
     return (
         <div  className='relative z-0' >
           
@@ -30,7 +26,7 @@ export default function AddOrderDrop() {
                     setDataDrop: setDataOrder
                 }} />
             </div>
-            <div className={`${openForm ? "block" : "hidden"}`}  ref={ref}>
+            <div className={`${openForm ? "block" : "hidden"}`}  key={"formdata"+openForm} >
                 <FormOrder data={dataOrder} isAdd={true} />
             </div>
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 
 import Form from "./Form";
@@ -17,16 +17,20 @@ import { MdInfo } from "react-icons/md";
 import { IoIosCheckmarkCircle } from "react-icons/io";
 
 export default function FormOrder({ data, isAdd = false }: { data: OrderFull, isAdd?: boolean }) {
+
   const global = useSelector<RootState>((state) => state.global) as GlobalS
   const [dataOrder, setDataOrder] = useState<OrderFull>(data)
   const navigate = useNavigate()
-
+  console.log(data)
   const user = useSelector<RootState>((state) => state.user) as UserAuth
   const [loading, setLoading] = useState(false)
   const [delivery, setDelivery] = useState<PriceDeliveryResponce | null>(null)
-  const [cart, setCart] = useState<OrderFullItem[]>(
-    data.item
-  )
+  // const cart = useMemo<OrderFullItem[]>(
+  //   ()=>data.item,[data.item]
+  // )
+  // const setCart=()=>{}
+
+ 
 
   const getFunctionName = (t: string) => {
     switch (t) {
@@ -42,7 +46,7 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
       if (isAdd) {
         OrderApi[getFunctionName(user.role)]({
           ...dataOrder,
-          item: cart,
+          // item: cart,
           contact_phone: "+213" + parseInt(dataOrder.contact_phone),
           min_price_drop_shipper: getDropPrice().ventmin,
           price_total: dataOrder.price_drop ?? dataOrder.price_total,
@@ -56,7 +60,7 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
           alertError(err)
         })
       } else
-        OrderApi.updateOrder({ ...dataOrder, item: cart }, global?.platform ? "?" + global.platform : undefined).then(_ => {
+        OrderApi.updateOrder({ ...dataOrder}, global?.platform ? "?" + global.platform : undefined).then(_ => {
           toast.success("Modifié avec succès")
           navigate("/orders")
           setLoading(false)
@@ -68,8 +72,8 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
   });
   const getTotal = () => {
     let s = 0;
-    for (let i = 0; i != cart.length; i++) {
-      s += cart[i].price_total
+    for (let i = 0; i != dataOrder.item.length; i++) {
+      s += dataOrder.item[i].price_total
     }
     return s
   }
@@ -81,6 +85,7 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
     return price
   }
   const getTotalDrop = () => {
+    const cart=dataOrder.item
     let s = 0;
     for (let i = 0; i != cart.length; i++) {
       s += (cart[i].min_selling_drop_price ?? cart[i].price_total)*cart[i].qte
@@ -101,23 +106,26 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
       ventdrop: 0
     }
   }
+
   return (
     <form onSubmit={formik.handleSubmit} >
       <div className="grid grid-cols-5  gap-2 mt-3 relative">
         <div className="col-span-3  max-md:col-span-5 p-0">
 
-          <Form {...{ cart, setCart, dataOrder, setDataOrder, delivery, setDelivery }} />
+          <Form {...{ cart:dataOrder.item, setCart:(e:OrderFullItem[])=>setDataOrder({...dataOrder,item:e}), dataOrder, setDataOrder, delivery, setDelivery }} />
 
         </div>
         <div className="col-span-2  max-md:col-span-5 relative">
           <div className=" rounded-md p-5 sticky top-[60px] bg-card dark:text-[#E3E3E3]">
             <h1 className="text-center  text-xl font-bold my-4">Votre Panier</h1>
             <div className="flex flex-col gap-2">
+
               {
-                cart.map((el, k) => {
-                  return <CartItem2 data={el} index={k} {...{ cart, setCart }} />
+                dataOrder.item.map((el, k) => {
+                  return <CartItem2 data={el} index={k} {...{ cart:dataOrder.item, setCart:(e:OrderFullItem[])=>setDataOrder({...dataOrder,item:e}) }} />
                 })
               }
+            
             </div>
             {
               user.role != "vendor" && <>

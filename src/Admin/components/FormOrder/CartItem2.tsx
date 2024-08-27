@@ -16,7 +16,7 @@ export default function CartItem2({ data, index, cart,
 
     return (
         <div className="flex gap-2 relative my-1">
-
+            
             <div className={`bg-cover cursor-pointer bg-no-repeat bg-center w-14 h-14 min-w-[56px] rounded-md mt-2 sticky 
             top-[60px]`}
                 style={{ backgroundImage: "url('" + imgSrc( data.product?.images[0],true) + "')" }} >
