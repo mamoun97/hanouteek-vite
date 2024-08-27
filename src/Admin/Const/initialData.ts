@@ -61,6 +61,7 @@ export const initialDataProduct: ProductFull = {
   "deliveryCostToTheOffice": 0,
   "deliveryCostToTheHome": 0,
   "hasOffer": false,
+  "is_drop_shipping":false,
   "priceOffer": 0,
   "minNumberQteOffer": 0,
   "sub_description": "",

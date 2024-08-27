@@ -13,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../Store";
 import { GlobalS } from "../../../Store/globalSlice";
+import { MdInfo } from "react-icons/md";
+import { IoIosCheckmarkCircle } from "react-icons/io";
 
 export default function FormOrder({ data, isAdd = false }: { data: OrderFull, isAdd?: boolean }) {
   const global = useSelector<RootState>((state) => state.global) as GlobalS
@@ -26,11 +28,11 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
     data.item
   )
 
-  const getFunctionName=(t:string)=>{
-    switch(t){
-      case "order_creator":return "createOrder";
-      case "vendor":return "createOrderDrop";
-      default:return "createOrderAssociate"
+  const getFunctionName = (t: string) => {
+    switch (t) {
+      case "order_creator": return "createOrder";
+      case "vendor": return "createOrderDrop";
+      default: return "createOrderAssociate"
     }
   }
   const formik = useFormik({
@@ -38,15 +40,15 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
     onSubmit: (_: OrderFull) => {
       setLoading(true)
       if (isAdd) {
-        OrderApi[getFunctionName(user.role) ]({
-          ...dataOrder, 
+        OrderApi[getFunctionName(user.role)]({
+          ...dataOrder,
           item: cart,
           contact_phone: "+213" + parseInt(dataOrder.contact_phone),
-          min_price_drop_shipper:getDropPrice().ventmin,
-          price_total:dataOrder.price_drop??dataOrder.price_total,
+          min_price_drop_shipper: getDropPrice().ventmin,
+          price_total: dataOrder.price_drop ?? dataOrder.price_total,
         }, global?.platform ? "?" + global.platform : undefined).then(_ => {
           toast.success("Ajoute avec succès")
-          if (user.role == "associate"||user.role=="vendor")
+          if (user.role == "associate" || user.role == "vendor")
             navigate("/orders")
           setLoading(false)
         }).catch(err => {
@@ -78,8 +80,15 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
 
     return price
   }
+  const getTotalDrop = () => {
+    let s = 0;
+    for (let i = 0; i != cart.length; i++) {
+      s += cart[i].min_selling_drop_price ?? cart[i].price_total
+    }
+    return s
+  }
   const getDropPrice = () => {
-    let s = getTotal() + getPriceDelivery()
+    let s = getTotalDrop()
     if (dataOrder.price_drop && getTotal())
       return {
         show: true,
@@ -101,8 +110,8 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
 
         </div>
         <div className="col-span-2  max-md:col-span-5">
-          <div className="bg-gray-50 rounded-md p-5 sticky top-[60px] border border-gray-200 dark:bg-[#222] dark:border-[#444]">
-            <h1 className="text-center  text-xl font-bold my-4">Cart</h1>
+          <div className=" rounded-md p-5 sticky top-[60px] bg-card dark:text-[#E3E3E3]">
+            <h1 className="text-center  text-xl font-bold my-4">Votre Panier</h1>
             <div className="flex flex-col gap-2">
               {
                 cart.map((el, k) => {
@@ -110,24 +119,29 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
                 })
               }
             </div>
-            <div className="flex mt-3 items-center">
-              <h1 className="text-sm font-medium">SubTotal</h1>
-              <div className="grow"></div>
-              <span className="font-semibold">{getTotal().toFixed(2)} DZD</span>
-            </div>
-            <div className="flex items-center">
-              <h1 className="text-sm font-medium">Delivery Price</h1>
-              <div className="grow"></div>
-              <span className="font-semibold">{getPriceDelivery().toFixed(2)} DZD</span>
-            </div>
-            <div className="flex mt-3 items-center">
-              <h1 className="text-sm font-bold uppercase">Total</h1>
-              <div className="grow"></div>
-              <span className="font-semibold text-2xl">{
-                (getTotal() + getPriceDelivery()).toFixed(2)
-              } <small className="font-medium ps-1">DZD</small></span>
-            </div>
-            <div className="border-b border-dashed border-gray-300 my-3"></div>
+            {
+              user.role != "vendor" && <>
+                <div className="flex mt-3 items-center">
+                  <h1 className="text-sm font-medium">SubTotal</h1>
+                  <div className="grow"></div>
+                  <span className="font-semibold">{getTotal().toFixed(2)} DZD</span>
+                </div>
+                <div className="flex items-center">
+                  <h1 className="text-sm font-medium">Prix ​​de livraison</h1>
+                  <div className="grow"></div>
+                  <span className="font-semibold">{getPriceDelivery().toFixed(2)} DZD</span>
+                </div>
+                <div className="flex mt-3 items-center">
+                  <h1 className="text-sm font-bold uppercase">Total</h1>
+                  <div className="grow"></div>
+                  <span className="font-semibold text-2xl">{
+                    (getTotal() + getPriceDelivery()).toFixed(2)
+                  } <small className="font-medium ps-1">DZD</small></span>
+                </div>
+                <div className="border-b border-dashed border-gray-300 my-3"></div>
+              </>
+            }
+
 
             {!isAdd && <Select
               label="Select state"
@@ -142,41 +156,79 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
             />}
             {
               user.role == "vendor" ? <>
+                <div className="flex mt-3 items-center">
+                  <h1 className="text-sm font-medium">Total</h1>
+                  <div className="grow"></div>
+                  <span className="font-semibold">{getTotal().toFixed(2)} DZD</span>
+                </div>
+                {!!getPriceDelivery() && <>
+                  <div className="flex  items-center gap-2">
+                    <h1 className="text-sm font-medium whitespace-nowrap ">Votre prix de vente</h1>
+
+                    <Input
+                      label=""
+                      size="sm"
+                      value={dataOrder.price_drop}
+                      onChange={(e) => {
+                        if (!isNaN(Number(e.target.value)))
+                          setDataOrder({
+                            ...dataOrder,
+                            price_drop: Number(e.target.value)
+                          })
+                      }}
+                      suffixClassName={"ms-2 "}
+                      suffix="DZD"
+                      dir="rtl"
+                      className="grow"
+
+                      inputClassName="text-right text-sm font-bold"
+                      placeholder="."
+                    />
+                  </div>
+
+                  {/* error message */}
+
+                  {getDropPrice().show && getDropPrice().ventdrop <= 0 && <div className="flex my-2 items-center p-4 mb-4 text-sm text-red-800  rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+                    <MdInfo className="flex-shrink-0 inline w-5 h-5 me-3" />
+
+                    <div>
+                      Le total de cette commande doit être au minimum de :  <strong>{getDropPrice().ventmin}</strong>  DZD
+                    </div>
+                  </div>}
+
+                  {/* success message */}
+
+                  {
+                    getDropPrice().show && getDropPrice().ventdrop > 0 &&
+                    <div className=" my-2">
+                      <div className="flex items-center p-4 mb-4 text-sm text-green-800  rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800" role="alert">
+                        <IoIosCheckmarkCircle className="flex-shrink-0 inline w-5 h-5 me-3" />
+                        <div>
+                          Voici votre bénéfice si la commande atteint le statut livré
+                          ( <strong className="text-green-400">{(dataOrder.price_drop??0)-getTotal()} DZD</strong> )
+                        </div>
+                      </div>
 
 
-                {!!getPriceDelivery()&&<Input
-                  label="Prix de vente"
-                  value={dataOrder.price_drop}
-                  onChange={(e) => {
-                    if (!isNaN(Number(e.target.value)))
-                      setDataOrder({
-                        ...dataOrder,
-                        price_drop: Number(e.target.value)
-                      })
-                  }}
-                  suffixClassName={"ms-2"}
-                  suffix="DZD"
-                  dir="rtl"
-                  inputClassName="text-right"
-                  placeholder="indiquer le prix de vente final"
-                />}
-                {getDropPrice().show && getDropPrice().ventdrop <= 0 && <div className="text-red text-[13px] mt-0.5 rizzui-input-error-text">
-                  Le prix de vente doit être supérieur à  <strong>{getDropPrice().ventmin}</strong>  DZD
-                </div>}
+                    </div>
+                  }
+                  <div className="flex items-center">
+                    <h1 className="text-sm font-medium">Prix ​​de livraison</h1>
+                    <div className="grow"></div>
+                    <span className="font-semibold">{getPriceDelivery().toFixed(2)} DZD</span>
+                  </div>
 
-                {
-                  getDropPrice().show && getDropPrice().ventdrop > 0 &&
-                  <Input
-                    label="Voici votre bénéfice si la commande atteint le statut livré"
-                    value={getDropPrice().ventdrop}
-                    suffix="DZD"
-                    readOnly
-                    dir="rtl"
-                    className="mt-2 text-center"
-                    inputClassName={"text-green-400 font-bold text-lg"}
-                    suffixClassName={"ms-2"}
-                  />
-                }
+                  {getDropPrice().show && getDropPrice().ventdrop > 0&&<div className="flex mt-3 items-center">
+                    <h1 className="text-sm font-bold ">Total de la commande pour votre client</h1>
+                    <div className="grow"></div>
+                    <span className="font-semibold text-2xl">{
+                      (dataOrder.price_drop??0 + getPriceDelivery()).toFixed(2)
+                    } <small className="font-medium ps-1">DZD</small></span>
+                  </div>}
+
+
+                  <Button className="mt-4 w-full" type="submit" isLoading={loading}>Ajouter</Button>
+                </>}
 
 
               </> : <>
@@ -195,21 +247,22 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
                   className="mt-4"
                   label=""
                 />
+                {
+                  isAdd ?
+                    <Button className="mt-4 w-full" type="submit" isLoading={loading}>Ajouter</Button>
+                    :
+                    <Button className="mt-4 w-full" type="submit" isLoading={loading}>Sauvegarder</Button>
+                }
               </>
             }
 
 
-            {
-              isAdd ?
-                <Button className="mt-4 w-full" type="submit" isLoading={loading}>Ajouter</Button>
-                :
-                <Button className="mt-4 w-full" type="submit" isLoading={loading}>Sauvegarder</Button>
-            }
+
 
           </div>
         </div>
       </div>
       <Toaster position="bottom-center" />
-    </form>
+    </form >
   )
 }

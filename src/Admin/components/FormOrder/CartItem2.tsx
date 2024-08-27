@@ -46,6 +46,10 @@ export default function CartItem2({ data, index, cart,
                         <span>Pointure :</span>
                         <span className="font-semibold">{data.size}</span>
                     </div> : ""}
+                    {data.min_selling_drop_price ? <div className="flex gap-2">
+                        <span>Prix ​​de vente minimum :</span>
+                        <span className="font-semibold">{data.min_selling_drop_price} DZD</span>
+                    </div> : ""}
                 </div>
                 <div className="flex items-center mt-2">
                     <Qte

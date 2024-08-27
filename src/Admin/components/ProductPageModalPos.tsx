@@ -74,9 +74,9 @@ function ProductPageRequest({ prod }: { prod: ProductModalProps }) {
                 }
             }} />}
     </div> : <div>
-            <h1 className="text-lg font-bold text-center text-red-500">
+        <h1 className="text-lg font-bold text-center text-red-500">
             indisponible
-            </h1>
+        </h1>
     </div>
 }
 

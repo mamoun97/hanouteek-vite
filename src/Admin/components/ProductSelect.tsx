@@ -42,7 +42,7 @@ export default function ProductSelect({ setValue = () => { }, nameProduct = "", 
             />
 
             {open && <div className='relative z-20'>
-                <div className="p-4 max-h-60 overflow-auto absolute top-1 left-0 right-0 rounded-md bg-white dark:bg-[#222]  shadow dark:shadow-gray-500">
+                <div className="p-4 max-h-60 overflow-auto absolute top-1 left-0 right-0 rounded-md bg-card">
 
                     {
                         data?.data.map((el, k) => {

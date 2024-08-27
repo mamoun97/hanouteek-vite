@@ -21,6 +21,7 @@ export function ProductOptions({ data, setValue }:
                 "color": prod.checkData.color?.value ?? "",
                 "size": prod.checkData.size?.value ?? "",
                 "qte": prod.qte,
+                min_selling_drop_price:prod.min_selling_drop_price,
                 "cancelled": false,
                 "product": {
                     id: prod.id,

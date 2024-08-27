@@ -81,6 +81,7 @@ type OrderFullItem = {
     CompareAtPrice?: number,
     created_at?: string,
     updated_at?: string,
+    min_selling_drop_price?:number,
     product?: ProductOrderAssociat,
 
 }

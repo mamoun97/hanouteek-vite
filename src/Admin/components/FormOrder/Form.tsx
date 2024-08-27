@@ -101,7 +101,7 @@ export default function Form({
             </Card>}
 
 
-            <Card title="User Information">
+            <Card title="Informations sur l'acheteur">
                 <div className="grid-cols-6 grid gap-2">
                     <Input
                         label="Prénom"
@@ -380,7 +380,7 @@ export default function Form({
     )
 }
 function Card({ title, children }: { title: string, children: any }) {
-    return <div className="p-6 max-sm:p-3 border border-gray-200 bg-white  py-6 rounded-lg  dark:bg-[#222] dark:border-[#444]">
+    return <div className="p-6 max-sm:p-3   py-6 rounded-lg  bg-card">
         <h1 className="mb-4 font-semibold text-lg">{title}</h1>
         {children}
     </div>

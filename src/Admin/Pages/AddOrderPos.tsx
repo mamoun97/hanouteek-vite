@@ -307,7 +307,7 @@ export default function AddOrderPos({ dropData }: { dropData?: DropData }) {
                     </div>
                 </div>
                 <div className="col-span-2 max-[1080px]:col-span-3 max-sm:col-span-2 max-sm:min-h-[80px] ">
-                    <div className={` mt-[33px] rounded-md p-5 max-sm:hidden sticky ${dropData ? "top-16" : "top-3"}   bg-gray-50 dark:bg-[#292a2d]    border border-gray-200  dark:border-gray-800 shadow dark:shadow-black  `} >
+                    <div className={` mt-[33px] rounded-md p-5 max-sm:hidden sticky ${dropData ? "top-16" : "top-3"}   bg-card  `} >
                         {
                             cartView
                         }

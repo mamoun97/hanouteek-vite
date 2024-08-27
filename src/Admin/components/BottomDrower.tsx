@@ -15,10 +15,11 @@ export default function ButtomDrower({ open, onClose, children }: CartProps) {
 
 
             <BottomSheet
-                className=" !bg-black"
-
+                className=" bottom-drawer "
                 open={open}
-                
+                style={{
+                    background:"#F00"
+                }}
                 onDismiss={() => onClose(false)}
                 // blocking={false}
                 maxHeight={450}

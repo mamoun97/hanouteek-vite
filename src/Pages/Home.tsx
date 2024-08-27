@@ -19,10 +19,10 @@ export default function Home() {
   // return <HomeJoomlaOld/>
   // if (ApiConfig.isJoomla/*||theme.theme.templateType=="joomla"*/)
   //   return <HomeJoomla />
-  // if (ApiConfig.isHanouteek)
-  //   return <Container>
-  //     <HomeHanouteek />
-  //   </Container>
+  if (ApiConfig.isHanouteek)
+    return <Container>
+      <HomeHanouteek />
+    </Container>
   return <>
 
     {

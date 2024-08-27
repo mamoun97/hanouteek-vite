@@ -31,7 +31,7 @@ export default function ProductPos({ data, showAddToCart = false, addToCart }: {
     return <>
         <div
 
-            className={`transition-all z-50 rounded-md border-none cursor-pointer bg-gray-50 dark:bg-[#292a2d]    border border-gray-200  dark:border-gray-800 shadow dark:shadow-black`}
+            className={`transition-all z-50 rounded-md border-none cursor-pointer bg-card`}
             onClick={() => {
                 // navigate("/product/" + data.slugName)
             }}

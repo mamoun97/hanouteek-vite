@@ -53,6 +53,7 @@ declare global {
         pricePromo: number,
         drop_price?:number,
         is_drop_shipping:boolean,
+        min_selling_drop_price?:number,
         stock: number,
         discount: number,
         ProductColor: string,

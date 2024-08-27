@@ -82,11 +82,11 @@
   /* dark theme */
   /* --------------------------------- */
   [data-theme="dark"] {
-    --background: 32 33 36;
+    --background: 51 51 51;
     /* #08090e */
     --foreground: 200 200 200;
     /* #dfdfdf */
-    --muted: 51 51 51;
+    --muted: 80 80 80;
     /* #333333 */
     --muted-foreground: 102 102 102;
     /* #666666 */
@@ -149,12 +149,21 @@
   html {
     font-family: "Gilroy", "Roboto", "Noto Kufi Arabic", "Nunito", "Helvetica", "sans-serif";
   }
-
+  .bottom-drawer div[role="dialog"] {
+    background-color: #FFF;
+    /* height: 100%; */
+  }
+  .dark  .bottom-drawer div[role="dialog"] {
+    background-color: #292a2d;
+  }
   /* ................................................... */
   /* React Datepicker Styling */
   /* ................................................... */
   .react-datepicker-popper .react-datepicker {
     @apply bg-white text-gray-600 dark:border-muted dark:bg-gray-50;
+  }
+  .bg-card{
+    @apply bg-gray-50 dark:bg-[#292a2d]    border border-gray-200  dark:border-[#222] shadow dark:shadow-black/30
   }
 
   /* month container */

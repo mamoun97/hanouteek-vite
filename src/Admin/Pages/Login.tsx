@@ -109,7 +109,7 @@ export default function Login() {
     const LoginView = <div className="flex h-[100vh]" dir="ltr">
                 <div className="h-full w-full max-w-md flex justify-center items-center flex-col" >
                     <div className="grow"></div>
-                    <div className="w-[90%] bg-gray-50/50 rounded-lg p-4">
+                    <div className="w-[90%] bg-card rounded-lg p-4">
                         <div className="flex p-2 justify-center mb-3">
                             <img src={ApiConfig.rootUrl + "/" + theme.theme.Logo}
                                 className="h-7  " alt="" />
