@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import AddOrderPos from './AddOrderPos'
 import FormOrder from '../components/FormOrder'
 import { initialDataOrder } from '../Const/initialData'
@@ -8,14 +8,14 @@ import { IoArrowBackOutline } from 'react-icons/io5'
 export default function AddOrderDrop() {
     const [openForm, setOpenForm] = useState(false)
     const [dataOrder, setDataOrder] = useState<OrderFull>(initialDataOrder)
-    
+    const ref = useRef<HTMLDivElement | null>(null)
     useEffect(() => {
-        window.scrollTo(0, 0)
-
+        if (ref.current)
+            ref.current.scrollTop = 0
     }, [openForm])
     return (
-        <div className='relative z-0'>
-
+        <div  className='relative z-0' >
+          
             {
                 openForm ? <div className="flex gap-2 items-center">
                     <ActionIcon variant="text" className="text-lg" onClick={() => setOpenForm(false)}>
@@ -30,7 +30,7 @@ export default function AddOrderDrop() {
                     setDataDrop: setDataOrder
                 }} />
             </div>
-            <div className={`${openForm ? "block" : "hidden"}`} key={"DDDD" + openForm}>
+            <div className={`${openForm ? "block" : "hidden"}`}  ref={ref}>
                 <FormOrder data={dataOrder} isAdd={true} />
             </div>
 

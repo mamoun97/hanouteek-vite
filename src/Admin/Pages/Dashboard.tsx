@@ -30,7 +30,13 @@ export default function Dashboard() {
   }, (global?.platform) ? "&" + global?.platform : undefined)
 
   const { data: price_total } = useGetPriceTotalService(
-    `?startDate=${moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm")}&endDate=${moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")}&states=soldFromTheStore&priceType=price_total&type=created_at`
+    `?startDate=${moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm")}&endDate=${moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")}${user.role == "pos" ? "&states=soldFromTheStore" : ""}&priceType=${user.role == "vendor" ? "benefit_drop_shipper" : "price_total"}&type=created_at`
+  )
+  const { data: price_total_b } = useGetPriceTotalService(
+    `?startDate=${moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm")}&endDate=${moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")}&states=${"payed"}&priceType=benefit_drop_shipper&type=created_at`
+  )
+  const { data: price_total_e } = useGetPriceTotalService(
+    `?startDate=${moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm")}&endDate=${moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")}&states=${"Livré"}&priceType=benefit_drop_shipper&type=created_at`
   )
   const { data: compareAtPrice } = useGetPriceTotalService(
     `?startDate=${moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm")}&endDate=${moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")}&states=soldFromTheStore&priceType=CompareAtPrice&type=created_at`
@@ -39,7 +45,7 @@ export default function Dashboard() {
     <div className="">
       <h1 className="text-2xl font-medium">Dashboard</h1>
 
-      <div className="flex justify-center max-md:flex-col gap-2">
+      <div className="flex justify-center  gap-2">
         <DatePicker
           inputProps={
             { label: "" }
@@ -51,6 +57,7 @@ export default function Dashboard() {
               startDate: date.toDateString()
             })
           }}
+          
           maxDate={new Date(option.endDate ?? "")}
           placeholderText="Start Date"
         />
@@ -69,7 +76,7 @@ export default function Dashboard() {
           placeholderText="End Date"
         />
       </div>
-      <div className="grid grid-cols-3 gap-2 mt-3">
+      <div className="grid grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 gap-2 mt-3">
         {
           [
             {
@@ -80,20 +87,36 @@ export default function Dashboard() {
               icon: FiBox,
               color: "#FE9090",
             },
-            ...user.role=="pos"?[
+            ...user.role == "vendor" ? [
+              {
+                name: "Bénéfices ​​en attente",
+                value: price_total_e != undefined ? price_total_e + " DZD" : "",
+                icon: FaDollarSign,
+                color: "#08F",
+              },
+              {
+                name: "Bénéfices",
+                value: price_total_b != undefined ? price_total_b + " DZD" : "",
+                icon: FaDollarSign,
+                color: "#10D164",
+              },
+
+
+            ] : [],
+            ...user.role == "pos" ? [
               {
                 name: "Chiffre d'affaires",
-                value: price_total!=undefined ? price_total + " DZD" : "",
+                value: price_total != undefined ? price_total + " DZD" : "",
                 icon: FaDollarSign,
                 color: "#10D164",
               },
               {
                 name: "Bénéfices",
-                value: compareAtPrice!=undefined ? compareAtPrice + " DZD" : "",
+                value: compareAtPrice != undefined ? compareAtPrice + " DZD" : "",
                 icon: IoStatsChart,
                 color: "#FD8451",
               }
-            ]:[]
+            ] : []
           ].map((el, k) => {
             return <div key={k}
               style={{
@@ -107,7 +130,7 @@ export default function Dashboard() {
               </div>
               <div>
                 <p className="text-lg font-semibold  text-center line-clamp-2">
-                  All Orders
+                  {el.name}
                 </p>
                 <span className="font-bold text-2xl" key={el.value}>
                   {el.value}
@@ -129,20 +152,22 @@ export default function Dashboard() {
 
           </div>
         }
-        {
-          data?.map((el, k) => {
-            return <Link to={"/orders/"+el.state} className={`p-2 h-28 border  rounded-md flex flex-col justify-center items-center `}
-              style={{ 
-                backgroundColor: statesColor[el.state],
-                color: invertColor(statesColor[el.state])
-              }} key={k}>
-              <p className="text-lg font-semibold  text-center line-clamp-2">
-                {el.state}
-              </p>
-              <span className="font-bold text-2xl">{el.count}</span>
-            </Link>
-          })
-        }
+        <div className="flex col-span-full flex-wrap gap-2 ">
+          {
+            data?.map((el, k) => {
+              return <Link to={"/orders/" + el.state} className={`grow border dark:border-black  rounded-md flex flex-col justify-center items-center  p-2 min-w-[110px] max-w-[340px]`}
+                style={{
+                  backgroundColor: statesColor[el.state] ?? "#FFF",
+                  color: invertColor(statesColor[el.state])
+                }} key={k}>
+                <p className="text-sm font-semibold  text-center line-clamp-2">
+                  {el.state || "undefined"}
+                </p>
+                <span className="font-bold text-2xl">{el.count}</span>
+              </Link>
+            })
+          }
+        </div>
 
         {
           isLoading && <div className="flex justify-center col-span-full">

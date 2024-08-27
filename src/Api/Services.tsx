@@ -58,7 +58,7 @@ export const useGetAllProductsByNameService = (name:string,db?:string) => {
 }
 // Get price total
 export const useGetPriceTotalService = (filter:string,db?:string) => {
-    const data = useSWR("/tenant/order/price-total"+filter+(db??ApiConfig.db), () => OrderApi.priceTotal(filter,db), options);
+    const data = useSWR("/tenant/order/associate/price-total"+filter+(db??ApiConfig.db), () => OrderApi.priceTotal(filter,db), options);
     return data
 }
 

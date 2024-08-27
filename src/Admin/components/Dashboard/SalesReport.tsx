@@ -189,13 +189,13 @@ export default function SalesReport({ className }: { className?: string }) {
                                 //     <RoundedTopBar className="fill-[#B8C3E9] dark:fill-[#7c88b2]" />
                                 // }
                             />
-                            <Bar
+                            {/* <Bar
                                 dataKey="val"
                                 label="Val"
                                 fill="#FF0"
                                 stackId="a"
                                 // shape={<RoundedBottomBar />}
-                            />
+                            /> */}
                             <Area
                                 type="bump"
                                 dataKey="revenue"

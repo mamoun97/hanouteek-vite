@@ -114,6 +114,7 @@ type OrderFull = {
     ProductStock?: boolean,
     product_to_collect?: string | null,
     min_price_drop_shipper?:number,
+    benefit_drop_shipper?:number,
     address_lat?: number,
     address_lng?: number,
     time_delivery?: number,

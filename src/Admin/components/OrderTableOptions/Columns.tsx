@@ -218,6 +218,17 @@ const getColumns= ({ order, column, onHeaderClick, afterChange, changeFilter, is
             ),
         },
         {
+            title: <HeaderCell title="Bénéfice" />,
+            dataIndex: "benefit_drop_shipper",
+            key: "benefit_drop_shipper",
+
+            render: (b: string) => (
+                <div className="flex items-center whitespace-nowrap ">
+                    {b} DZD
+                </div>
+            ),
+        },
+        {
             title: <HeaderCell title="َAssociate" />,
             dataIndex: "associate",
             key: "associate",

@@ -218,7 +218,7 @@ export default function Form({
 
                     {
                         delivery && <div>
-                            <div className="flex items-center  p-3 mb-1 hover:bg-gray-100 cursor-pointer"
+                            <div className="flex items-center  p-3 mb-1 hover:bg-gray-100 dark:hover:bg-[#333] cursor-pointer"
                                 onClick={() => setDataOrder({ ...dataOrder, is_stopdesk: false })}>
                                 <Checkbox label="" checked={!dataOrder.is_stopdesk} />
                                 <div className="me-2"></div>
@@ -231,7 +231,7 @@ export default function Form({
                                     <small>DZD</small>
                                 </div>
                             </div>
-                            {delivery.priceDeliveryOffice && <div className="flex items-center p-3 hover:bg-gray-100 cursor-pointer"
+                            {delivery.priceDeliveryOffice && <div className="flex items-center p-3 hover:bg-gray-100 dark:hover:bg-[#333] cursor-pointer"
                                 onClick={() => setDataOrder({ ...dataOrder, is_stopdesk: true })}>
                                 <Checkbox label="" checked={dataOrder.is_stopdesk} />
                                 <div className="me-2"></div>
@@ -274,7 +274,7 @@ export default function Form({
                         tbody={<>
                             {
                                 yalidine.map((el, k) => {
-                                    return <tr key={k} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    return <tr key={k} className="bg-transparent border-b  dark:border-muted">
                                         <th className="px-3 py-0">
                                             <Checkbox label="" checked={el.center_id == dataOrder.stopdesk_id} onChange={() => setDataOrder({
                                                 ...dataOrder,

@@ -83,13 +83,13 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
   const getTotalDrop = () => {
     let s = 0;
     for (let i = 0; i != cart.length; i++) {
-      s += cart[i].min_selling_drop_price ?? cart[i].price_total
+      s += (cart[i].min_selling_drop_price ?? cart[i].price_total)*cart[i].qte
     }
     return s
   }
   const getDropPrice = () => {
     let s = getTotalDrop()
-    if (dataOrder.price_drop && getTotal())
+    if (dataOrder.price_drop && s)
       return {
         show: true,
         ventmin: s,
@@ -103,13 +103,13 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
   }
   return (
     <form onSubmit={formik.handleSubmit} >
-      <div className="grid grid-cols-5  gap-2 mt-3">
+      <div className="grid grid-cols-5  gap-2 mt-3 relative">
         <div className="col-span-3  max-md:col-span-5 p-0">
 
           <Form {...{ cart, setCart, dataOrder, setDataOrder, delivery, setDelivery }} />
 
         </div>
-        <div className="col-span-2  max-md:col-span-5">
+        <div className="col-span-2  max-md:col-span-5 relative">
           <div className=" rounded-md p-5 sticky top-[60px] bg-card dark:text-[#E3E3E3]">
             <h1 className="text-center  text-xl font-bold my-4">Votre Panier</h1>
             <div className="flex flex-col gap-2">
@@ -182,7 +182,7 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
                       className="grow"
 
                       inputClassName="text-right text-sm font-bold"
-                      placeholder="."
+                      placeholder={`Le prix doit être au minimum de ${getDropPrice().ventmin} DZD`}
                     />
                   </div>
 
@@ -221,7 +221,7 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
                   {getDropPrice().show && getDropPrice().ventdrop > 0&&<div className="flex mt-3 items-center">
                     <h1 className="text-sm font-bold ">Total de la commande pour votre client</h1>
                     <div className="grow"></div>
-                    <span className="font-semibold text-2xl">{
+                    <span className="font-semibold text-2xl max-sm:text-lg whitespace-nowrap">{
                       (dataOrder.price_drop??0 + getPriceDelivery()).toFixed(2)
                     } <small className="font-medium ps-1">DZD</small></span>
                   </div>}

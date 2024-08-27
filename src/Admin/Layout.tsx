@@ -73,7 +73,7 @@ export default function LayoutAdmin({ children }: {
               {openPos && <div className="w-64 min-w-[256px] max-sm:w-0 max-sm:min-w-0 ">
                 <Drower {...{ open, setOpen }} />
               </div>}
-              <div className='grow min-h-screen overflow-auto max-w-full bg-background dark:bg-[#202124]'>
+              <div className='grow h-screen overflow-auto  bg-background dark:bg-[#202124]'>
                 <Navbar {...{ open, setOpen }}
                   btnClose={
                   <button onClick={() => {
