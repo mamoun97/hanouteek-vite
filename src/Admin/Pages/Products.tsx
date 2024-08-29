@@ -9,6 +9,7 @@ import { useSelector } from "react-redux"
 import { RootState } from "../../Store"
 import { GlobalS } from "../../Store/globalSlice"
 import ProductsTable from "../components/ProductsTable"
+import useLang from "../../hoock/useLang"
 
 
 export default function Products() {
@@ -20,12 +21,12 @@ export default function Products() {
     sort:"sort=createdAt:desc"
 
   })
-
+const {t}=useLang()
   const [param, setParam] = useState(`?limit=${option.limit}&page=${option.page}`)
 
   const { data, isLoading, mutate } = useGetAllProductsByFilterService(param, (global?.platform) ? "&" + global?.platform : undefined)
   
-  const [showCols, setShowCols] = useState(orderCols)
+  const [showCols, setShowCols] = useState(orderCols(t,[]))
   useEffect(() => {
 
     document.body.dir = "ltr"

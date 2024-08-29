@@ -13,7 +13,11 @@ import imgSrc from "../../utils/imgSrc";
 import { GrDeliver } from "react-icons/gr";
 import { IoMdEye } from "react-icons/io";
 import { LuArrowBigDownDash } from "react-icons/lu";
-
+type OC = {
+    label: string,
+    value: string,
+    check: boolean
+  }[]
 moment.locale('fr')
 const getColumns = (
     order: string,
@@ -179,9 +183,9 @@ const getColumns = (
     ];
 
 export default function ProductsTable({ data, option, showCols, setOption, isLoading, afterChange = () => { } }:
-    { data: ProductsResponse, option: ProductOptionRequest, setOption: any, afterChange: any, showCols: typeof orderCols, isLoading: boolean }) {
+    { data: ProductsResponse, option: ProductOptionRequest, setOption: any, afterChange: any, showCols: OC, isLoading: boolean }) {
 
-    if (showCols) { }
+   
     const [order, _] = React.useState<string>("desc");
     const [count, setCount] = React.useState<number>(0);
     const [column, setColumn] = React.useState<string>("");
