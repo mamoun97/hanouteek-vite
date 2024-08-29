@@ -9,6 +9,7 @@ import { RootState } from "../../Store";
 import { useEffect, useState } from "react";
 import ProductApi from "../../Api/ProductApi";
 import alertError from "../../hoock/alertError";
+import useLang from "../../hoock/useLang";
 
 type ProductModalProps = {
     slug: string,
@@ -23,6 +24,7 @@ type CartProps = {
 }
 function ProductPageRequest({ prod }: { prod: ProductModalProps }) {
     const global = useGlobal("?")
+    const {tr}=useLang()
     const user = useSelector<RootState>((state) => state.user) as UserAuth
     const [product, setProduct] = useState<Product>()
     const [loading, setLoading] = useState(false)
@@ -53,7 +55,7 @@ function ProductPageRequest({ prod }: { prod: ProductModalProps }) {
     return product ? <div key={prod.slug} className="">
         <div className="flex justify-center items-center flex-col">
             <h1 className="text-lg font-bold text-center">
-                {product?.name ?? "FFFF"}
+                {product?.name }
             </h1>
             <p className=" text-center">
                 {user.role == "vendor" ? product?.drop_price ?? product?.price : product?.price} <Currency />
@@ -75,7 +77,7 @@ function ProductPageRequest({ prod }: { prod: ProductModalProps }) {
             }} />}
     </div> : <div>
         <h1 className="text-lg font-bold text-center text-red-500">
-            indisponible
+            {tr.order.in_dispo}
         </h1>
     </div>
 }

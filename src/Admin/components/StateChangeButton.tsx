@@ -7,16 +7,20 @@ import {
     Textarea
 } from "rizzui";
 import { IoSave } from "react-icons/io5";
-import { associatStates, returnStates, Substates } from "../Const/states";
+import { associatStates, returnStates, Substates, vendorStates } from "../Const/states";
 import statesColor, { subStatesColor } from "../Const/statesColor";
 import OrderApi from "../../Api/OrderApi";
 
 import toast from "react-hot-toast";
 import useGlobal from "../../hoock/useGlobal";
+import { useSelector } from "react-redux";
+import { RootState } from "../../Store";
+import useLang from "../../hoock/useLang";
 
 export default function StateChange({ data, afterChange = () => { }, readOnly = false, type = "default" }: { data: OrderFull, afterChange?: any, readOnly?: boolean, type?: OrderProsType }) {
-
+    const user = useSelector<RootState>((state) => state.user) as UserAuth
     const [modalState, setModalState] = useState(false);
+    const {tr}=useLang()
     const [loading, setLoading] = useState(false);
     const [dataReq, setDataReq] = useState({
         comment: "",
@@ -60,7 +64,7 @@ export default function StateChange({ data, afterChange = () => { }, readOnly = 
         <>
             <div onClick={readOnly ? () => { } : () => setModalState(true)}
                 className={"whitespace-nowrap capitalize rounded-full p-1 px-2   text-[13px] font-semibold border py-1 !text-[" + statesColor[data?.state ?? ""] + "] " + (readOnly ? "" : "cursor-pointer")}
-                style={
+                style={ 
                     type=="failed" ? {
                         color: subStatesColor[data?.subStatus ?? ""],
                         borderColor: subStatesColor[data?.subStatus ?? ""] + "26",
@@ -71,7 +75,9 @@ export default function StateChange({ data, afterChange = () => { }, readOnly = 
                         backgroundColor: statesColor[data?.state ?? ""] + "22"
                     }
                 } >
-                {type=="failed" ? data.subStatus : data.state}
+                {type=="failed" ? data.subStatus :(
+                    (tr.states[data.state as keyof typeof tr.states]) || "undefined"
+                     )}
             </div>
             <Modal isOpen={modalState} onClose={() => setModalState(false)}>
                 <div className="m-auto px-7 pt-6 pb-8">
@@ -110,7 +116,10 @@ export default function StateChange({ data, afterChange = () => { }, readOnly = 
                                         state: e.value
                                     })
                                 }}
-                                options={associatStates}
+                                options={
+                                    user.role=="vendor"?vendorStates:
+                                    associatStates
+                                }
                             />
                             <Password
                                 label="Password"

@@ -3,6 +3,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import ApiConfig from "../../../Api/ApiConfig";
 import Qte from "../../../Views/Qte";
 import imgSrc from "../../../utils/imgSrc";
+import useLang from "../../../hoock/useLang";
 
 
 
@@ -12,6 +13,7 @@ export default function CartItem2({ data, index, cart,
         setCart: any
 
     }) {
+        const {tr}=useLang()
 
 
     return (
@@ -35,19 +37,19 @@ export default function CartItem2({ data, index, cart,
                 </div>
                 <div className="text-[12px] text-gray-600 dark:text-zinc-200">
                     <div className="flex gap-2">
-                        <span>unit_price :</span>
+                        <span>{tr.order.unit_price} </span>
                         <span className="font-semibold">{data.price_item.toFixed(2)} DZD</span>
                     </div>
                     {data.color ? <div className="flex gap-2">
-                        <span>Colour:</span>
+                        <span>{tr.order.color} :</span>
                         <span className="font-semibold">{data.color}</span>
                     </div> : ""}
                     {data.size ? <div className="flex gap-2">
-                        <span>Pointure :</span>
+                        <span>{tr.order.size} :</span>
                         <span className="font-semibold">{data.size}</span>
                     </div> : ""}
                     {data.min_selling_drop_price ? <div className="flex gap-2">
-                        <span>Prix ​​de vente minimum :</span>
+                        <span>{tr.order.price_vent_min}</span>
                         <span className="font-semibold">{data.min_selling_drop_price} DZD</span>
                     </div> : ""}
                 </div>
@@ -87,7 +89,7 @@ export default function CartItem2({ data, index, cart,
                                 cart.filter((_, k) => k != index)
                             )
                         }}
-                        className="bg-red-50 text-red-600  w-7 h-7 text-center hover:bg-red-600 hover:text-white  flex justify-center cursor-pointer items-center rounded-md disabled:!bg-gray-100 disabled:!text-gray-500">
+                        className="bg-red-50 dark:bg-red-800 dark:text-white dark:hover:bg-red-500 text-red-600  w-7 h-7 text-center hover:bg-red-600 hover:text-white  flex justify-center cursor-pointer items-center rounded-md disabled:!bg-gray-100 disabled:!text-gray-500">
                         <MdDeleteOutline />
                     </button>
                 </div>

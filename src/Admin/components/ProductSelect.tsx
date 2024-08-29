@@ -6,12 +6,13 @@ import useClickOutside from '../../hoock/ClickOutSide';
 import { MdSearch } from 'react-icons/md';
 import useGlobal from '../../hoock/useGlobal';
 import imgSrc from '../../utils/imgSrc';
+import useLang from '../../hoock/useLang';
 
 
 
 export default function ProductSelect({ setValue = () => { }, nameProduct = "", isSearch = false }: { isSearch?: boolean, nameProduct?: string, setValue?: any }) {
     const [name, setName] = useState(nameProduct);
-    
+    const {tr}=useLang()
     const global=useGlobal("&")
     const [open, setOpen] = useState(false);
     const clickOutsideRef = useClickOutside({
@@ -24,7 +25,7 @@ export default function ProductSelect({ setValue = () => { }, nameProduct = "", 
         <div className={"w-full"} ref={clickOutsideRef}>
 
             <Input
-                label="Select Product"
+                label={tr.order.select_prod}
                 value={name}
                 type='text'
                 {...isSearch ? {
@@ -37,7 +38,7 @@ export default function ProductSelect({ setValue = () => { }, nameProduct = "", 
 
                 prefix={<MdSearch className="w-5 h-5" />}
                 onFocus={() => setOpen(true)}
-                placeholder='Select product'
+                placeholder={tr.order.select_prod}
                 onChange={(e) => { setName(e.target.value) }}
             />
 
@@ -62,7 +63,7 @@ export default function ProductSelect({ setValue = () => { }, nameProduct = "", 
                     }
                     {
                         data?.data.length === 0 && <div className='flex justify-center items-center h-24'>
-                            No Product
+                            {tr.order.no_prod}
                         </div>
                     }
                     {

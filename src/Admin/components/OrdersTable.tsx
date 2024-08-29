@@ -7,11 +7,16 @@ import orderCols from "../Const/order-cols";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Store";
 import getColumns, { ColumnTypeReturn } from "./OrderTableOptions/Columns";
+import useLang from "../../hoock/useLang";
 
-
+const OC=[{
+  label:"",
+  value: "",
+  check: true
+}]
 export default function OrdersTable({ data, option, showCols, setOption, isLoading, afterChange = () => { }, type = "default" }:
-  { data: OrdersResponse, option: OrderOptionRequest, setOption: any, afterChange: any, showCols: typeof orderCols, isLoading: boolean, type?: OrderProsType }) {
-
+  { data: OrdersResponse, option: OrderOptionRequest, setOption: any, afterChange: any, showCols:  typeof OC, isLoading: boolean, type?: OrderProsType }) {
+    const {tr}=useLang()
   const [order, _] = React.useState<string>("desc");
   const [count, setCount] = React.useState<number>(0);
   const [column, setColumn] = React.useState<string>("");
@@ -30,8 +35,11 @@ export default function OrdersTable({ data, option, showCols, setOption, isLoadi
     onHeaderClick,
     afterChange,
     changeFilter,
+    deleteCols:[
+      ...(user.role=="pos")?["actions"]:[],
+      ...user.role=="vendor"?["platform","associate","subState"]:[]
+    ],
     isPos: user.role == "pos",
-
     type
   }), [order, column, onHeaderClick, afterChange, changeFilter, type,])
 
@@ -52,8 +60,8 @@ export default function OrdersTable({ data, option, showCols, setOption, isLoadi
       <Pagination
         total={data.totalCount}
         defaultCurrent={data.page}
-        nextIcon="Next"
-        prevIcon="Previous"
+        nextIcon={tr.global.next}
+        prevIcon={tr.global.previous}
         pageSize={option.limit}
         onChange={(page) => {
           setOption({
@@ -61,8 +69,9 @@ export default function OrdersTable({ data, option, showCols, setOption, isLoadi
             page
           })
         }}
-        prevIconClassName="py-0 text-foreground !leading-[26px]"
-        nextIconClassName="py-0 text-foreground !leading-[26px]"
+        
+        prevIconClassName="py-0 text-foreground !leading-[26px] font-gilroy"
+        nextIconClassName="py-0 text-foreground !leading-[26px] font-gilroy"
       />
 
       <Select

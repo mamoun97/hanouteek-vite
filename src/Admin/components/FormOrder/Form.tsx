@@ -11,6 +11,8 @@ import { Link } from "react-router-dom";
 import { RootState } from "../../../Store";
 import { useSelector } from "react-redux";
 import { GlobalS } from "../../../Store/globalSlice";
+import useLang from "../../../hoock/useLang";
+import Currency from "../../../Constants/Currency";
 
 type FormProps = {
     cart: OrderFullItem[],
@@ -29,6 +31,7 @@ export default function Form({
     delivery,
     setDelivery
 }: FormProps) {
+    const { t, tr } = useLang()
     const global = useSelector<RootState>((state) => state.global) as GlobalS
     const user = useSelector<RootState>((state) => state.user) as UserAuth
     const [selectProduct, setSelectProduct] = useState<Product | null>(null)
@@ -79,7 +82,7 @@ export default function Form({
 
     return (
         <div className="flex gap-2 flex-col">
-            {user.role!="vendor"&&<Card title="Select Product">
+            {user.role != "vendor" && <Card title="Select Product">
                 <ProductSelect setValue={setSelectProduct} />
                 {
                     selectProduct && <div key={selectProduct.slugName}>
@@ -101,14 +104,15 @@ export default function Form({
             </Card>}
 
 
-            <Card title="Informations sur l'acheteur">
+            <Card title={tr.order.buyer_info}>
                 <div className="grid-cols-6 grid gap-2">
                     <Input
-                        label="Prénom"
+                        label={tr.order.first_name}
+                        placeholder={tr.order.first_name}
                         name="prenom"
                         className="col-span-3 max-sm:col-span-6"
                         value={dataOrder.firstname ?? ""}
-                        
+
                         onChange={(e) => {
                             setDataOrder({
                                 ...dataOrder,
@@ -117,7 +121,8 @@ export default function Form({
                         }}
                     />
                     <Input
-                        label="Nom"
+                        label={tr.order.last_name}
+                        placeholder={tr.order.last_name}
                         name="nom"
                         className="col-span-3 max-sm:col-span-6"
                         value={dataOrder.familyname ?? ""}
@@ -129,9 +134,9 @@ export default function Form({
                         }}
                     />
                     <Input
-                        label="Email"
+                        label={t.email}
                         autoComplete="off"
-                        
+                        placeholder={t.email}
                         inputMode="email"
                         className="col-span-2 max-sm:col-span-6"
                         value={dataOrder.email ?? ""}
@@ -143,7 +148,8 @@ export default function Form({
                         }}
                     />
                     <Input
-                        label="Address"
+                        label={t.address}
+                        placeholder={t.address}
                         name="addressss"
                         className="col-span-2 max-sm:col-span-6"
                         value={dataOrder.address ?? ""}
@@ -155,8 +161,9 @@ export default function Form({
                         }}
                     />
                     <Input
-                        label="Phone"
-                       inputMode="tel"
+                        label={t.phone}
+                        placeholder={t.phone}
+                        inputMode="tel"
                         name="phone"
                         autoComplete="off"
                         className="col-span-2 max-sm:col-span-6"
@@ -165,15 +172,16 @@ export default function Form({
                             if ((!/^[0-9]{0,10}$/.test(e.target.value))) {
                                 return
                             }
-                            else 
-                            setDataOrder({
-                                ...dataOrder,
-                                contact_phone: e.target.value
-                            })
+                            else
+                                setDataOrder({
+                                    ...dataOrder,
+                                    contact_phone: e.target.value
+                                })
                         }}
                     />
                     <Select
-                        label="Wilaya"
+                        label={t.wilaya}
+                        placeholder={"- "+t.wilaya+" -"}
                         className="col-span-3 max-sm:col-span-6"
                         options={wilayas?.data?.map(el => { return { item: el, label: el.id + " - " + el.name, value: el.name } }) ?? []}
                         value={selectedWilaya ? {
@@ -194,7 +202,8 @@ export default function Form({
 
                     />
                     <Select
-                        label="Daira"
+                        label={t.commune}
+                        placeholder={"- "+t.commune+" -"}
                         className="col-span-3 max-sm:col-span-6"
                         options={communes?.communes?.map(el => { return { item: el, label: el.name, value: el.name } }) ?? []}
                         value={selectedCommune ? {
@@ -213,7 +222,7 @@ export default function Form({
                     />
                 </div>
             </Card>
-            {selectedCommune && <Card title="Modes de livraison">
+            {selectedCommune && <Card title={t.delivery_mode}>
                 <div className="mt-4 col-span-full">
 
                     {
@@ -222,33 +231,33 @@ export default function Form({
                                 onClick={() => setDataOrder({ ...dataOrder, is_stopdesk: false })}>
                                 <Checkbox label="" checked={!dataOrder.is_stopdesk} />
                                 <div className="me-2"></div>
-                                Livraison à domicile
+                                {t.home_delivery}
                                 <div className="grow"></div>
                                 <div className="flex items-center font-semibold text-sm   whitespace-nowrap">
 
                                     {delivery.priceDeliveryHome}
                                     <div className="me-2"></div>
-                                    <small>DZD</small>
+                                    <small><Currency /></small>
                                 </div>
                             </div>
                             {delivery.priceDeliveryOffice && <div className="flex items-center p-3 hover:bg-gray-100 dark:hover:bg-[#333] cursor-pointer"
                                 onClick={() => setDataOrder({ ...dataOrder, is_stopdesk: true })}>
                                 <Checkbox label="" checked={dataOrder.is_stopdesk} />
                                 <div className="me-2"></div>
-                                Livraison au bureau
+                                {tr.order.office_del}
                                 <div className="grow"></div>
                                 <div className="flex items-center font-semibold text-sm   whitespace-nowrap">
 
                                     {delivery.priceDeliveryOffice}
                                     <div className="me-2"></div>
-                                    <small>DZD</small>
+                                    <small><Currency /></small>
                                 </div>
                             </div>}
                         </div>
                     }
                 </div></Card>}
             {dataOrder.is_stopdesk && ((!!yalidine && !!!selectedCommune) || (!!yalidine && !!selectedCommune && !!delivery?.priceDeliveryOffice)) &&
-                <Card title="Bureaux de livraison disponibles"> <div className="col-span-full mt-4">
+                <Card title={tr.order.office_dispo}> <div className="col-span-full mt-4">
                     <TableSimple
                         thead={<>
                             <tr>
@@ -257,17 +266,17 @@ export default function Form({
                                 </th>
 
                                 <th scope="col" className="px-3 py-3">
-                                    Commune
+                                    {t.commune}
                                 </th>
                                 <th scope="col" className="px-3 py-3">
 
-                                    Address
+                                    {t.address}
                                 </th>
                                 <th scope="col" className="px-3 py-3">
-                                    Location
+                                    {tr.order.location}
                                 </th>
                                 <th scope="col" className="px-3 py-3">
-                                    Prix
+                                    {tr.order.price}
                                 </th>
                             </tr>
                         </>}
@@ -320,7 +329,7 @@ export default function Form({
                 </div>
                 </Card>}
 
-            {user.role!="vendor"&&<Card title="Shipping">
+            {user.role != "vendor" && <Card title="Shipping">
                 <div className="flex flex-col gap-2">
                     <Checkbox
                         label="Vendu depuis le magasin"
@@ -364,9 +373,9 @@ export default function Form({
                     />
                 </div>
             </Card>}
-            <Card title="Note">
+            <Card title={tr.order.note}>
                 <Textarea
-                    label="Note"
+                    label={tr.order.note}
                     value={dataOrder.nots}
                     onChange={(e) => {
                         setDataOrder({

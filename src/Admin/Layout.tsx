@@ -32,11 +32,7 @@ export default function LayoutAdmin({ children }: {
     if (!user?.id) {
       navigate("/admin")
     }
-    setTimeout(() => {
-      document.body.dir = "ltr"
-
-      i18n.changeLanguage("fr")
-    }, 3000)
+   
   }, [])
   useEffect(() => {
     let d = loadData("user")
@@ -69,7 +65,7 @@ export default function LayoutAdmin({ children }: {
       <TH >
         {
           user?.id ?
-            <div className={(location.pathname.includes("order/edit") ? "" : "") + ' flex min-h-screen  '} dir='ltr'>
+            <div className={(location.pathname.includes("order/edit") ? "" : "") + ' flex min-h-screen  '} dir={i18n.language=="ar"?"rtl":'ltr'}>
               {openPos && <div className="w-64 min-w-[256px] max-sm:w-0 max-sm:min-w-0 ">
                 <Drower {...{ open, setOpen }} />
               </div>}
@@ -79,8 +75,10 @@ export default function LayoutAdmin({ children }: {
                   <button onClick={() => {
                     setOpenPos(!openPos)
                   }} className=" p-2 mr-3 max-sm:hidden text-gray-600 rounded cursor-pointer  hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700">
-                    {openPos?<LuArrowLeftToLine className="w-5 h-5" />:
-                    <LuArrowRightFromLine className="w-5 h-5" />}
+                    {
+                    (i18n.language!="ar"?openPos:!openPos)?<LuArrowLeftToLine className="w-5 h-5" />:
+                    <LuArrowRightFromLine className="w-5 h-5" />
+                    }
                   </button>
                 } />
                 <div className="p-5 relative max-md:p-3 ">

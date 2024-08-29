@@ -3,12 +3,13 @@ import moment from "moment";
 import { MdHistory } from "react-icons/md";
 import { ActionIcon, Popover } from "rizzui";
 import statesColor from "../Const/statesColor";
+import useLang from "../../hoock/useLang";
 
 
 
 
 export default function TimeLine({ data }: { data: OrderFull }) {
-
+    const {tr}=useLang();
     return (
         <Popover placement="left" >
             <Popover.Trigger>
@@ -20,10 +21,10 @@ export default function TimeLine({ data }: { data: OrderFull }) {
                 </ActionIcon>
 
             </Popover.Trigger>
-            <Popover.Content className="p-4 max-h-60 overflow-auto" >
+            <Popover.Content className="p-4 max-h-60 overflow-auto dark:bg-[#222]" >
                 {({ }) => (
-                    <div className=" flex flex-col gap-2 w-full" dir="ltr">
-                        <h1 className="text-sm font-semibold">Order (#{data.id}) History</h1>
+                    <div className=" flex flex-col gap-2 w-full " >
+                        <h1 className="text-sm font-semibold">{tr.order.order_history.replace("%DATA%",data.id+"")}</h1>
                       
                         <ol className="relative border-s border-gray-200 dark:border-gray-700">
 
@@ -41,7 +42,7 @@ export default function TimeLine({ data }: { data: OrderFull }) {
                                                     borderColor: statesColor[el?.state ?? ""] + "26",
                                                     backgroundColor: statesColor[el?.state ?? ""] + "22"
                                                 }} >
-                                                {el.state}
+                                                {(tr.states[el.state as keyof typeof tr.states]) || "undefined"}
                                             </span>
                                             <span className="text-[13px] max-w-[180px]">
                                             {el.comment} 

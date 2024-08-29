@@ -114,6 +114,14 @@ export const useGetOrderAbandonedService = (params:string,db?:string) => {
     const data = useSWR("orderAbandoned/"+params+db, () => OrderApi.orderAbandoned(params,db), options);
     return data
 }
+
+// Get All order statistics
+export const useGetAllOrdersStatisticsService = (filter:string,db?:string) => {
+    const data = useSWR("/tenant/statistics/days" + filter + (db ?? ApiConfig.db), () => OrderApi.statistics(filter,db), options);
+    return data
+}
+
+
 export const useGetAllOffers=(filter:string)=>{
   
     const data = useSWR("/tenant/offer"+filter, () => OfferApi.getAll(filter), {...options,...{}});

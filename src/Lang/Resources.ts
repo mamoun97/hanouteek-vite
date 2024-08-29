@@ -1,3 +1,6 @@
+import associate_AR from "./associate_AR"
+import associate_EN from "./associate_EN"
+import associate_FR from "./associate_FR"
 
 
 const Resources = {
@@ -25,7 +28,6 @@ const Resources = {
             please_select_att: "Merci de vérifier la taille et la couleur",
             related_prod: "Produits connexes",
             unit_price: "Prix ​​unitaire",
-
             total: "Total",
             your_info: "Vos informations pour la livraison",
             your_command: "Votre commande",
@@ -50,7 +52,6 @@ const Resources = {
             delivery_mode: "Frais de livraison",
             cahch_ondeliv: "Paiement à la livraison",
             confirm_order: "Confirmer la commande",
-
             payment_methode: "Moyen de paiement",
             order_details: "détails de la commande",
             product: "Product",
@@ -88,7 +89,6 @@ const Resources = {
             thanks_rating: "Merci pour l'évaluation. L'évaluation a été enregistrée avec succès.",
             del_waslet: "Livraison en 1H à domicile",
             addons: "Toppings en suppléments",
-
             otp_msg: "Nous avons envoyé un code à %DATA%. Veuillez confirmer votre numéro pour confirmer votre commande",
             confirm: "Confirmer",
             skip: "Sauter",
@@ -125,7 +125,8 @@ const Resources = {
             change_ur_order: "Modifier votre commande",
             send: "Envoyer",
             upload_image:"Télécharger une image",
-            send_success:"Votre demande a été envoyée avec succès"
+            send_success:"Votre demande a été envoyée avec succès",
+            associate:associate_FR
         }
     },
     "en": {
@@ -153,7 +154,6 @@ const Resources = {
             please_select_att: "Please check size and color",
             related_prod: "Related Products",
             unit_price: "Unit Price",
-
             total: "Total",
             your_info: "Your delivery information",
             your_command: "Your order",
@@ -239,7 +239,7 @@ const Resources = {
             product_exchange: "Order Exchange",
             product_exchange_desc: "Your satisfaction is at the heart of our priorities. That is why we have established a simple and effective product exchange service. If you are not completely satisfied with your purchase, you can easily request an exchange. Our customer service is at your disposal to assist you and ensure that your request is handled quickly and without hassle. Shop with confidence, knowing that we are here to help you every step of the way.",
             id: "Id",
-            Date: "Date",
+            date: "Date",
             state: "State",
             platform: "Platform",
             not_exist: "Not exist",
@@ -251,12 +251,13 @@ const Resources = {
             change_ur_order: "Change your order",
             send: "Send",
             upload_image:"Upload image",
-            send_success:"Your request has been sent successfully."
+            send_success:"Your request has been sent successfully.",
+            associate:associate_EN
         }
     },
     "ar": {
         translation: {
-            "home": "الرئيسية",
+            home: "الرئيسية",
             "categs": "التصنيفات",
             "contact": "اتصل بنا",
             "faves": "المفضلة",
@@ -278,7 +279,6 @@ const Resources = {
             "please_select_att": "يرجى اختيار الحجم واللون",
             "related_prod": "المنتجات ذات الصلة",
             "unit_price": "سعر الوحدة",
-
             "total": "المجموع",
             "your_info": "معلوماتك للتسليم",
             "your_command": "طلبك",
@@ -303,7 +303,6 @@ const Resources = {
             "delivery_mode": "تكلفة التوصيل",
             "cahch_ondeliv": "الدفع عند التوصيل",
             "confirm_order": "تأكيد الطلب",
-
             "payment_methode": "وسيلة الدفع",
             "order_details": "تفاصيل الطلب",
             "product": "المنتج",
@@ -377,7 +376,8 @@ const Resources = {
             change_ur_order: "تغيير طلبك",
             send: "ارسال",
             upload_image:"رفع صورة",
-            send_success:"تم ارسال طلبك بنجاح"
+            send_success:"تم ارسال طلبك بنجاح",
+            associate:associate_AR
         }
     }
 }

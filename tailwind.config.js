@@ -16,7 +16,9 @@ export default {
       cursor: {
         'delete': 'url(./src/assets/delete.ico), pointer',
       },
-
+      fontFamily: {
+        gilroy: ["Gilroy", "Roboto", "Noto Kufi Arabic", "Nunito", "Helvetica", "sans-serif"]
+      },
 
       keyframes: {
         transcart: {

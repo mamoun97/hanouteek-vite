@@ -23,6 +23,8 @@ import useGlobal from "../../hoock/useGlobal";
 import TabC from "../components/TabC";
 import ButtomDrower from "../components/BottomDrower";
 import { FiShoppingCart } from "react-icons/fi";
+import useLang from "../../hoock/useLang";
+import Currency from "../../Constants/Currency";
 
 type ProductsTotal = {
     data: Product[],
@@ -35,7 +37,8 @@ type DropData = {
 }
 export default function AddOrderPos({ dropData }: { dropData?: DropData }) {
     const [openModal, setOpenModal] = useState(false)
-
+    const {tr}=useLang()
+    const t=tr.order
     const user = useSelector<RootState>((state) => state.user) as UserAuth
     const [selectProduct, setSelectProduct] = useState<Product | null>(null)
     const [selectCateg, setSelectCateg] = useState<Category | null>(null)
@@ -123,7 +126,7 @@ export default function AddOrderPos({ dropData }: { dropData?: DropData }) {
 
     const cartView = <>
 
-        <h1 className="text-center  text-xl font-bold my-4">Cart</h1>
+        <h1 className="text-center  text-xl font-bold my-4">{t.cart}</h1>
         <div className="flex flex-col gap-2">
             {
                 cart.map((el, k) => {
@@ -135,17 +138,17 @@ export default function AddOrderPos({ dropData }: { dropData?: DropData }) {
             }
         </div>
         <div className="flex mt-3 items-center">
-            <h1 className="text-sm font-medium">SubTotal</h1>
+            <h1 className="text-sm font-medium">{t.sub_total}</h1>
             <div className="grow"></div>
-            <span className="font-semibold">{getTotal().toFixed(2)} DZD</span>
+            <span className="font-semibold">{getTotal().toFixed(2)} <Currency/></span>
         </div>
 
         <div className="flex mt-3 items-center">
-            <h1 className="text-sm font-bold uppercase">Total</h1>
+            <h1 className="text-sm font-bold uppercase">{t.total}</h1>
             <div className="grow"></div>
             <span className="font-semibold text-2xl">{
                 (getTotal()).toFixed(2)
-            } <small className="font-medium">DZD</small></span>
+            } <small className="font-medium ms-1"> <Currency/></small></span>
         </div>
         {
             dropData ? <>
@@ -156,7 +159,7 @@ export default function AddOrderPos({ dropData }: { dropData?: DropData }) {
                     })
                     dropData.setOpenForm(true)
                     setOpenCart(false)
-                }}>Add Command</Button>
+                }}>{t.add_order}</Button>
             </> : <>
                 <div className="border-b border-dashed border-gray-300 my-3"></div>
                 <Input
@@ -201,7 +204,7 @@ export default function AddOrderPos({ dropData }: { dropData?: DropData }) {
                         <IoArrowBackOutline />
                     </ActionIcon>
                 </Link>}
-                <h1 className="text-2xl font-semibold">Ajouter une commande</h1>
+                <h1 className="text-2xl font-semibold">{t.add_order}</h1>
             </div>
             <div className="grid grid-cols-6 max-[910px]:grid-cols-2 gap-2">
                 <div className="col-span-4 max-[1080px]:col-span-3 mt-2 ">
@@ -213,7 +216,7 @@ export default function AddOrderPos({ dropData }: { dropData?: DropData }) {
                         {
                             categs?.data && <TabC data={[
                                 {
-                                    name: "All",
+                                    name:t.all,
                                     active: selectCateg == null,
                                     onClick: (_: any) => {
                                         setProducts({
@@ -272,7 +275,7 @@ export default function AddOrderPos({ dropData }: { dropData?: DropData }) {
                         >
                             <MdOutlineCloudOff className="w-28 h-28 text-primary" />
                             <p className="text-lg font-medium  text-center line-clamp-2">
-                                Il n'y a pas de produits
+                                {t.no_prod}
                             </p>
 
                         </div>}
@@ -329,9 +332,9 @@ export default function AddOrderPos({ dropData }: { dropData?: DropData }) {
                 }} />}
             {!!cart.length&&<Button onClick={() => setOpenCart(true)} className="fixed  justify-center gap-2 items-center bottom-4 left-4 right-4 z-20 max-sm:flex hidden">
                 <FiShoppingCart className="text-xl" />
-                <span className="tet-lg font-bold">Total</span>
+                <span className="tet-lg font-bold">{t.cart}</span>
                 <div className="grow"></div>
-                <span className="font-bold">{(getTotal()).toFixed(2)} DZD</span>
+                <span className="font-bold">{(getTotal()).toFixed(2)} <Currency/></span>
             </Button>}
             <ButtomDrower open={openCart} onClose={() => setOpenCart(false)}  >
                 <div className="p-4">

@@ -55,7 +55,7 @@ export default function HeaderCell({
         {...(ellipsis && { className: "truncate" })}
         {...(ellipsis && width && { style: { width } })}
       >
-        {title}
+        <span className="whitespace-nowrap">{title}</span>
       </div>
 
       {sortable && (

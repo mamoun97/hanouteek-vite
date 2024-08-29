@@ -1,10 +1,10 @@
 import { Badge, Button, Input, Popover, Select, Switch } from "rizzui"
 import { useGetAllOrdersService, useGetWilayasService } from "../../Api/Services"
 import OrdersTable from "../components/OrdersTable"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { LuPlus } from "react-icons/lu"
 import { Link, useParams } from "react-router-dom"
-import orderCols from "../Const/order-cols"
+// import orderCols from "../Const/order-cols"
 import { MdCheck, MdSearch } from "react-icons/md"
 import DatePicker from "../components/Datepicker"
 import ProductSelect from "../components/ProductSelect"
@@ -13,6 +13,8 @@ import { states as associatStates, GestionStatus, returnStates, Substates } from
 import { useSelector } from "react-redux"
 import { RootState } from "../../Store"
 import { GlobalS } from "../../Store/globalSlice"
+import useLang from "../../hoock/useLang"
+import OrderCols from "../Const/order-cols"
 
 function getState({
   type,
@@ -36,7 +38,8 @@ export default function Orders({ type = "default" }: { type?: OrderProsType }) {
   const global = useSelector<RootState>((state) => state.global) as GlobalS
   const user = useSelector<RootState>((state) => state.user) as UserAuth
   const paramSlugState = useParams()
-
+  const { tr, t: t1, lang } = useLang()
+  const t = tr.order
   const [option, setOptions] = useState<OrderOptionRequest>({
     limit: 10,
     page: 1,
@@ -55,11 +58,15 @@ export default function Orders({ type = "default" }: { type?: OrderProsType }) {
   const [param, setParam] = useState(`?limit=${option.limit}&page=${option.page}`)
 
   const { data, isLoading, mutate } = useGetAllOrdersService(param, (global?.platform) ? "&" + global?.platform : undefined)
-
-  const [showCols, setShowCols] = useState(orderCols)
+ 
+const deleteCols=["associate"]
+  const [showCols, setShowCols] = useState(OrderCols(t1,deleteCols))
+  useEffect(() => {
+    let f=OrderCols(t1,deleteCols)
+    setShowCols(showCols.map((el,k)=>({...el,label:f[k].label})))
+  }, [lang])
   useEffect(() => {
     window.scrollTo(0, 0)
-    document.body.dir = "ltr"
   }, [])
   useEffect(() => {
     if (option) {
@@ -151,12 +158,12 @@ export default function Orders({ type = "default" }: { type?: OrderProsType }) {
 
   />
   return (
-    <div dir="ltr">
+    <div >
 
       <h1 className="text-2xl font-semibold">
 
         {
-          type == "default" && "All Orders" ||
+          type == "default" && tr.dashboard.all_orders ||
           type == "failed" && "Gestion des échecs" ||
           type == "return" && "Gestion des retours"
         }
@@ -184,19 +191,19 @@ export default function Orders({ type = "default" }: { type?: OrderProsType }) {
         <Popover >
           <Popover.Trigger>
             <Button variant="flat" className="dark:hover:bg-muted/75">
-              Colunms
+              {tr.order.cols}
             </Button>
           </Popover.Trigger>
           <Popover.Content className="p-2">
             {({ }) => (
-              <div className="w-56">
+              <div className="w-56" key={lang+"444"}>
                 {
                   showCols.map((el, k) => {
-                    return el.value != "id" && el.value != "checked" ? <div onClick={() => {
+                    return el.value != "id" && el.value != "checked" ? <div key={k} onClick={() => {
                       setShowCols(showCols.map((item, i) => {
                         return { ...item, check: i == k ? !item.check : item.check }
                       }))
-                    }} className={"flex items-center p-[5px] mb-1 cursor-pointer text-sm hover:bg-gray-100 dark:hover:bg-black rounded-lg " + (el.check ? "" : "")} dir="ltr">
+                    }} className={"flex items-center p-[5px] mb-1 cursor-pointer text-sm hover:bg-gray-100 dark:hover:bg-black rounded-lg " + (el.check ? "" : "")} >
                       {el.label}
                       <div className="grow me-2"></div>
                       <MdCheck className={"text-lg transition-transform text-green-600 dark:text-white/75 " + (el.check ? "" : "scale-0")} />
@@ -211,7 +218,7 @@ export default function Orders({ type = "default" }: { type?: OrderProsType }) {
         <Link to={user.role == "pos" && "/pos/order/create" ||
           user.role == "vendor" && "/order/create-drop" || "/order/create"}>
           <Button>
-            <span className="max-sm:hidden">Add New Order</span>
+            <span className="max-sm:hidden">{tr.order.add_order}</span>
             <span className="me-1"></span>
             <LuPlus className="text-lg" />
           </Button>
@@ -240,7 +247,7 @@ export default function Orders({ type = "default" }: { type?: OrderProsType }) {
 
 
 function Searche({ option, setOptions, db }: { db?: string, option: OrderOptionRequest, setOptions: (d: OrderOptionRequest) => void }) {
-
+  const { tr, t } = useLang()
   const { data: wilayas } = useGetWilayasService(db);
   const [optionV, setOptionsV] = useState<OrderOptionRequest>(option)
   useEffect(() => {
@@ -249,17 +256,17 @@ function Searche({ option, setOptions, db }: { db?: string, option: OrderOptionR
   return <Popover enableOverlay >
     <Popover.Trigger>
       <Button variant="outline">
-        Search <MdSearch className="text-lg" />
+        {tr.order.search} <MdSearch className="text-lg" />
       </Button>
     </Popover.Trigger>
     <Popover.Content className="p-4">
       {({ setOpen }) => (
-        <div className=" flex flex-col gap-2" dir="ltr">
-          <h1 className="text-lg font-semibold">Filter options</h1>
+        <div className=" flex flex-col gap-2" >
+          <h1 className="text-lg font-semibold">{tr.order.filter_ops}</h1>
           <div className="flex max-md:flex-col gap-2">
             <DatePicker
               inputProps={
-                { label: "Start Date" }
+                { label: tr.order.start_date }
               }
               selected={new Date(optionV.startDate ?? "")}
               onChange={(date: Date) => {
@@ -268,11 +275,11 @@ function Searche({ option, setOptions, db }: { db?: string, option: OrderOptionR
                   startDate: date.toDateString()
                 })
               }}
-              placeholderText="Start Date"
+              placeholderText={tr.order.start_date}
             />
             <DatePicker
               inputProps={
-                { label: "End Date" }
+                { label: tr.order.end_date }
               }
               selected={new Date(optionV.endDate ?? "")}
               onChange={(date: Date) => {
@@ -281,7 +288,7 @@ function Searche({ option, setOptions, db }: { db?: string, option: OrderOptionR
                   endDate: date.toDateString()
                 })
               }}
-              placeholderText="End Date"
+              placeholderText={tr.order.end_date}
             />
           </div>
           <ProductSelect
@@ -296,9 +303,9 @@ function Searche({ option, setOptions, db }: { db?: string, option: OrderOptionR
           />
 
           <Input
-            label="Phone"
+            label={t.phone}
             value={optionV.contact_phone}
-            placeholder="phone"
+            placeholder={t.phone}
             onChange={(e) => {
               setOptionsV({
                 ...optionV,
@@ -307,9 +314,9 @@ function Searche({ option, setOptions, db }: { db?: string, option: OrderOptionR
             }}
           />
           <Input
-            label="Order Id"
+            label={tr.order.order_id}
             type="number"
-            placeholder="order"
+            placeholder={tr.order.order_id}
             value={optionV.id}
             onChange={(e) => {
               setOptionsV({
@@ -318,15 +325,16 @@ function Searche({ option, setOptions, db }: { db?: string, option: OrderOptionR
               })
             }}
           />
-          <Switch variant="outline" label="Show diplicat orders"
-            checked={optionV.duplicate} dir="ltr" onChange={(_) => {
+          <Switch variant="outline" label={tr.order.show_dep_orders}
+            checked={optionV.duplicate} onChange={(_) => {
               setOptionsV({
                 ...optionV,
                 duplicate: !optionV.duplicate
               })
             }} />
           <Select
-            label="wilaya"
+            label={t.wilaya}
+            placeholder={"- " + t.wilaya + " -"}
             options={
               wilayas?.data.map(el => {
                 return {
@@ -364,7 +372,7 @@ function Searche({ option, setOptions, db }: { db?: string, option: OrderOptionR
             })
             setOpen(false)
           }}>
-            Filter
+            {tr.order.filter}
           </Button>
         </div>
       )}

@@ -15,7 +15,8 @@ import { FaDollarSign } from "react-icons/fa";
 import { FiBox } from "react-icons/fi";
 import { IoStatsChart } from "react-icons/io5";
 import { Link } from "react-router-dom";
-
+import useLang from "../../hoock/useLang";
+import 'moment';
 export default function Dashboard() {
   const global = useSelector<RootState>((state) => state.global) as GlobalS
   const user = useSelector<RootState>((state) => state.user) as UserAuth
@@ -41,15 +42,18 @@ export default function Dashboard() {
   const { data: compareAtPrice } = useGetPriceTotalService(
     `?startDate=${moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm")}&endDate=${moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")}&states=soldFromTheStore&priceType=CompareAtPrice&type=created_at`
   )
+  const { tr, lang } = useLang()
+  moment.locale(lang);
   return (
     <div className="">
-      <h1 className="text-2xl font-medium">Dashboard</h1>
+      <h1 className="text-2xl font-medium mt-4">{tr.drower.dashboard}</h1>
 
-      <div className="flex justify-center  gap-2">
+      <div className="flex justify-center  gap-2 mt-6">
         <DatePicker
           inputProps={
             { label: "" }
           }
+
           selected={new Date(option.startDate ?? "")}
           onChange={(date: Date) => {
             setOptions({
@@ -57,11 +61,13 @@ export default function Dashboard() {
               startDate: date.toDateString()
             })
           }}
-          
+
           maxDate={new Date(option.endDate ?? "")}
           placeholderText="Start Date"
         />
         <DatePicker
+        
+        className="font-gilroy"
           inputProps={
             { label: "" }
           }
@@ -80,7 +86,7 @@ export default function Dashboard() {
         {
           [
             {
-              name: "All Orders",
+              name: tr.dashboard.all_orders,
               value: !!data?.length ? data.reduce((a, b) => {
                 return a + b.count;
               }, 0) : 0,
@@ -89,13 +95,13 @@ export default function Dashboard() {
             },
             ...user.role == "vendor" ? [
               {
-                name: "Bénéfices ​​en attente",
+                name: tr.dashboard.pending_profits,
                 value: price_total_e != undefined ? price_total_e + " DZD" : "",
                 icon: FaDollarSign,
                 color: "#08F",
               },
               {
-                name: "Bénéfices",
+                name: tr.dashboard.benefits,
                 value: price_total_b != undefined ? price_total_b + " DZD" : "",
                 icon: FaDollarSign,
                 color: "#10D164",
@@ -161,7 +167,7 @@ export default function Dashboard() {
                   color: invertColor(statesColor[el.state])
                 }} key={k}>
                 <p className="text-sm font-semibold  text-center line-clamp-2">
-                  {el.state || "undefined"}
+                  {(tr.states[el.state as keyof typeof tr.states]) || "undefined"}
                 </p>
                 <span className="font-bold text-2xl">{el.count}</span>
               </Link>
@@ -182,8 +188,11 @@ export default function Dashboard() {
       {/* <div className="my-4">
       <StatHomeCards />
       </div> */}
-      <div className="my-2">
+      <div className="my-2 relative">
         <SalesReport className="dark:bg-[#000] dark:border-[#222]" />
+        <div className="absolute flex items-center justify-center inset-0 bg-black/30 text-white font-bold text-4xl">
+          Coming Soon
+        </div>
       </div>
 
     </div>

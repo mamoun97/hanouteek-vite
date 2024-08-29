@@ -8,7 +8,8 @@ import { Cart, openCart } from "../Store/cartSlice";
 import { RootState } from "../Store"
 import { ThemeSetting } from "../Types/ThemeSetting"
 import UpdatePrices from "../hoock/UpdatePrices"
-import { ThemeProvider } from "../utils/ThemeProvider"
+// import { useTranslation } from "react-i18next"
+// import { ThemeProvider } from "../utils/ThemeProvider"
 export default function Layout({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch()
   const cart = useSelector<RootState>(state => state.cart) as Cart
@@ -18,6 +19,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     window.scrollTo(0, 0)
 
   }, [location.pathname])
+  
 
   return (
     // <ThemeProvider>

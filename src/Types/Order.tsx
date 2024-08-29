@@ -370,5 +370,27 @@ interface OrderAbandonedResponse extends ResponseAtt {
     data: OrderAbandoned[]
 }
 
+type StatisticOrder={
+    data: {
+        id: number,
+        totalOrders: number,
+        product: number|null,
+        totalPaidOrders: number,
+        totalReturnedOrders: number,
+        delivered: number,
+        shipped: number,
+        waiting: number|null,
+        return: number,
+        percentageDelivery: number|null,
+        realCost: number|null,
+        benefit: number,
+        CostProduct: number,
+        year: number,
+        month: number,
+        day: number
+    },
+    day: string
+}
+
 
 
