@@ -135,7 +135,7 @@ const JumpPrevIcon = ({ icon, rounded, outline, className }: IconProps) => (
       className
     )}
   >
-    {icon || "•••"}
+    {icon || "_"}
   </div>
 );
 
@@ -149,7 +149,7 @@ const JumpNextIcon = ({ icon, rounded, outline, className }: IconProps) => (
       className
     )}
   >
-    {icon || "•••"}
+    {icon || "_"}
   </div>
 );
 
@@ -185,6 +185,7 @@ export default function Pagination({
   color = "primary",
   locale,
   nextIcon,
+  simple,
   prevIcon,
   prevIconClassName,
   nextIconClassName,
@@ -198,6 +199,7 @@ export default function Pagination({
   return (
     <RcPagination
       locale={locale || localeDefault}
+      
       nextIcon={
         <NextIcon
           icon={nextIcon as React.ReactNode}

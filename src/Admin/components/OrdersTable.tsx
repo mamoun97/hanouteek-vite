@@ -3,20 +3,21 @@ import Table from "./Table";
 import { Select } from "rizzui";
 import Pagination from "./Pagination";
 import { Toaster } from "react-hot-toast";
-import orderCols from "../Const/order-cols";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Store";
 import getColumns, { ColumnTypeReturn } from "./OrderTableOptions/Columns";
 import useLang from "../../hoock/useLang";
+import MobileCardRow from "./OrderTableOptions/MobileCardRow";
+import { IoArrowBack, IoArrowForward } from "react-icons/io5";
 
-const OC=[{
-  label:"",
-  value: "",
-  check: true
-}]
+type OC = {
+  label: string,
+  value: string,
+  check: boolean
+}[]
 export default function OrdersTable({ data, option, showCols, setOption, isLoading, afterChange = () => { }, type = "default" }:
-  { data: OrdersResponse, option: OrderOptionRequest, setOption: any, afterChange: any, showCols:  typeof OC, isLoading: boolean, type?: OrderProsType }) {
-    const {tr}=useLang()
+  { data: OrdersResponse, option: OrderOptionRequest, setOption: any, afterChange: any, showCols: OC, isLoading: boolean, type?: OrderProsType }) {
+  const { tr ,lang} = useLang()
   const [order, _] = React.useState<string>("desc");
   const [count, setCount] = React.useState<number>(0);
   const [column, setColumn] = React.useState<string>("");
@@ -35,9 +36,9 @@ export default function OrdersTable({ data, option, showCols, setOption, isLoadi
     onHeaderClick,
     afterChange,
     changeFilter,
-    deleteCols:[
-      ...(user.role=="pos")?["actions"]:[],
-      ...user.role=="vendor"?["platform","associate","subState"]:[]
+    deleteCols: [
+      ...(user.role == "pos") ? ["actions"] : [],
+      ...user.role == "vendor" ? ["platform", "associate", "subState"] : []
     ],
     isPos: user.role == "pos",
     type
@@ -49,19 +50,31 @@ export default function OrdersTable({ data, option, showCols, setOption, isLoadi
     setCount(count + 1)
   }, [option])
   return <div>
-    <Table variant="modern"
-      data={data.data}
-      columns={
-        columns.filter(el => showCols.find(t => t.value == el.key)?.check ?? el)
+    <div className="max-sm:hidden">
+      <Table variant="modern"
+        data={data.data}
+        columns={
+          columns.filter(el => showCols.find(t => t.value == el.key)?.check ?? el)
+        }
+
+
+        className="text-sm"
+        isLoading={isLoading} />
+    </div>
+    <div className=" max-sm:flex  flex-col hidden gap-2 mt-2">
+
+      {
+        data.data.map((el, k) => {
+          return <MobileCardRow data={el} key={k} afterChange={afterChange}/>
+        })
       }
-      className="text-sm"
-      isLoading={isLoading} />
-    <div className="flex justify-end p-2">
+    </div>
+    <div className="flex justify-end p-2 max-sm:flex-col gap-2">
       <Pagination
         total={data.totalCount}
         defaultCurrent={data.page}
-        nextIcon={tr.global.next}
-        prevIcon={tr.global.previous}
+        nextIcon={<div className="flex items-center gap-1"> <span className="max-sm:hidden text-xs font-semibold">{tr.global.next}</span> <IoArrowForward className={lang=="ar"?"rotate-180":""}/></div>}
+        prevIcon={<div className="flex items-center gap-1"><IoArrowBack className={lang=="ar"?"rotate-180":""}/> <span className="max-sm:hidden text-xs font-semibold">{tr.global.previous}</span> </div>}
         pageSize={option.limit}
         onChange={(page) => {
           setOption({
@@ -69,10 +82,13 @@ export default function OrdersTable({ data, option, showCols, setOption, isLoadi
             page
           })
         }}
-        
+        className="font-gilroy"
+
+
         prevIconClassName="py-0 text-foreground !leading-[26px] font-gilroy"
         nextIconClassName="py-0 text-foreground !leading-[26px] font-gilroy"
       />
+      
 
       <Select
         options={[

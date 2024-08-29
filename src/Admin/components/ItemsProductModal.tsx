@@ -73,7 +73,7 @@ export default function ItemsProductModal({ data }: { data: OrderFull }) {
                     </div>
                     <div className="flex justify-end mt-3 gap-2">
                         <Button
-                            type="submit"
+                            type="button"
                             variant="flat"
                             onClick={() => setModalState(false)}
                         >

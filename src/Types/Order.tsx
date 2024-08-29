@@ -217,6 +217,8 @@ type UpdateStatePayload = {
 }|{
     subStatus?: OrderSubState,
     remark?: string,
+}|{
+    state: OrderState,
 }
 type StateItem = {
     label: string,

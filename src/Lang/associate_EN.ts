@@ -2,7 +2,9 @@ export default {
     global:{
         next:"Next",
         previous:"Previous",
-        edit:"Edit"
+        edit:"Edit",
+        yes:"Yes",
+        no:"No",
     },
     order: {
         add_order: "Add Order",
@@ -65,7 +67,9 @@ export default {
         order_history:"Order ( # %DATA% ) History",
         timeline:"Timeline",
         print_ticket:"Print ticket",  
-        duplicate:"Duplicate order"      
+        duplicate:"Duplicate order",
+        cancel_order_msg:"Do you really want to cancel this order?",
+        cancel_order:"Cancel order",
     },
     drower: {
         dashboard: "Dashboard",
@@ -85,6 +89,8 @@ export default {
         sales_report: "Sales report",
         fresh: "Fresh",
         income: "Income",
+        no_order_indate:"There is no order on this date",
+        coming_soon:"Coming Soon"
     },
     auth: {
         "login": "Login",

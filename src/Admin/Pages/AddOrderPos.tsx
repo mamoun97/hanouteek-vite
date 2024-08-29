@@ -25,6 +25,7 @@ import ButtomDrower from "../components/BottomDrower";
 import { FiShoppingCart } from "react-icons/fi";
 import useLang from "../../hoock/useLang";
 import Currency from "../../Constants/Currency";
+import { useTranslation } from "react-i18next";
 
 type ProductsTotal = {
     data: Product[],
@@ -38,6 +39,7 @@ type DropData = {
 export default function AddOrderPos({ dropData }: { dropData?: DropData }) {
     const [openModal, setOpenModal] = useState(false)
     const {tr}=useLang()
+    const {i18n}=useTranslation()
     const t=tr.order
     const user = useSelector<RootState>((state) => state.user) as UserAuth
     const [selectProduct, setSelectProduct] = useState<Product | null>(null)
@@ -152,14 +154,14 @@ export default function AddOrderPos({ dropData }: { dropData?: DropData }) {
         </div>
         {
             dropData ? <>
-                <Button className="mt-4 w-full" type="button" onClick={() => {
+                {!!cart.length&&<Button className="mt-4 w-full" type="button" onClick={() => {
                     dropData.setDataDrop({
                         ...dataOrder,
                         item: cart
                     })
                     dropData.setOpenForm(true)
                     setOpenCart(false)
-                }}>{t.add_order}</Button>
+                }}>{t.add_order}</Button>}
             </> : <>
                 <div className="border-b border-dashed border-gray-300 my-3"></div>
                 <Input
@@ -201,7 +203,7 @@ export default function AddOrderPos({ dropData }: { dropData?: DropData }) {
             <div className="flex gap-2 items-center ">
                 {dropData ? null : <Link to={"/dashboard"}>
                     <ActionIcon variant="flat" size="lg" className="text-lg">
-                        <IoArrowBackOutline />
+                        <IoArrowBackOutline className={i18n.language=="ar"?"rotate-180":""}  />
                     </ActionIcon>
                 </Link>}
                 <h1 className="text-2xl font-semibold">{t.add_order}</h1>

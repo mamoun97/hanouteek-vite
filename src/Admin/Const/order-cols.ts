@@ -32,11 +32,6 @@ const OrderCols = (d: typeof Resources.ar.translation,deleteCols:string[]) => {
             check: true
         },
         {
-            label: t.benefit,
-            value: "benefit_drop_shipper",
-            check: true
-        },
-        {
             label: t.associate,
             value: "associate",
             check: true
@@ -54,6 +49,11 @@ const OrderCols = (d: typeof Resources.ar.translation,deleteCols:string[]) => {
         {
             label: t.price_total,
             value: "price_total",
+            check: true
+        },
+        {
+            label: t.benefit,
+            value: "benefit_drop_shipper",
             check: true
         },
         {

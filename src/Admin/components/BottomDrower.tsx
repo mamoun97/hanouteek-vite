@@ -20,6 +20,7 @@ export default function ButtomDrower({ open, onClose, children }: CartProps) {
                 style={{
                     background:"#F00"
                 }}
+                
                 onDismiss={() => onClose(false)}
                 // blocking={false}
                 maxHeight={450}

@@ -237,7 +237,7 @@ interface PaginationProps {
     onPageChange: (page: number) => void;
 }
 
-const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
+export const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
     const generatePageNumbers = () => {
         const pageNumbers = [];
         for (let i = 1; i <= totalPages; i++) {

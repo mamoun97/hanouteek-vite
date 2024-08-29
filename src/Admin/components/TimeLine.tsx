@@ -4,6 +4,7 @@ import { MdHistory } from "react-icons/md";
 import { ActionIcon, Popover } from "rizzui";
 import statesColor from "../Const/statesColor";
 import useLang from "../../hoock/useLang";
+import { RiTimeLine } from "react-icons/ri";
 
 
 
@@ -16,7 +17,7 @@ export default function TimeLine({ data }: { data: OrderFull }) {
 
                 <ActionIcon variant="text" className="text-green-500">
 
-                    <MdHistory className="w-5 h-5 min-w-[20px]" />
+                    <RiTimeLine className="w-5 h-5 min-w-[20px]" />
 
                 </ActionIcon>
 

@@ -50,9 +50,13 @@ export default function Dashboard() {
 
       <div className="flex justify-center  gap-2 mt-6">
         <DatePicker
+          dateFormat="d/MM/yyyy"
           inputProps={
-            { label: "" }
+            {
+              label: "",
+            }
           }
+          className="text-xs"
 
           selected={new Date(option.startDate ?? "")}
           onChange={(date: Date) => {
@@ -66,10 +70,13 @@ export default function Dashboard() {
           placeholderText="Start Date"
         />
         <DatePicker
-        
-        className="font-gilroy"
+
+          className="font-gilroy"
+          dateFormat="d/MM/yyyy"
           inputProps={
-            { label: "" }
+            {
+              label: "",
+            }
           }
           selected={new Date(option.endDate ?? "")}
           onChange={(date: Date) => {
@@ -153,7 +160,7 @@ export default function Dashboard() {
           >
             <MdOutlineCloudOff className="w-28 h-28 text-primary" />
             <p className="text-lg font-medium  text-center line-clamp-2">
-              Il n'y a pas de commande à cette date
+              {tr.dashboard.no_order_indate}
             </p>
 
           </div>
@@ -191,7 +198,7 @@ export default function Dashboard() {
       <div className="my-2 relative">
         <SalesReport className="dark:bg-[#000] dark:border-[#222]" />
         <div className="absolute flex items-center justify-center inset-0 bg-black/30 text-white font-bold text-4xl">
-          Coming Soon
+          {tr.dashboard.coming_soon}
         </div>
       </div>
 

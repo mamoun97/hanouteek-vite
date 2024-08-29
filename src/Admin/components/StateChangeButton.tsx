@@ -42,8 +42,7 @@ export default function StateChange({ data, afterChange = () => { }, readOnly = 
         }).catch(err => {
             toast.error(err.response ? err.response.data.message : err.message)
             setLoading(false)
-        }
-        )
+        })
     }
     const updateSubState = () => {
         

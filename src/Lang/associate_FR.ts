@@ -2,7 +2,9 @@ export default {
     "global": {
         "next": "Suivant",
         "previous": "Précédent",
-        "edit": "Modifier"
+        "edit": "Modifier",
+        "yes": "Oui",
+        "no": "Non"
     },
     "order": {
         "add_order": "Ajouter une commande",
@@ -24,7 +26,7 @@ export default {
         "error_benif": "Le total de cette commande doit être au minimum de : ",
         "total_client_comm": "Total de la commande pour votre client",
         "del_price": "Prix de livraison",
-        "min_price": "Prix minimum: %DATA% DZD",
+        "min_price": "Prix minimum : %DATA% DZD",
         "select_ops": "Sélectionnez des options",
         "non_dispo": "Non disponible",
         "qte_stock": "Quantité en stock",
@@ -65,7 +67,9 @@ export default {
         "order_history": "Historique de commande ( # %DATA% )",
         "timeline": "Chronologie",
         "print_ticket": "Imprimer le billet",
-        "duplicate": "Commande en double"
+        "duplicate": "Commande en double",
+        "cancel_order_msg": "Voulez-vous vraiment annuler cette commande ?",
+        "cancel_order": "Annuler la commande",
     },
     "drower": {
         "dashboard": "Tableau de bord",
@@ -85,6 +89,8 @@ export default {
         "sales_report": "Rapport des ventes",
         "fresh": "Revenu",
         "income": "Frais",
+        "no_order_indate": "Il n'y a aucune commande à cette date",
+        "coming_soon": "Bientôt disponible"
     },
     "auth": {
         "login": "Connexion",

@@ -2,7 +2,9 @@ export default {
     "global": {
         "next": "التالي",
         "previous": "السابق",
-        "edit": "تعديل"
+        "edit": "تعديل",
+        "yes": "نعم",
+        "no": "لا"
     },
     "order": {
         "add_order": "إضافة طلب",
@@ -24,7 +26,7 @@ export default {
         "error_benif": "يجب أن يكون إجمالي هذا الطلب على الأقل: ",
         "total_client_comm": "إجمالي الطلب لعميلك",
         "del_price": "سعر التوصيل",
-        "min_price": "الحد الأدنى للسعر: %DATA% دج",
+        "min_price": "الحد الأدنى للسعر : %DATA% دج",
         "select_ops": "اختر الخيارات",
         "non_dispo": "غير متوفر",
         "qte_stock": "الكمية المتوفرة في المخزون",
@@ -65,7 +67,9 @@ export default {
         "order_history": "تأريخ الطلب ( # %DATA% )",
         "timeline": "الجدول الزمني",
         "print_ticket": "طباعة التذكرة",
-        "duplicate":"طلب مكرر"  
+        "duplicate": "طلب مكرر",
+        "cancel_order_msg": "هل تريد حقًا إلغاء هذا الطلب؟",
+        "cancel_order": "إلغاء الطلب",
     },
     "drower": {
         "dashboard": "لوحة التحكم",
@@ -84,8 +88,9 @@ export default {
         "benefits": "الأرباح",
         "sales_report": "تقرير المبيعات",
         "fresh": "إيرادات",
-        "income": "الدخل"
-
+        "income": "الدخل",
+        "no_order_indate": "لا توجد طلبات في هذا التاريخ",
+        "coming_soon": "قريباً"
     },
     "auth": {
         "login": "تسجيل الدخول",

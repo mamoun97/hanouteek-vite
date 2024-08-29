@@ -160,7 +160,7 @@ const deleteCols=["associate"]
   return (
     <div >
 
-      <h1 className="text-2xl font-semibold">
+      <h1 className="text-2xl font-semibold max-sm:mb-4">
 
         {
           type == "default" && tr.dashboard.all_orders ||
@@ -188,9 +188,9 @@ const deleteCols=["associate"]
         {type != "default" && selectSubState}
         <div className="grow"></div>
         <Searche {...{ option, setOptions }} db={(global?.platform) ? "&" + global?.platform : undefined} />
-        <Popover >
+        <Popover  >
           <Popover.Trigger>
-            <Button variant="flat" className="dark:hover:bg-muted/75">
+            <Button variant="flat" className="dark:hover:bg-muted/75 max-sm:hidden">
               {tr.order.cols}
             </Button>
           </Popover.Trigger>
@@ -218,7 +218,7 @@ const deleteCols=["associate"]
         <Link to={user.role == "pos" && "/pos/order/create" ||
           user.role == "vendor" && "/order/create-drop" || "/order/create"}>
           <Button>
-            <span className="max-sm:hidden">{tr.order.add_order}</span>
+            <span className="">{tr.order.add_order}</span>
             <span className="me-1"></span>
             <LuPlus className="text-lg" />
           </Button>

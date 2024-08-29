@@ -19,8 +19,8 @@ import useLang from "../../../hoock/useLang";
 import Currency from "../../../Constants/Currency";
 
 export default function FormOrder({ data, isAdd = false }: { data: OrderFull, isAdd?: boolean }) {
-  const {tr,t:t1,lang}=useLang()
-  const t=tr.order
+  const { tr, t: t1, lang } = useLang()
+  const t = tr.order
   const global = useSelector<RootState>((state) => state.global) as GlobalS
   const [dataOrder, setDataOrder] = useState<OrderFull>(data)
   const navigate = useNavigate()
@@ -52,8 +52,8 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
           // item: cart,
           contact_phone: "+213" + parseInt(dataOrder.contact_phone),
           min_price_drop_shipper: getDropPrice.ventmin,
-          price_delivery:getPriceDelivery(),
-          price_total:user.role=="vendor"?(dataOrder.price_drop ?? 0) :dataOrder.price_total,
+          price_delivery: getPriceDelivery(),
+          price_total: user.role == "vendor" ? (dataOrder.price_drop ?? 0) : dataOrder.price_total,
         }, global?.platform ? "?" + global.platform : undefined).then(_ => {
           toast.success(t.add_succ)
           if (user.role == "associate" || user.role == "vendor")
@@ -134,19 +134,19 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
                 <div className="flex mt-3 items-center">
                   <h1 className="text-sm font-medium">{t.sub_total}</h1>
                   <div className="grow"></div>
-                  <span className="font-semibold">{getTotal().toFixed(2)} <Currency/></span>
+                  <span className="font-semibold">{getTotal().toFixed(2)} <Currency /></span>
                 </div>
                 <div className="flex items-center">
                   <h1 className="text-sm font-medium">Prix ​​de livraison</h1>
                   <div className="grow"></div>
-                  <span className="font-semibold">{getPriceDelivery().toFixed(2)} <Currency/></span>
+                  <span className="font-semibold">{getPriceDelivery().toFixed(2)} <Currency /></span>
                 </div>
                 <div className="flex mt-3 items-center">
                   <h1 className="text-sm font-bold uppercase">Total</h1>
                   <div className="grow"></div>
                   <span className="font-semibold text-2xl">{
                     (getTotal() + getPriceDelivery()).toFixed(2)
-                  } <small className="font-medium ps-1"><Currency/></small></span>
+                  } <small className="font-medium ps-1"><Currency /></small></span>
                 </div>
                 <div className="border-b border-dashed border-gray-300 my-3"></div>
               </>
@@ -170,16 +170,16 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
                 <div className="flex mt-3 items-center">
                   <h1 className="text-sm font-medium">{t.total}</h1>
                   <div className="grow"></div>
-                  <span className="font-semibold">{getTotal().toFixed(2)} <Currency/></span>
+                  <span className="font-semibold">{getTotal().toFixed(2)} <Currency /></span>
                 </div>
                 {!!getPriceDelivery() && <>
-                  <div className="flex  items-center gap-2 my-1">
+                  <div className="flex  items-center gap-2 mt-2">
                     <h1 className="text-sm font-medium whitespace-nowrap ">{t.ur_price_vent}</h1>
 
                     <Input
                       label=""
                       size="sm"
-                      value={dataOrder.price_drop}
+                      value={dataOrder.price_drop }
                       onChange={(e) => {
                         if (!isNaN(Number(e.target.value)))
                           setDataOrder({
@@ -188,34 +188,37 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
                           })
                       }}
                       suffixClassName={"ms-2 "}
-                      dir={lang=="ar"?'ltr':"rtl"}
+                      dir={lang == "ar" ? 'ltr' : "rtl"}
                       className="grow"
-                      {...getDropPrice.show?{suffix:<Currency/>}:{}}
+                      {...getDropPrice.show ? { suffix: <Currency /> } : {}}
                       inputClassName="text-right text-sm font-bold"
-                      placeholder={t.min_price.replace("%DATA%",getTotalDrop()+"")}
+                      placeholder={""}
                     />
                   </div>
+                  {!getDropPrice.show&&<div className="mb-4 text-xs opacity-50 font-semibold rtl:text-left ltr:text-right">
+                    {t.min_price.replace("%DATA%", getTotalDrop() + "")}
+                  </div>}
 
                   {/* error message */}
 
-                  {getDropPrice.show && getDropPrice.ventdrop <= 0 && <div className="flex my-2 items-center p-4 mb-4 text-sm text-red-800  rounded-lg bg-[#EEE] dark:bg-[#181818] dark:text-red-400 dark:border-red-800" role="alert">
+                  {getDropPrice.show && getDropPrice.ventdrop < 0 && <div className="flex my-2 items-center p-4 mb-4 text-sm text-red-800  rounded-lg bg-[#EEE] dark:bg-[#181818] dark:text-red-400 dark:border-red-800" role="alert">
                     <MdInfo className="flex-shrink-0 inline w-5 h-5 me-3" />
 
                     <div>
-                      {t.error_benif}  <strong>{getDropPrice.ventmin}</strong>  <Currency/>
+                      {t.error_benif}  <strong>{getDropPrice.ventmin}</strong>  <Currency />
                     </div>
                   </div>}
 
                   {/* success message */}
 
                   {
-                    getDropPrice.show && getDropPrice.ventdrop > 0 &&
+                    getDropPrice.show && getDropPrice.ventdrop >= 0 &&
                     <div className=" my-2">
                       <div className="flex items-center p-4 mb-4 text-sm text-green-800  rounded-lg bg-[#EEE] dark:bg-[#181818] dark:text-green-400 dark:border-green-800" role="alert">
                         <IoIosCheckmarkCircle className="flex-shrink-0 inline w-5 h-5 me-3" />
                         <div>
                           {t.success_benif}
-                          ( <strong className="text-green-400">{(dataOrder.price_drop ?? 0) - getTotal()} <Currency/></strong> )
+                          ( <strong className="text-green-400">{(dataOrder.price_drop ?? 0) - getTotal()} <Currency /></strong> )
                         </div>
                       </div>
 
@@ -225,22 +228,22 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
                   <div className="flex items-center">
                     <h1 className="text-sm font-medium">{t.del_price}</h1>
                     <div className="grow"></div>
-                    <span className="font-semibold">{getPriceDelivery().toFixed(2)} <Currency/></span>
+                    <span className="font-semibold">{getPriceDelivery().toFixed(2)} <Currency /></span>
                   </div>
 
-                  {getDropPrice.show && getDropPrice.ventdrop > 0 && <>
+                  {getDropPrice.show && getDropPrice.ventdrop >= 0 && <>
                     <div className="border border-dashed dark:border-muted my-4"></div>
                     <div className="flex mt-3 items-center">
                       <h1 className="text-sm font-bold ">{t.total_client_comm}</h1>
                       <div className="grow"></div>
                       <span className="font-semibold text-2xl max-sm:text-lg whitespace-nowrap">{
                         ((dataOrder.price_drop ?? 0) + getPriceDelivery()).toFixed(2)
-                      } <small className="font-medium ps-1"><Currency/></small></span>
+                      } <small className="font-medium ps-1"><Currency /></small></span>
                     </div>
                   </>}
 
 
-                  {getDropPrice.show && getDropPrice.ventdrop > 0 && <Button className="mt-4 w-full" type="submit" isLoading={loading}>Ajouter</Button>}
+                  {getDropPrice.show && getDropPrice.ventdrop >= 0 && <Button className="mt-4 w-full" type="submit" isLoading={loading}>Ajouter</Button>}
                 </>}
 
 

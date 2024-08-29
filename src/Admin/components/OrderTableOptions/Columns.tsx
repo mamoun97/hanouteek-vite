@@ -35,6 +35,7 @@ export type ColumnTypeReturn = {
     width?: number,
     onHeaderCell?: any,
     show?: boolean,
+    // fixed?:string,
     render?: (x?: any, y?: any) => any
 }
 
@@ -47,6 +48,7 @@ type ColumnTypePros = {
     changeFilter: any,
     isPos: boolean,
     type?: OrderProsType,
+    
     deleteCols?: string[]
 }
 
@@ -70,6 +72,7 @@ const getColumns = ({ order, column, onHeaderClick, afterChange, changeFilter, i
             onHeaderCell: () => onHeaderClick("id"),
             dataIndex: "id",
             key: "id",
+
         },
 
         // actions
@@ -195,24 +198,24 @@ const getColumns = ({ order, column, onHeaderClick, afterChange, changeFilter, i
 
             render: (phone: string) => (
                 <div className="flex items-center">
-                    
 
-                        <Badge
-                            variant="flat"
-                            color="info"
-                            className="cursor-pointer flex whitespace-nowrap items-center"
 
-                        >
-                            <a href={"tel:" + phone} className="flex items-center">
-                                <MdLocalPhone className="text-lg" />
-                                <div className="me-1"></div>
-                                <span className="whitespace-nowrap" dir="ltr">{formatPhoneNumber(phone)}</span>
-                            </a>
+                    <Badge
+                        variant="flat"
+                        color="info"
+                        className="cursor-pointer flex whitespace-nowrap items-center"
 
+                    >
+                        <a href={"tel:" + phone} className="flex items-center">
+                            <MdLocalPhone className="text-lg" />
                             <div className="me-1"></div>
-                            <MdContentCopy onClick={() => { CopyText(phone); toast.success("Texte copié") }} className="text-lg" />
-                        </Badge>
-                 
+                            <span className="whitespace-nowrap" dir="ltr">{formatPhoneNumber(phone)}</span>
+                        </a>
+
+                        <div className="me-1"></div>
+                        <MdContentCopy onClick={() => { CopyText(phone); toast.success("Texte copié") }} className="text-lg" />
+                    </Badge>
+
                 </div>
             ),
         }],
@@ -250,19 +253,6 @@ const getColumns = ({ order, column, onHeaderClick, afterChange, changeFilter, i
             ),
         }],
 
-        // benefit_drop_shipper
-        ...deleteCols.find(el => el == "benefit_drop_shipper") ? [] : [{
-            title: <HeaderCell title={t.benefit} />,
-            dataIndex: "benefit_drop_shipper",
-            key: "benefit_drop_shipper",
-
-            render: (b: string) => (
-                <div className="flex items-center whitespace-nowrap ">
-                    {b} <Currency />
-                </div>
-            ),
-        }],
-
         // associate
         ...deleteCols.find(el => el == "associate") ? [] : [{
             title: <HeaderCell title={t.associate} />,
@@ -278,11 +268,11 @@ const getColumns = ({ order, column, onHeaderClick, afterChange, changeFilter, i
                         </div>
                     </Tooltip>
                         : <Badge
-                        variant="flat"
-                        className="whitespace-nowrap"
-                        color="danger">
-                        {t.not_exist}
-                    </Badge>}
+                            variant="flat"
+                            className="whitespace-nowrap"
+                            color="danger">
+                            {t.not_exist}
+                        </Badge>}
                 </div>
             ),
         }],
@@ -334,6 +324,27 @@ const getColumns = ({ order, column, onHeaderClick, afterChange, changeFilter, i
                     <Text className="mb-0.5 !text-sm font-semibold ">
                         {price_total} <small className="font-medium"><Currency /></small>
                     </Text>
+                </div>
+            ),
+        }],
+
+        // benefit_drop_shipper
+        ...deleteCols.find(el => el == "benefit_drop_shipper") ? [] : [{
+            title: <HeaderCell title={t.benefit} />,
+            dataIndex: "benefit_drop_shipper",
+            key: "benefit_drop_shipper",
+
+            render: (b: string) => (
+                <div className="flex items-center whitespace-nowrap ">
+                    <Badge
+                        variant="flat"
+                        color="success"
+                        size="lg"
+                        className="flex items-center gap-1 whitespace-nowrap cursor-pointer"
+                    >
+                        <span className="font-bold">{b}</span> <Currency />
+                    </Badge>
+                    
                 </div>
             ),
         }],
