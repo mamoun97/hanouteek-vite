@@ -53,7 +53,7 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
           contact_phone: "+213" + parseInt(dataOrder.contact_phone),
           min_price_drop_shipper: getDropPrice.ventmin,
           price_delivery: getPriceDelivery(),
-          price_total: user.role == "vendor" ? (dataOrder.price_drop ?? 0) : dataOrder.price_total,
+          price_total: user.role == "vendor" ? ((dataOrder.price_drop ?? 0)+getPriceDelivery()) : dataOrder.price_total,
         }, global?.platform ? "?" + global.platform : undefined).then(_ => {
           toast.success(t.add_succ)
           if (user.role == "associate" || user.role == "vendor")
