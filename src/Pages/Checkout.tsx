@@ -138,7 +138,7 @@ function CheckoutDefault() {
             do_insurance: false,
             freeshipping: false,
             is_stopdesk: m?.value ? true : false,
-            stopdesk_id: m?.value ? m.value.center_id ?? 0 : 0,
+            stopdesk_id: m?.value ? m.value?.center_id ?? 0 : 0,
             has_exchange: false,
             CompareAtPrice: 0,
             address_lat: 0,
@@ -275,7 +275,8 @@ function CheckoutDefault() {
                     ml.push({
                         title: t("delivery") + " " + m + " " + t("to_yalidine"),
                         check: false,
-                        cost: p.deliveryCostToTheOffice
+                        cost: p.deliveryCostToTheOffice,
+                        value:priceDelivery
                     })
 
 
