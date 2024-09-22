@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import OrderApi from "../Api/OrderApi";
 import { useTranslation } from "react-i18next";
-import { Avatar, Button, Input, Loader, Text, Tooltip } from "rizzui";
+import { ActionIcon, Avatar, Button, Input, Loader, Text, Tooltip } from "rizzui";
 import { IoSearchOutline } from "react-icons/io5";
 import toast, { Toaster } from "react-hot-toast";
 import { MdContentCopy, MdLocalPhone } from "react-icons/md";
@@ -17,6 +17,7 @@ import StateChange from "../Admin/components/StateChangeButton";
 import getPlatformUrl from "../Constants/Platform";
 import CopyText from "../Constants/CopyText";
 import { FaExchangeAlt } from "react-icons/fa";
+import ApiConfig from "../Api/ApiConfig";
 function formatPhoneNumber(phoneNumber: string) {
     const localNumber = phoneNumber.replace(/^(\+\d{3})(\d{9})$/, '0$2');
     return localNumber.replace(/(\d{4})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4');
@@ -36,6 +37,8 @@ type InputData = {
     phone: string
 }
 export default function Tracking() {
+    if(ApiConfig.isJoomla)
+        return <TrackingkaziTour/>
     const { t, i18n } = useTranslation()
     const [data, setData] = useState<TrackingResponse | undefined>(undefined)
     const [loading, setLoading] = useState<boolean>(false)
@@ -101,7 +104,9 @@ export default function Tracking() {
                         suffix={
                             loading ?
                             <Loader />
-                                : <IoSearchOutline className="ms-3 w-5 h-5 cursor-pointer" onClick={() => formik.handleSubmit} />
+                                : <ActionIcon className="ms-3" variant="text" type="submit" onClick={() => formik.handleSubmit} >
+                                    <IoSearchOutline className=" w-5 h-5 " />
+                                </ActionIcon>
                         }
 
 
@@ -260,5 +265,12 @@ function Table({ header, children }: { header: any, children: React.ReactNode })
         </div>
     );
 };
+
+// 
+function TrackingkaziTour(){
+    return <div>
+        <iframe src="https://kazi-tour.xyz/public/tracking" name="iFrame Name"   width="100%"  className="h-[calc(100vh-96px)]"></iframe>
+    </div>
+}
 
 

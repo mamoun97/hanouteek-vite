@@ -116,7 +116,7 @@ export default function StateChange({ data, afterChange = () => { }, readOnly = 
                                     })
                                 }}
                                 options={
-                                    user.role=="vendor"?vendorStates:
+                                    user?.role=="vendor"?vendorStates:
                                     associatStates
                                 }
                             />

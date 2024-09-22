@@ -10,9 +10,9 @@ import quincaillerie from "./quincaillerie.jpg"
 import img_notfound from "./Image-not-found.png"
 import clear from "./delete.ico"
 
-import cash_del from "./cash_del.webp"
-import exp_del from "./exp_del.webp"
-import gift from "./gift.webp"
+import cash_del from "./cash_del.png"
+import exp_del from "./exp_del.png"
+import gift from "./gift.png"
 
 
 import joomla from "./joomla.jpg"
@@ -20,6 +20,8 @@ import joomla_prod1 from "./joomla_prod1.jpg"
 import joomla_prod2 from "./joomla_prod2.jpg"
 import joomla_prod3 from "./joomla_prod3.jpg"
 import joomla_prod4 from "./joomla_prod4.jpg"
+
+import hanouteekPrivate from "./hanouteek-private.png"
 const images = {
     img_dz,
     img_en, clear,
@@ -30,9 +32,11 @@ const images = {
     exp_del,
     gift,
     joomla,
-joomla_prod1,
-joomla_prod2,
-joomla_prod3,
-joomla_prod4
+    joomla_prod1,
+    joomla_prod2,
+    joomla_prod3,
+    joomla_prod4,
+    hanouteekPrivate,
+    bg_auth:"https://joomladz.com/files/bg-auth.png"
 }
 export default images

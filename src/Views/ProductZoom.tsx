@@ -8,6 +8,7 @@ import imgs from '../assets/index.js';
 import Swiper from 'swiper';
 import { useTranslation } from 'react-i18next';
 import imgSrc from '../utils/imgSrc.js';
+import ApiConfig from '../Api/ApiConfig.js';
 
 const DivC = styled.div`
 
@@ -125,6 +126,8 @@ function ProductZoomDefault({ data, detect = null }: {
     useEffect(() => {
         setCount(count + 1)
     }, [i18n.language])
+    const promo = !!data.CompareAtPrice ? Math.ceil(100 - data.price * 100 / data.CompareAtPrice) : 0
+
     return <DivC key={data.id}>
         <SwiperF
             swiperProps={{
@@ -159,6 +162,14 @@ function ProductZoomDefault({ data, detect = null }: {
                                     }}
                                 />
                             </div>
+                            {
+                                !!promo ? <div dir="ltr" className={` absolute top-1 text-sm font-semibold left-1 flex justify-center items-center  text-white rounded-full h-14 w-14 max-sm:h-12 max-sm:w-12 max-sm:px-1 max-sm:text-[12px] ${data.category.id==ApiConfig.categPrv ? "bg-rose" : "bg-primary"}`}
+                                >
+                                    {
+                                        -promo
+                                    } %
+                                </div> : null
+                            }
 
                         </div>
                     </div>

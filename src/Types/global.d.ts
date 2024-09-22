@@ -42,7 +42,7 @@ interface Associate {
     active: boolean,
 }
 interface AssociateFull extends Associate {
-    
+
     socketId?: null,
     isOnline: boolean,
     created_at: string,
@@ -52,9 +52,57 @@ interface AssociateResponse extends ResponseAtt {
 
     data: Array<AssociateFull>
 }
-type AssociateOptionRequest={
+type AssociateOptionRequest = {
     limit: number,
     page: number,
 }
 
-type OrderProsType="default"|"failed"|"return"
+type OrderProsType = "default" | "failed" | "return"
+
+
+
+interface JoomlaUser {
+    firstName: string,
+    lastName: string,
+    email: string,
+    phone: string,
+    password?: string,
+    wilaya: string,
+    commune: string,
+    avatar: string,
+}
+interface JoomlaUserFull extends JoomlaUser {
+    id: number,
+    role: string,
+    socketId: string | null,
+    active: boolean,
+    isOnline: boolean,
+    created_at: string,
+    updated_at: string
+}
+
+
+interface JoomlaClient {
+    firstName: string,
+    lastName: string,
+    email: string,
+    phoneNumber: string,
+    password?: string,
+    avatar: string,
+    address: string,
+    zipCode: string
+}
+
+
+
+interface JoomlaClientFull extends JoomlaClient {
+    id: number,
+    active: boolean,
+    isOnline: boolean,
+    created_at: string,
+    updated_at: string,
+    commune: null,
+    willaya: null,
+    orders: 1,
+    isActive: false,
+}

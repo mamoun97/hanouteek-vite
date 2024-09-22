@@ -166,7 +166,7 @@ const getColumns = (
             dataIndex: "active",
             key: "active",
             show: false,
-            render: (active: boolean,row:AssociateFull) => (
+            render: (active: boolean, row: AssociateFull) => (
                 <div className="flex items-center">
 
                     <Switch
@@ -175,18 +175,18 @@ const getColumns = (
                         // onIcon={<span className="h-3 w-3" />}
                         switchClassName="min-w-[40px]"
                         variant="outline"
-                        onChange={async()=>{
+                        onChange={async () => {
                             try {
-                                await AssociateApi[ "updateAssociate"]({
+                                await AssociateApi["updateAssociate"]({
                                     ...row,
-                                    active:!active
+                                    active: !active
                                 });
-                                
-                                
+
+
                                 afterChange();
                             } catch (error) {
                                 alertError(error);
-                            } 
+                            }
                         }}
                         checked={active}
                     />
@@ -236,7 +236,7 @@ const getColumns = (
 export default function UsersTable({ data, option, showCols, setOption, isLoading, afterChange = () => { } }:
     { data: AssociateResponse, option: AssociateOptionRequest, setOption: any, afterChange: any, showCols: typeof orderCols, isLoading: boolean }) {
 
-    if (showCols) { }
+    // if (showCols) { }
     const [order, _] = React.useState<string>("desc");
     const [count, setCount] = React.useState<number>(0);
     const [column, setColumn] = React.useState<string>("");

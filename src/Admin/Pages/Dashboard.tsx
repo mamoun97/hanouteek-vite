@@ -1,6 +1,6 @@
 
 import SalesReport from "../components/Dashboard/SalesReport";
-import { useGetPriceTotalService, useGetStatisticsService } from "../../Api/Services";
+import { useGetPriceService, useGetPriceTotalService, useGetStatisticsService } from "../../Api/Services";
 import { RootState } from "../../Store";
 import { useSelector } from "react-redux";
 import { GlobalS } from "../../Store/globalSlice";
@@ -17,77 +17,155 @@ import { IoStatsChart } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import useLang from "../../hoock/useLang";
 import 'moment';
+import useGlobal from "../../hoock/useGlobal";
+
+
+
+/*
+
+
+price total  without states   priceType=price total
+
+
+pending benefit 
+
+
+benifit 
+Livré
+Payed
+
+
+*/
+const pendingBenifitStates = [
+  "pending",
+  "unresponsive",
+  "not Answered - 1st Attempt",
+  "not Answered - 2nd Attempt",
+  "not Answered - 3rd Attempt",
+  "confirmed",
+  "order preparation",
+  "prepared",
+  "expédié",
+  "processing",
+  "out for Delivery",
+  "En localisation",
+  "Vers Wilaya",
+  "Reçu à Wilaya",
+  "Centre",
+  "En préparation",
+  "En attente du client",
+  "Sorti en livraison",
+  "En attente",
+  "En alerte",
+  "Tentative échouée",
+].join(",")
+const benifitStates =[
+  "Livré",
+  "payed"
+].join(",")
+
+
+function formatNumberWithSpaces(number:number) {
+  // Convert number to string and split into integer and decimal parts
+  let numStr = number.toString();
+
+  // Regular expression to insert a space every three digits from the end
+  return numStr.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+}
 export default function Dashboard() {
-  const global = useSelector<RootState>((state) => state.global) as GlobalS
+
   const user = useSelector<RootState>((state) => state.user) as UserAuth
 
   const [option, setOptions] = useState({
     startDate: moment().subtract(30, 'days').startOf('day').format(),
     endDate: moment().endOf('day').format(),
   })
+  const global = useGlobal("&")
   const { data, isLoading } = useGetStatisticsService({
     startDate: moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm"),
     endDate: moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")
-  }, (global?.platform) ? "&" + global?.platform : undefined)
+  }, global)
 
   const { data: price_total } = useGetPriceTotalService(
-    `?startDate=${moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm")}&endDate=${moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")}${user.role == "pos" ? "&states=soldFromTheStore" : ""}&priceType=${user.role == "vendor" ? "benefit_drop_shipper" : "price_total"}&type=created_at`
+    `?startDate=${moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm")}&endDate=${moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")}${user.role == "pos" ? "&states=soldFromTheStore" : ""}&priceType=${user.role == "vendor" ? "benefit_drop_shipper" : "price_total"}&type=created_at`,
+    global
   )
+
+  // vendeur
+  // const { data: price_total_b } = useGetPriceTotalService(
+  //   `?startDate=${moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm")}&endDate=${moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")}&states=${"payed"}&priceType=benefit_drop_shipper&type=created_at`,
+  //   global
+  // )
+  // const { data: price_total_e } = useGetPriceTotalService(
+  //   `?startDate=${moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm")}&endDate=${moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")}&states=${"Livré"}&priceType=benefit_drop_shipper&type=created_at`,
+  //   global
+  // )
+
   const { data: price_total_b } = useGetPriceTotalService(
-    `?startDate=${moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm")}&endDate=${moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")}&states=${"payed"}&priceType=benefit_drop_shipper&type=created_at`
+    `?startDate=${moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm")}&endDate=${moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")}&states=${pendingBenifitStates}&priceType=price_total&type=created_at`,
+    global
   )
   const { data: price_total_e } = useGetPriceTotalService(
-    `?startDate=${moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm")}&endDate=${moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")}&states=${"Livré"}&priceType=benefit_drop_shipper&type=created_at`
+    `?startDate=${moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm")}&endDate=${moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")}&states=${benifitStates}&priceType=price_total&type=created_at`,
+    global
   )
+
   const { data: compareAtPrice } = useGetPriceTotalService(
-    `?startDate=${moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm")}&endDate=${moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")}&states=soldFromTheStore&priceType=CompareAtPrice&type=created_at`
+    `?startDate=${moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm")}&endDate=${moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")}&states=soldFromTheStore&priceType=CompareAtPrice&type=created_at`,
+    global
   )
+  // const { data: price_drop } = useGetPriceService(
+  //   `?startDate=${moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm")}&endDate=${moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")}states=Payed&is-drop-shipping=truetype=created_at`,
+  //   global
+  // )
   const { tr, lang } = useLang()
   moment.locale(lang);
   return (
-    <div className="">
-      <h1 className="text-2xl font-medium mt-4">{tr.drower.dashboard}</h1>
+    <div>
+      <div className="flex items-center gap-2 max-[848px]:flex-col max-[848px]:items-start">
+        <h1 className="text-2xl font-medium mt-4 whitespace-nowrap">{tr.drower.dashboard}</h1>
 
-      <div className="flex justify-center  gap-2 mt-6">
-        <DatePicker
-          dateFormat="d/MM/yyyy"
-          inputProps={
-            {
-              label: "",
+        <div className="flex justify-center  gap-2 mt-6 grow">
+          <DatePicker
+            dateFormat="d/MM/yyyy"
+            inputProps={
+              {
+                label: "",
+              }
             }
-          }
-          className="text-xs"
+            className="text-xs"
 
-          selected={new Date(option.startDate ?? "")}
-          onChange={(date: Date) => {
-            setOptions({
-              ...option,
-              startDate: date.toDateString()
-            })
-          }}
+            selected={new Date(option.startDate ?? "")}
+            onChange={(date: Date) => {
+              setOptions({
+                ...option,
+                startDate: date.toDateString()
+              })
+            }}
 
-          maxDate={new Date(option.endDate ?? "")}
-          placeholderText="Start Date"
-        />
-        <DatePicker
+            maxDate={new Date(option.endDate ?? "")}
+            placeholderText="Start Date"
+          />
+          <DatePicker
 
-          className="font-gilroy"
-          dateFormat="d/MM/yyyy"
-          inputProps={
-            {
-              label: "",
+            className="font-gilroy"
+            dateFormat="d/MM/yyyy"
+            inputProps={
+              {
+                label: "",
+              }
             }
-          }
-          selected={new Date(option.endDate ?? "")}
-          onChange={(date: Date) => {
-            setOptions({
-              ...option,
-              endDate: date.toDateString()
-            })
-          }}
-          minDate={new Date(option.startDate ?? "")}
-          placeholderText="End Date"
-        />
+            selected={new Date(option.endDate ?? "")}
+            onChange={(date: Date) => {
+              setOptions({
+                ...option,
+                endDate: date.toDateString()
+              })
+            }}
+            minDate={new Date(option.startDate ?? "")}
+            placeholderText="End Date"
+          />
+        </div>
       </div>
       <div className="grid grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 gap-2 mt-3">
         {
@@ -103,13 +181,13 @@ export default function Dashboard() {
             ...user.role == "vendor" ? [
               {
                 name: tr.dashboard.pending_profits,
-                value: price_total_e != undefined ? price_total_e + " DZD" : "",
+                value: price_total_e != undefined ? formatNumberWithSpaces(price_total_e) + " DZD" : "...",
                 icon: FaDollarSign,
                 color: "#08F",
               },
               {
                 name: tr.dashboard.benefits,
-                value: price_total_b != undefined ? price_total_b + " DZD" : "",
+                value: price_total_b != undefined ? formatNumberWithSpaces(price_total_b) + " DZD" : "...",
                 icon: FaDollarSign,
                 color: "#10D164",
               },
@@ -168,7 +246,7 @@ export default function Dashboard() {
         <div className="flex col-span-full flex-wrap gap-2 ">
           {
             data?.map((el, k) => {
-              return <Link to={"/orders/" + el.state} className={`grow border dark:border-black  rounded-md flex flex-col justify-center items-center  p-2 min-w-[110px] max-w-[340px]`}
+              return <Link to={"/orders/" + el.state + "?dateStart=" + moment(option.startDate).startOf("day").format("yyyy-MM-DD HH:mm") + "&dateEnd=" + moment(option.endDate).endOf("day").format("yyyy-MM-DD HH:mm")} className={`grow border dark:border-black  rounded-md flex flex-col justify-center items-center  p-2 min-w-[110px] max-w-[340px]`}
                 style={{
                   backgroundColor: statesColor[el.state] ?? "#FFF",
                   color: invertColor(statesColor[el.state])

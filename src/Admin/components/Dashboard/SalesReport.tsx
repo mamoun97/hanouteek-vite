@@ -110,7 +110,7 @@ const data = [
 export default function SalesReport({ className }: { className?: string }) {
     const isTablet = useMedia('(max-width: 820px)', false);
     const [startDate, setStartDate] = useState<Date>(new Date());
-    const global = useGlobal("&")
+    const global = useGlobal("?")
     const { data: dt } = useGetAllOrdersStatisticsService("", global)
     const {tr}=useLang()
     return (

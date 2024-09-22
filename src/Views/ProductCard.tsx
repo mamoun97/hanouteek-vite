@@ -23,8 +23,10 @@ import imgSrc from "../utils/imgSrc"
 type ProductsProps = {
     data: Product,
     className?: string,
+    imageClassName?: string,
     showFull?: boolean,
-    hidePrice?: boolean
+    hidePrice?: boolean,
+    isPrivate?:boolean
 }
 const ProductCard = (props: ProductsProps) => {
     const theme = useSelector<ThemeSetting>(state => state.theme) as ThemeSetting
@@ -33,7 +35,9 @@ const ProductCard = (props: ProductsProps) => {
     return <ProductHanouteek {...props} />
 }
 
-function ProductHanouteek({ data, showFull = false, className = ""
+function ProductHanouteek({ data, showFull = false, className = "",
+    isPrivate=false,
+    imageClassName="",
     //  ,hidePrice=false
 }: ProductsProps) {
     const theme = useSelector<ThemeSetting>(state => state.theme) as ThemeSetting
@@ -50,7 +54,7 @@ function ProductHanouteek({ data, showFull = false, className = ""
             <div className={`relative  pt-[100%]  overflow-hidden group `}>
                 <Link to={"/product/" + data.slugName}>
 
-                    <div className="absolute top-0 left-0 right-0 bottom-0 group/img">
+                    <div className={"absolute top-0 left-0 right-0 bottom-0 border group/img overflow-hidden "+imageClassName}>
                         <LazyLoad className={
                             "w-full h-auto max-h-full object-fill " + (data.images.length >= 2 ? "group-hover/img:hidden" : "")
                         } src={imgSrc(data.images[0],true)} />
@@ -84,7 +88,7 @@ function ProductHanouteek({ data, showFull = false, className = ""
                 </IconButton>}
             </div>
             <div className="p-2 flex flex-col">
-                <h1 className="text-sm  text-center leading-5 font-medium mt-3 min-h-[40px] ">{data.name}</h1>
+                <h1 className="text-sm  text-center leading-2 line-clamp-2 font-medium mt-3 h-[40px] ">{data.name}</h1>
                 {!!!hidePrice && <div className="flex justify-center text-[13px] font-semibold mt-2 max-md:flex-col max-md:items-center">
                     {
                         !!data.CompareAtPrice && <>
@@ -94,21 +98,19 @@ function ProductHanouteek({ data, showFull = false, className = ""
                     }
 
 
-                    <span style={{ color: theme.theme.Primary }}>{data.price.toFixed(2)} <Currency /></span>
+                    <span  className={isPrivate?"text-rose":"text-primary"}>{data.price.toFixed(2)} <Currency /></span>
                 </div>}
 
                 <Link to={"/product/" + data.slugName} className="w-full">
-                    <Button className={`w-full border-none mt-2 bg-transparent group-hover:bg-secondary group-hover:text-white buttonProd `}>
+                    <Button className={`w-full border-none mt-2 bg-transparent group-hover:bg-secondary group-hover:text-white ${isPrivate?"hover:!bg-rose":"hover:!bg-primary"} `}>
                         {t("buy")}
                     </Button>
                 </Link>
 
             </div>
             {
-                !!promo ? <div dir="ltr" className={` absolute top-1 text-sm font-semibold left-1 flex justify-center items-center  text-white rounded-full px-2 py-1 max-sm:px-1 max-sm:text-[12px]`}
-                    style={{
-                        backgroundColor: theme.theme.Primary
-                    }}>
+                !!promo ? <div dir="ltr" className={` absolute top-1 text-sm font-semibold left-1 flex justify-center items-center  text-white rounded-full px-2 py-1 max-sm:px-1 max-sm:text-[12px] ${isPrivate?"bg-rose":"bg-primary"}`}
+                    >
                     {
                         -promo
                     } %

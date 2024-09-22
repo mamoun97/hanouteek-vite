@@ -43,7 +43,7 @@ export default function Categories() {
                             <div className={`group-hover:scale-110 bg-cover bg-no-repeat bg-center absolute top-0 left-0 right-0 bottom-0 
                      transition  duration-300 dd`} style={{ backgroundImage: "url('" + el.image + "')" }}></div>
 
-                            <Link to={"/categories/" + el.id} className="absolute top-0 left-0 right-0 bottom-0 group-hover:bg-[#0006]  p-12">
+                            <Link to={(ApiConfig.isHanouteek&&(ApiConfig.categPrv==el.id))?"/private-category/"+el.id:"/categories/" + el.id} className="absolute top-0 left-0 right-0 bottom-0 group-hover:bg-[#0006]  p-12">
                                 <h1 className="text-xl font-bold text-white drop-shadow-md">
                                     {el.name}
                                 </h1>

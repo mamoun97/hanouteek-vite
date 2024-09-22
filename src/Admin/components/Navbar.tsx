@@ -8,6 +8,7 @@ import { IoIosNotifications } from "react-icons/io";
 import ModeThemeButton from './ModeThemeButton'
 
 import LangButton from './LangButton'
+import SelectPlatform from './SelectPlatform'
 // import SelectPlatform from './SelectPlatform'
 export default function Navbar({
     open,
@@ -20,7 +21,7 @@ export default function Navbar({
 }) {
     const theme = useSelector<RootState>(state => state.theme) as ThemeSetting
     
-
+    const user = useSelector<RootState>((state) => state.user) as UserAuth
     if (open) { }
 
     return (
@@ -41,11 +42,11 @@ export default function Navbar({
                         <div className="grow">
 
                         </div>
-                        {/* {
+                        {
 
-                            ["/dashboard","/orders"].includes(location.pathname)&&
-                            <SelectPlatform/>
-                            } */}
+                            user.role=="associate"&&["/dashboard","/orders"].includes(location.pathname)&&
+                            <SelectPlatform />
+                            }
 
                         <LangButton />
 

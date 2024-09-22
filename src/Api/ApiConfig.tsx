@@ -2,7 +2,7 @@
 
 const url = "https://api.risecart.net";
 
-
+// 0674022054
 
 // const db = "db=hanouteekiwY3oYSQ2"
 // const db = "db=taniajawaheroi7JLwmU5"
@@ -21,6 +21,7 @@ const url = "https://api.risecart.net";
 // const db = "db=dropdropmSqp6A8rx"
 const db = false;
 const isHanouteek = false
+const isJoomla=false;
 const param = {
     url: url + "/api/v1",
     rootUrl: url,
@@ -29,7 +30,8 @@ const param = {
     } : {
         isHanouteek: false,
     },
-    isJoomla: window.location.host.includes("joomla.risecart.net"),
+    categPrv:15,
+    isJoomla: window.location.host.includes("joomla.risecart.net")||isJoomla,
     swrStop: {
         dedupingInterval: 500000,
         refreshWhenOffline: false,
@@ -37,6 +39,7 @@ const param = {
         revalidateOnFocus: false,
 
     },
+    
 
     db: db ? "&" + db : "",
     dbq: db ? "?" + db : "",

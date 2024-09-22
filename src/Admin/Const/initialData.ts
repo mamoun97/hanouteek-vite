@@ -9,6 +9,7 @@ export const initialDataOrder: OrderFull = {
   "tracking": null,
   "platform": null,
   "label": null,
+  "auto_confirmed":false,
   "to_wilaya_name": "",
   "address": "",
   "fullName": "",

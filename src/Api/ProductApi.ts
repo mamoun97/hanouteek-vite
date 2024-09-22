@@ -98,6 +98,7 @@ const getById = async (id: number, db?: string): Promise<Product> => {
         .get("/tenant/product/associate/" + id + (db ?? ApiConfig.dbq));
     return data
 }
+
 const updateProduct = async (prod: ProductPayload, db?: string): Promise<{
     message: string,
     product: ProductFull
@@ -114,6 +115,10 @@ const addProduct = async (prod: ProductPayload, db?: string): Promise<{
     const { data } = await req.httpAuth(user?.token ?? "").post("/tenant/product/associate/" + (db ?? ApiConfig.dbq), prod);
     return data
 }
+const changeState = async (id:number, db?: string): Promise<any> => {
+    const { data } = await req.httpAuth("").patch("/tenant/product/product-action/disable/"+id + (db ?? ApiConfig.dbq));
+    return data
+}
 
 
 const ProductApi = {
@@ -121,7 +126,7 @@ const ProductApi = {
     getProductByIdCategory, getAllCategories, createOrder, Abandoned, getAllByName,
     getYalidineCenter, getAllByNameAssociate,
     getAllByFilter, getAllReviews, applyPromo, getById,
-    getPriceDeliveryAdmin, createReview,
+    getPriceDeliveryAdmin, createReview,changeState,
     updateProduct, addProduct,getAllByFilterAssociate
 }
 export default ProductApi

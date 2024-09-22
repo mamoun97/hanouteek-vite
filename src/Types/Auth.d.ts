@@ -32,9 +32,9 @@ interface ClientAuth {
     avatar: string,
     commune: string,
     willaya: string,
-
     isOnline: boolean,
     created_at: string,
     updated_at: string,
     token: string,
+    md5?: string
 }

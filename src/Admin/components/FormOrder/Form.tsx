@@ -82,7 +82,7 @@ export default function Form({
 
     return (
         <div className="flex gap-2 flex-col">
-            {user.role != "vendor" && <Card title="Select Product">
+            {user.role != "vendor" && <Card title="">
                 <ProductSelect setValue={setSelectProduct} />
                 {
                     selectProduct && <div key={selectProduct.slugName}>
@@ -329,10 +329,10 @@ export default function Form({
                 </div>
                 </Card>}
 
-            {user.role != "vendor" && <Card title="Shipping">
+            {user.role != "vendor" && <Card title={tr.order.shipping}>
                 <div className="flex flex-col gap-2">
                     <Checkbox
-                        label="Vendu depuis le magasin"
+                        label={tr.order.vendu_depuis_mag}
                         checked={dataOrder.soldFromTheStore ?? false}
                         onChange={() => {
                             setDataOrder({
@@ -342,7 +342,7 @@ export default function Form({
                         }}
                     />
                     <Checkbox
-                        label="Insurance"
+                        label={tr.order.insurance}
                         checked={dataOrder.do_insurance ?? false}
                         onChange={() => {
                             setDataOrder({
@@ -352,7 +352,7 @@ export default function Form({
                         }}
                     />
                     <Checkbox
-                        label="Free shipping"
+                        label={tr.order.free_shipping}
                         checked={dataOrder.freeshipping ?? false}
                         onChange={() => {
                             setDataOrder({
@@ -362,7 +362,7 @@ export default function Form({
                         }}
                     />
                     <Checkbox
-                        label="Exchange"
+                        label={tr.order.exchange}
                         checked={dataOrder.has_exchange ?? false}
                         onChange={(_) => {
                             setDataOrder({
@@ -375,7 +375,7 @@ export default function Form({
             </Card>}
             <Card title={tr.order.note}>
                 <Textarea
-                    label={tr.order.note}
+                    label={tr.order.exp_note}
                     value={dataOrder.nots}
                     onChange={(e) => {
                         setDataOrder({

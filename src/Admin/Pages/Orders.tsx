@@ -3,7 +3,7 @@ import { useGetAllOrdersService, useGetWilayasService } from "../../Api/Services
 import OrdersTable from "../components/OrdersTable"
 import { useEffect, useMemo, useState } from "react"
 import { LuPlus } from "react-icons/lu"
-import { Link, useParams } from "react-router-dom"
+import { Link, useParams, useSearchParams } from "react-router-dom"
 // import orderCols from "../Const/order-cols"
 import { MdCheck, MdSearch } from "react-icons/md"
 import DatePicker from "../components/Datepicker"
@@ -15,6 +15,7 @@ import { RootState } from "../../Store"
 import { GlobalS } from "../../Store/globalSlice"
 import useLang from "../../hoock/useLang"
 import OrderCols from "../Const/order-cols"
+import useGlobal from "../../hoock/useGlobal"
 
 function getState({
   type,
@@ -33,18 +34,30 @@ function getState({
     default: return defaultValue
   }
 }
+type QueryParams = {
+  dateStart?: string;
+  dateEnd?: string;
+};
 export default function Orders({ type = "default" }: { type?: OrderProsType }) {
   const failed = type == "failed"
-  const global = useSelector<RootState>((state) => state.global) as GlobalS
+  const global = useGlobal("&")
   const user = useSelector<RootState>((state) => state.user) as UserAuth
   const paramSlugState = useParams()
   const { tr, t: t1, lang } = useLang()
   const t = tr.order
+
+  const [searchParams] = useSearchParams();
+
+  const params: QueryParams = {
+    dateStart: searchParams.get('dateStart') || undefined,
+    dateEnd: searchParams.get('dateEnd') || undefined,
+  };
+ 
   const [option, setOptions] = useState<OrderOptionRequest>({
     limit: 10,
     page: 1,
-    startDate: moment().add(-15, "day").startOf("day").format(),
-    endDate: moment().endOf("day").format(),
+    startDate: params.dateStart?moment(new Date(params.dateStart)).format():moment().add(-15, "day").startOf("day").format(),
+    endDate:params.dateEnd?moment(new Date(params.dateEnd)).format(): moment().endOf("day").format(),
     duplicate: false,
     contact_phone: "",
     id: "0",
@@ -57,7 +70,7 @@ export default function Orders({ type = "default" }: { type?: OrderProsType }) {
 
   const [param, setParam] = useState(`?limit=${option.limit}&page=${option.page}`)
 
-  const { data, isLoading, mutate } = useGetAllOrdersService(param, (global?.platform) ? "&" + global?.platform : undefined)
+  const { data, isLoading, mutate } = useGetAllOrdersService(param, global)
  
 const deleteCols=["associate"]
   const [showCols, setShowCols] = useState(OrderCols(t1,deleteCols))
@@ -187,7 +200,7 @@ const deleteCols=["associate"]
         }
         {type != "default" && selectSubState}
         <div className="grow"></div>
-        <Searche {...{ option, setOptions }} db={(global?.platform) ? "&" + global?.platform : undefined} />
+        <Searche {...{ option, setOptions }} db={global} />
         <Popover  >
           <Popover.Trigger>
             <Button variant="flat" className="dark:hover:bg-muted/75 max-sm:hidden">

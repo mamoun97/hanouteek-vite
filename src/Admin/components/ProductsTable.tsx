@@ -110,7 +110,7 @@ const getColumns = (
             show: false,
             render: (price: string) => (
                 <div className="flex items-center">
-                    <span className="font-bold text-green-500">{price} <small>DZD</small></span>
+                    <span className="font-bold text-green-500 whitespace-nowrap">{price} <small>DZD</small></span>
                 </div>
             ),
         },
@@ -134,7 +134,7 @@ const getColumns = (
                 <div className="flex items-center">
                     <Button variant="outline" className="gap-2 ">
                         {row.attribute?.options?.length}
-                        variant
+                        <span>variant</span>
                         <IoMdEye className="text-lg" />
                     </Button>
                 </div>
@@ -173,10 +173,6 @@ const getColumns = (
                             </ActionIcon>
                         </Link>
                     </Tooltip>
-
-
-
-
                 </div>
             ),
         }

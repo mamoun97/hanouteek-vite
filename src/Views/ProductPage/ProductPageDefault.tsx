@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../Store'
-import {  addToCart as addToCartS, addToFavorite, Cart, openCart, removeFromFavorite, updateCart } from '../../Store/cartSlice'
+import { addToCart as addToCartS, addToFavorite, Cart, openCart, removeFromFavorite, updateCart } from '../../Store/cartSlice'
 import { useTranslation } from 'react-i18next'
 import ApiConfig from '../../Api/ApiConfig'
 import { addToCartEvent, viewContentEvent } from '../../Api/PixelService'
@@ -23,12 +23,14 @@ import Checkout from '../../Pages/Checkout'
 import RelatedProducts from '../RelatedProducts'
 import OfferModal from '../OfferModal'
 import Button from '../Flowbit/Button'
+import useLang from '../../hoock/useLang'
 const NULL_STOCK = -9999999
 
 export function ProductPageDefault({ data, isUpdate = false, index = -1, isSmall = false, onClose }:
     { data: ProductCart, isUpdate?: boolean, index?: number, isSmall?: boolean, onClose?: any }) {
     const cart = useSelector<RootState>(state => state.cart) as Cart
-    const { t } = useTranslation()
+    // const { t } = useTranslation()
+    const { t } = useLang()
     const client = useSelector<RootState>((state) => state.client) as UserAuth
     const hidePrice = ApiConfig.isJoomla ? (client?.id ? false : true) : false
     const dispatch: AppDispatch = useDispatch();
@@ -48,7 +50,7 @@ export function ProductPageDefault({ data, isUpdate = false, index = -1, isSmall
         // setOpenOfferModal(true)
         // return
         if (!isValid()) {
-            alert(t("please_select_att"))
+            alert(t.please_select_att)
             return
         }
         if (onClose) {
@@ -132,6 +134,10 @@ export function ProductPageDefault({ data, isUpdate = false, index = -1, isSmall
     ) || (prod.checkData.size?.stock && prod.checkData.size.stock > 0 ||
         prod.checkData.color?.stock && prod.checkData.color.stock > 0)
 
+
+    // const isJoomla = client?.id &&ApiConfig.isJoomla?true:false
+    // const isJoomla = ApiConfig.isJoomla?(true):false
+    // const hidePrice=ApiConfig.isJoomla?(!!client?.id):false
     return <Container className={"mt-5 "}>
         <div className={"grid grid-cols-2 gap-4 max-md:grid-cols-1 "}>
             <div className="col-span-1">
@@ -203,9 +209,12 @@ export function ProductPageDefault({ data, isUpdate = false, index = -1, isSmall
                 {
                     stock != NULL_STOCK && stock > 0 ? <div className="flex justify-center bg-green-100 p-3 my-2">
                         {stock <= 0 ? <>
-                            <span className='text-red-800'>{t("no_dispo")}</span>
+                            <span className='text-red-800'>{t.no_dispo}</span>
+                        </> : hidePrice ? <>
+
+                            {t.dispo} 
                         </> : <>
-                            {t("qte_instock")} <div className="me-2"></div> <strong >{stock}</strong>
+                            {t.qte_instock} <div className="me-2"></div> <strong >{stock}</strong>
                         </>}
                     </div> : ""
                 }
@@ -229,29 +238,29 @@ export function ProductPageDefault({ data, isUpdate = false, index = -1, isSmall
                     </IconButton>
                     <div className="me-2"></div>
                     <h2 className="font-medium text-sm">{
-                        !cart.faverites.find(el => el.id == data.id) ? t("add_faves") : t("remove_faver")
+                        !cart.faverites.find(el => el.id == data.id) ? t.add_faves : t.remove_faver
                     }</h2>
                 </div>
                 <div className="mt-2">
-                    <h2 className="font-medium italic flex items-center gap-2">
-                        {t("qte")}
+                    {!ApiConfig.isJoomla && <h2 className="font-medium italic flex items-center gap-2">
+                        {t.qte}
                         <div className="flex items-center">
                             (
                             {
                                 isDispo ? <>
-                                    <p className="min-w-[80px] ">{t("dispo")}</p>
+                                    <p className="min-w-[80px] ">{t.dispo}</p>
 
                                 </> : <>
-                                    <p className="min-w-[80px] text-red-600">{t("no_dispo")}</p>
+                                    <p className="min-w-[80px] text-red-600">{t.no_dispo}</p>
                                 </>
                             }
                             )
                         </div>
-                    </h2>
+                    </h2>}
                     <div className="flex items-center mt-2 gap-2" ref={refF}>
 
                         {
-                            ApiConfig.isJoomla ? <>
+                            hidePrice ? <>
 
                                 <Link to={"https://m.me/133121346554730"} className="grow" target="_blank">
                                     <Button
@@ -261,7 +270,7 @@ export function ProductPageDefault({ data, isUpdate = false, index = -1, isSmall
                                         className={"w-full text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100   font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 grow  flex items-center justify-center " + (isDispo ? "animate-vibre" : "")}>
                                         <BsMessenger className="text-2xl" />
                                         <span className="me-2"></span>
-                                        {t("contact_us_buy")}
+                                        {t.contact_us_buy}
                                     </Button>
                                 </Link>
                             </> : <>
@@ -301,7 +310,7 @@ export function ProductPageDefault({ data, isUpdate = false, index = -1, isSmall
 
                                         <Button
                                             onClick={() => {
-                                                if (ApiConfig.isJoomla) {
+                                                if (hidePrice) {
                                                     setOpenContact(true)
                                                     return
                                                 }
@@ -310,11 +319,11 @@ export function ProductPageDefault({ data, isUpdate = false, index = -1, isSmall
                                             className={"text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100   font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 grow  flex items-center justify-center"}>
                                             <FiShoppingCart className="text-xl" />
                                             <div className="me-2"></div>
-                                            {t("edit_cart")}
+                                            {t.edit_cart}
                                         </Button> :
                                         <Button
                                             onClick={() => {
-                                                if (ApiConfig.isJoomla) {
+                                                if (hidePrice) {
                                                     setOpenContact(true)
                                                     return
                                                 }
@@ -323,7 +332,7 @@ export function ProductPageDefault({ data, isUpdate = false, index = -1, isSmall
                                             className={"text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100   font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 grow  flex items-center justify-center"}>
                                             <FiShoppingCart className="text-xl" />
                                             <div className="me-2"></div>
-                                            {t("add_to_cart")}
+                                            {t.add_to_cart}
                                         </Button>
                                 }
                             </>
@@ -341,7 +350,7 @@ export function ProductPageDefault({ data, isUpdate = false, index = -1, isSmall
                     </Button>
                 </div>} */}
                 <div className="mt-2">
-                    <h2 className="font-medium italic">{t("desc")}</h2>
+                    <h2 className="font-medium italic">{t.desc}</h2>
                     <div className="overflow-auto font-normal mt-2">
                         <div dangerouslySetInnerHTML={{ __html: data.description }} ></div>
                     </div>
@@ -355,7 +364,7 @@ export function ProductPageDefault({ data, isUpdate = false, index = -1, isSmall
         <div ref={checkoutRef}></div>
         {isCheck ? <Checkout /> : ""}
         {!isSmall && <div className="relative z-0">
-            <RelatedProducts title={t("related_prod")} />
+            <RelatedProducts title={t.related_prod} />
         </div>}
         {
             openOfferModal && <OfferModal {...{
@@ -376,7 +385,7 @@ export function ProductPageDefault({ data, isUpdate = false, index = -1, isSmall
                 className={" w-full max-w-sm animate-vibre border border-white"}>
                 <FiShoppingCart className="text-xl" />
                 <div className="me-2"></div>
-                {t("add_to_cart")}
+                {t.add_to_cart}
             </ButtonR>
 
         </div>

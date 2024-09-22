@@ -84,7 +84,7 @@ export default function Autres({
                 type='number'
                 min={0}
                 value={data[el.key]}
-                onChange={(e) => setData({ ...data, [el.key]: e.target.value })}
+                onChange={(e) => setData({ ...data, [el.key]: Number(e.target.value) })}
                 className='col-span-1'
                 placeholder="."
               />

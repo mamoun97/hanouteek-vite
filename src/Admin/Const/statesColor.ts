@@ -36,6 +36,7 @@ export default {
   "delivered": "#F831F3", // Green
   "returns": "#C20E4D", // LimeGreen
   "canceled": "#DC143C", // Crimson
+  "confirmed_otp":"#008800"
 };
 export const subStatesColor={
   "":"#000",

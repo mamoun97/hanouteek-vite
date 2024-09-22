@@ -31,6 +31,8 @@ import { ThemeSetting } from "../Types/ThemeSetting";
 import OtpModal from "../Views/OtpModal";
 import alertError from "../hoock/alertError";
 import Gift from "../Views/Gift";
+import useLang from "../hoock/useLang";
+import ApiConfig from "../Api/ApiConfig";
 
 
 type ModeLivraisan = {
@@ -68,7 +70,9 @@ export default function Checkout() {
 }
 
 function CheckoutDefault() {
-    const { t, i18n } = useTranslation()
+    const { t: llll, i18n } = useTranslation()
+    const { t } = useLang()
+    
     const [modalState, setModalState] = useState<any>(null);
     const [otp, setOtp] = useState<OtpModalOpen | null>();
     const [orderResponse, setOrderResponse] = useState<CreateOrderResponse | null>(null);
@@ -168,7 +172,7 @@ function CheckoutDefault() {
         onSubmit: (values: OrderForm) => {
             if (values) { }
             if (!isValid()) {
-                setErrors({ ...errors, deliveryRequire: t("chose_del_mod") })
+                setErrors({ ...errors, deliveryRequire: t.chose_del_mod })
                 return
             }
             setLoading(true)
@@ -202,12 +206,12 @@ function CheckoutDefault() {
 
         },
         validationSchema: validationS({
-            toshort: t("toshort"),
-            commune_op: t("commune_op"),
-            fullname_op: t("fullname_op"),
-            invalid_phone: t("invalid_phone"),
-            phone_op: t("phone_op"),
-            wilaya_op: t("wilaya_op")
+            toshort: t.toshort,
+            commune_op: t.commune_op,
+            fullname_op: t.fullname_op,
+            invalid_phone: t.invalid_phone,
+            phone_op: t.phone_op,
+            wilaya_op: t.wilaya_op
         }),
     });
 
@@ -216,13 +220,13 @@ function CheckoutDefault() {
     const gestionErrors = () => {
         let y: HTMLDivElement | null
         let k = modeDelivery.length ? !!modeDelivery.find(el => el.check) : true
-        y = (!!formik.errors.fullName && !!ref.fullName.current) && ref.fullName.current ||
-            (!!formik.errors.contact_phone && !!ref.contact_phone.current) && ref.contact_phone.current ||
+        y = (!!formik.errors.contact_phone && !!ref.contact_phone.current) && ref.contact_phone.current ||
+            (!!formik.errors.fullName && !!ref.fullName.current) && ref.fullName.current ||
             (!!formik.errors.to_wilaya_name && !!ref.to_wilaya_name.current) && ref.to_wilaya_name.current ||
             (!!formik.errors.to_commune_name && !!ref.to_commune_name.current) && ref.to_commune_name.current ||
             (!k) && ref.modeDelivery.current || null
         if (y == ref.modeDelivery.current && !k) {
-            setErrors({ ...errors, deliveryRequire: t("chose_del_mod") })
+            setErrors({ ...errors, deliveryRequire: t.chose_del_mod })
         }
         if (y) {
 
@@ -264,34 +268,34 @@ function CheckoutDefault() {
             let p = cartHasDelivery();
             if (priceDelivery?.priceDeliveryHome == 350) {
                 ml.push({
-                    title: t("del_waslet"),
+                    title: t.del_waslet,
                     check: true,
                     isWaslet: true,
                     cost: priceDelivery.priceDeliveryHome
                 })
             } else if (p) {
                 if (p.deliveryCostToTheOffice != null) {
-                    let m = p.deliveryCostToTheOffice != 0 ? "" : t("free");
+                    let m = p.deliveryCostToTheOffice != 0 ? "" : t.free;
                     ml.push({
-                        title: t("delivery") + " " + m + " " + t("to_yalidine"),
+                        title: t.delivery + " " + m + " " + (ApiConfig.isJoomla? t.to_kazi_tour: t.to_yalidine),
                         check: false,
                         cost: p.deliveryCostToTheOffice,
-                        value:priceDelivery
+                        value: priceDelivery
                     })
 
 
                 }
-                if (p.deliveryCostToTheHome != null)
+                if (p.deliveryCostToTheHome != null&&!ApiConfig.isJoomla)
                     ml.push({
-                        title: t("home_delivery"),
+                        title: t.home_delivery,
                         check: false,
                         cost: p.deliveryCostToTheHome
                     })
             } else {
                 if (priceDelivery.priceDeliveryOffice != null) {
-                    let m = priceDelivery.priceDeliveryOffice != 0 ? "" : t("free");
+                    let m = priceDelivery.priceDeliveryOffice != 0 ? "" : t.free;
                     ml.push({
-                        title: t("delivery") + " " + m + " " + t("to_yalidine"),
+                        title: t.delivery + " " + m + " " + (ApiConfig.isJoomla? t.to_kazi_tour: t.to_yalidine),
                         check: false,
                         cost: priceDelivery.priceDeliveryOffice,
                         value: priceDelivery
@@ -299,15 +303,15 @@ function CheckoutDefault() {
 
 
                 }
-                if (priceDelivery.priceDeliveryHome != null)
+                if (priceDelivery.priceDeliveryHome != null&&!ApiConfig.isJoomla)
                     ml.push({
-                        title: t("home_delivery"),
+                        title: t.home_delivery,
                         check: false,
                         cost: priceDelivery.priceDeliveryHome
                     })
 
                 if (ml.length == 0) {
-                    setErrors({ ...errors, deliveryError: t("not_delivery") })
+                    setErrors({ ...errors, deliveryError: t.not_delivery })
                     // setYalidinCenters(null)
                 }
             }
@@ -440,37 +444,37 @@ function CheckoutDefault() {
                                 <div className="max-w-lg w-full pt-12 relative pb-12">
 
                                     <div className=" sticky top-[60px] ">
-                                        <h1 className="text-center text-xl font-bold mb-6">{t("your_info")}</h1>
+                                        <h1 className="text-center text-xl font-bold mb-6">{t.your_info}</h1>
 
                                         <div ref={ref.contact_phone}></div>
                                         <TextEditor
                                             id="contact_phone"
-                                            label={t("phone")}
+                                            label={t.phone}
                                             type="tel"
                                             inputClassName=""
-                                            placeholder={t("phone")}
+                                            placeholder={t.phone}
                                             {...register("contact_phone")}
                                         />
 
                                         <div ref={ref.fullName}></div>
                                         <TextEditor
                                             id="fullName"
-                                            label={t("fullname")}
-                                            placeholder={t("fullname")}
+                                            label={t.fullname}
+                                            placeholder={t.fullname}
                                             {...register("fullName")}
                                         />
 
                                         <div ref={ref.to_wilaya_name}></div>
                                         <SelectEditor
                                             id="to_wilaya_name"
-                                            label={t("wilaya")}
-                                            placeholder={t("wilaya")}
+                                            label={t.wilaya}
+                                            placeholder={t.wilaya}
                                             {...register("to_wilaya_name")}
                                         >
                                             {
                                                 lodingWilaya ?
                                                     <option className="!text-gray-700" value={""}>... Loading </option>
-                                                    : <option className="!text-gray-700" value={""}>- {t("wilaya")} - </option>
+                                                    : <option className="!text-gray-700" value={""}>- {t.wilaya} - </option>
                                             }
                                             {
                                                 wilayas?.data.map((el, key) => {
@@ -482,14 +486,14 @@ function CheckoutDefault() {
                                         <div ref={ref.to_commune_name}></div>
                                         <SelectEditor
                                             id="to_commune_name"
-                                            label={t("commune")}
-                                            placeholder={t("commune")}
+                                            label={t.commune}
+                                            placeholder={t.commune}
                                             {...register("to_commune_name")}
                                         >
                                             {
                                                 communeLoading ?
                                                     <option className="!text-gray-700" value={""}>... Loading </option>
-                                                    : <option className="!text-gray-700" value={""}>- {t("commune")} - </option>
+                                                    : <option className="!text-gray-700" value={""}>- {t.commune} - </option>
                                             }
                                             {
                                                 communes?.communes?.map((el, key) => {
@@ -500,16 +504,16 @@ function CheckoutDefault() {
                                         <div ref={ref.nots}></div>
                                         <Textarea
                                             id="nots"
-                                            label={t("notes")}
+                                            label={t.notes}
                                             {...register("nots")}
-                                            placeholder={t("notes") + "..."} />
+                                            placeholder={t.notes + "..."} />
 
                                     </div>
                                 </div>
                             </div>
                             <div className="col-span-4 max-md:col-span-5 max-sm:col-span-10 relative">
                                 <div className="bg-gray-50 rounded-md p-5 pt-12 sticky top-[60px] border border-gray-200">
-                                    <h1 className="text-center  text-xl font-bold mb-6">{t("your_command")}</h1>
+                                    <h1 className="text-center  text-xl font-bold mb-6">{t.your_command}</h1>
 
                                     <div className="flex flex-col gap-2">
                                         {
@@ -519,7 +523,7 @@ function CheckoutDefault() {
                                         }
                                     </div>
                                     <div className="flex mt-3 items-center">
-                                        <h1 className="text-lg font-medium">{t("sub_total")}</h1>
+                                        <h1 className="text-lg font-medium">{t.sub_total}</h1>
                                         <div className="grow"></div>
                                         <span className="font-semibold">{getSubTotal(cart).toFixed(2)} <Currency /></span>
                                     </div>
@@ -536,7 +540,7 @@ function CheckoutDefault() {
 
                                     </> : ""}
                                     <div className="flex font-medium items-center">
-                                        {t("delivery_mode")}
+                                        {t.delivery_mode}
                                     </div>
                                     <div>
                                         {
@@ -560,7 +564,7 @@ function CheckoutDefault() {
                                                                 </span>
                                                                 <div className="grow"></div>
                                                                 <div className="flex items-center whitespace-nowrap gap-2">
-                                                                    
+
                                                                     <img src={images.waslet} style={{ height: "42px" }} alt="" />
                                                                 </div>
                                                             </div>
@@ -590,7 +594,7 @@ function CheckoutDefault() {
                                     <div className="flex items-center">
                                         <Radio id="dd" checked={true} onChange={() => { }} />
                                         <div className="me-2"></div>
-                                        {t("cahch_ondeliv")}
+                                        {t.cahch_ondeliv}
                                     </div>
 
 
@@ -599,12 +603,12 @@ function CheckoutDefault() {
                                         suffix={
                                             <ButtonR onClick={() => {
                                                 apply()
-                                            }} isLoading={loadingPromo} className="ltr:rounded-l-none rtl:rounded-r-none" type="button">{t("apply")}</ButtonR>
+                                            }} isLoading={loadingPromo} className="ltr:rounded-l-none rtl:rounded-r-none" type="button">{t.apply}</ButtonR>
                                         }
                                         prefix={
-                                            <span className="text-gray-500 font-semibold text-[12px]">{t("promo_code")}</span>
+                                            <span className="text-gray-500 font-semibold text-[12px]">{t.promo_code}</span>
                                         }
-                                        placeholder={t("enter_promo")}
+                                        placeholder={t.enter_promo}
                                         inputClassName="pe-0"
                                         className="mt-4"
                                         onChange={(e) => {
@@ -615,7 +619,7 @@ function CheckoutDefault() {
                                     />
                                     {/* <div className="border border-dotted border-gray-300 mt-3 mb-2"></div> */}
                                     <div className="flex mt-3 items-center">
-                                        <h1 className="text-lg font-bold uppercase">{t("total")}</h1>
+                                        <h1 className="text-lg font-bold uppercase">{t.total}</h1>
                                         <div className="grow"></div>
                                         <span className="font-semibold text-2xl">{getTotal(cart).toFixed(2)} <small className="font-medium"><Currency /></small></span>
                                     </div>
@@ -626,7 +630,7 @@ function CheckoutDefault() {
                                         onClick={() => gestionErrors()}
                                         className={`customPrimary grow text-white mb-3 max-h-11 h-11 mt-3 uppercase w-full
                                 ${isValid() && !loading ? "animate-vibre" : ""}`}>
-                                        {t("confirm_order")}
+                                        {t.confirm_order}
                                     </Button>
                                 </div>
 
@@ -639,18 +643,18 @@ function CheckoutDefault() {
 
                 : <div className="flex flex-col items-center mt-6">
                     <BsPatchCheckFill className="text-primary w-12 h-12" />
-                    <h1 className="text-center text-xl font-bold mt-6">{t("order_valid")}</h1>
+                    <h1 className="text-center text-xl font-bold mt-6">{t.order_valid}</h1>
                     <p className="mt-2 max-w-2xl text-center">
-                        {t("order_valid_msg")}
+                        {t.order_valid_msg}
                     </p>
                     {orderResponse?.state == 1 && <>
                         <div className="flex my-4 w-full max-w-xl items-center gap-2">
                             <div className="border grow"></div>
-                            <span className="text-sm font-bold text-gray-400">{t("or")}</span>
+                            <span className="text-sm font-bold text-gray-400">{t.or}</span>
                             <div className="border grow"></div>
                         </div>
                         <p className="mb-4 max-w-2xl text-center">
-                            {t("msg_conf_n")}
+                            {t.msg_conf_n}
                         </p>
                         <ButtonR onClick={() => {
                             setOtp({
@@ -658,33 +662,33 @@ function CheckoutDefault() {
                                 phone: isCreated.contact_phone
                             })
                         }}>
-                            {t("msg_conf_n_btn")}
+                            {t.msg_conf_n_btn}
                         </ButtonR>
                     </>}
                     {
                         orderResponse?.state == 2 && <p className="mb-4 max-w-2xl text-center text-green-600">
-                            {t("otp_conf")}
+                            {t.otp_conf}
                         </p>
                     }
 
                     <div className="bg-[#F1F1F1] rounded-md p-5 w-full max-w-4xl mt-4 flex justify-center">
                         <div className="flex items-center justify-center flex-col">
-                            <span>{t("total")} :</span>
+                            <span>{t.total} :</span>
                             <strong>{isCreated.price_total?.toFixed(2)} <Currency /></strong>
                         </div>
                         <div className="me-3"></div>
                         <div className="flex items-center justify-center flex-col">
-                            <span>{t("payment_methode")} :</span>
-                            <strong>{t("cahch_ondeliv")}</strong>
+                            <span>{t.payment_methode} :</span>
+                            <strong>{t.cahch_ondeliv}</strong>
                         </div>
 
                     </div>
                     <div className="p-3 border border-gray-200 rounded-md w-full max-w-4xl mt-2">
-                        <h1 className="text-center font-semibold text-lg">{t("order_details")}</h1>
+                        <h1 className="text-center font-semibold text-lg">{t.order_details}</h1>
                         <div className="flex items-center ">
-                            <div>{t("product")}</div>
+                            <div>{t.product}</div>
                             <div className="grow"></div>
-                            <div>{t("price")}</div>
+                            <div>{t.price}</div>
                         </div>
                         <div className="border border-dashed border-gray-200 mt-2"></div>
                         {
@@ -707,18 +711,18 @@ function CheckoutDefault() {
                             <div className="font-semibold">{isCreated.price_items?.toFixed(2)} <Currency /></div>
                         </div>
                         <div className="flex items-center ">
-                            <div >{t("delivery_mode")}</div>
+                            <div >{t.delivery_mode}</div>
                             <div className="grow"></div>
                             <div className="font-semibold">{(isCreated.price_delivery).toFixed(2)} <Currency /></div>
                         </div>
                         <div className="flex items-center ">
-                            <div >{t("payment_methode")}</div>
+                            <div >{t.payment_methode}</div>
                             <div className="grow"></div>
-                            <div className="font-semibold">{t("cahch_ondeliv")}</div>
+                            <div className="font-semibold">{t.cahch_ondeliv}</div>
                         </div>
                         <div className="border border-dashed border-gray-200 mt-3"></div>
                         <div className="flex items-center mt-4 text-xl font-semibold">
-                            <div >{t("total")}</div>
+                            <div >{t.total}</div>
                             <div className="grow"></div>
                             <div className=" text-2xl font-bold">{isCreated.price_total?.toFixed(2)} <Currency /></div>
                         </div>
@@ -727,7 +731,7 @@ function CheckoutDefault() {
                         <Button
 
                             className={`!bg-primary grow text-white mb-3 max-h-11 h-11 mt-3`}>
-                            {t("return_tohome")}
+                            {t.return_tohome}
                         </Button>
                     </Link>
                 </div>}

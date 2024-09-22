@@ -92,6 +92,7 @@ type OrderFull = {
     price_promo: number,
     price_delivery: number,
     price_drop?:number,
+    auto_confirmed?:boolean,
     to_commune_name: string,
     tracking: string | null,
     platform: string | null,
@@ -184,6 +185,7 @@ type OrderState = (
     "Echange échoué" |
     "delivered" |
     "returns" |
+    "confirmed_otp"|
     "canceled");
 type StatesOrder = {
     id: number,

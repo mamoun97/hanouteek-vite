@@ -13,6 +13,8 @@ import { FiFilter } from "react-icons/fi";
 import useMediaQuery from "../hoock/useMediaQuery";
 import getFilter from "../utils/getFilter";
 import { IoIosArrowDown } from "react-icons/io";
+import ApiConfig from "../Api/ApiConfig";
+import images from "../assets";
 // import ProductView from "../Views/Resturant/ProductView";
 
 type Param = {
@@ -26,7 +28,7 @@ export default function Ctegories() {
     const p = useParams()
     const { t } = useTranslation();
     const [param, setParam] = useState<Param>({ id: null, idSub: null })
-    const refScroll=useRef<HTMLDivElement | null>(null)
+    const refScroll = useRef<HTMLDivElement | null>(null)
     const [options, setOptions] = useState<OptionsFilter>({
         limit: 15,
         page: 1,
@@ -54,9 +56,9 @@ export default function Ctegories() {
     }, [options])
 
     useEffect(() => {
-        if(refScroll.current)
+        if (refScroll.current)
             window.scroll({ top: refScroll.current.getBoundingClientRect().top + window.scrollY - 56, behavior: 'smooth' });
-    },[categs,options])
+    }, [categs, options])
 
     const filterView = useMemo(() => {
         return categs?.data ? <div className="bg-white rounded-md p-3 py-4 tracking-[1px]" key={"k" + param}>
@@ -78,7 +80,10 @@ export default function Ctegories() {
                             <Radio id="cc" checked={checked1} name={"categ" + param.id ?? "1"} />
 
                             <div className="me-2"></div>
-                            <span className="text-sm font-semibold group-hover:underline">{el.name}</span>
+                            {el.id==ApiConfig.categPrv?<img src={images.hanouteekPrivate} className="h-[26px] min-w-[90px] w-auto cursor-pointer" alt="" />:<span className="text-sm font-semibold group-hover:underline">
+                                {el.name}
+                                
+                                </span>}
 
                         </Link>
                         <div className="ps-2">
@@ -156,7 +161,7 @@ export default function Ctegories() {
                     } */}
                     <Accordion
                         key={"item.title"}
-                        defaultOpen={width>640}
+                        defaultOpen={width > 640}
                         className=" border   rounded-md"
                     >
                         <Accordion.Header className="bg-gray-100">
@@ -182,19 +187,28 @@ export default function Ctegories() {
                 <div className="col-span-3 max-md:col-span-1">
                     <div ref={refScroll}></div>
                     {loadingProds && Loading.categoriesProducts}
-                    
+
                     <div className="grid grid-cols-3 gap-3 max-md:grid-cols-2 ">
                         {
 
                             prods?.data.map((el, k) => {
                                 return <div className="col-span-1">
-                                    <ProductCard data={el} key={k} showFull={true} />
+                                    <ProductCard data={el} key={k} showFull={true} isPrivate={param.id==ApiConfig.categPrv} />
                                 </div>
                             })
                         }
                         {
-                            (prods?.data.length === 0 || error) && <div className="col-span-3 flex justify-center mt-20 max-md:col-span-2">
-                                <CartEmpty text={t("no_prods")} />
+                            (prods?.data.length === 0 || error) && <div className="col-span-full flex justify-center mt-20 max-md:col-span-2">
+
+                                {
+                                    ApiConfig.isHanouteek && ApiConfig.categPrv == param.id ? <CartEmpty text={""} >
+                                        <div className="flex justify-center items-center flex-col">
+                                            <h1 className="text-xl font-bold">{t("no_vent_prv")}</h1>
+                                            <p>{t("next_vent_prv")}</p>
+                                        </div>
+                                    </CartEmpty> : <CartEmpty text={t("no_prods")} />
+                                }
+
 
                             </div>
                         }

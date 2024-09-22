@@ -14,10 +14,12 @@ import alertError from '../../../hoock/alertError'
 import useGlobal from '../../../hoock/useGlobal'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
+import JoomlaApi from '../../../Api/JoomlaApi'
 const  initialErrors:ProductFormErrors = [
     false,true,false,false,true,true,true
 ]
-export default function FormProduct({ data, isAdd = false }: { data: ProductFull, isAdd?: boolean }) {
+export default function FormProduct({ data, isAdd = false ,isJoomla=false}: { data: ProductFull, isAdd?: boolean,isJoomla?:boolean }) {
+    console.log(data)
     const [loading, setLoading] = useState(false)
     const [dt, setData] = useState({
         ...data,
@@ -55,26 +57,50 @@ export default function FormProduct({ data, isAdd = false }: { data: ProductFull
     const save = () => {
         setLoading(true)
         let { category, ...p } = dt
-        if (!isAdd) {
-            ProductApi.updateProduct({ ...p, category: category.id }, global).then(res => {
-
-                setLoading(false)
-                toast.success("Ajoute success")
-                navigate("/products")
-            }).catch(err => {
-                alertError(err)
-                setLoading(false)
-            })
-        } else {
-            ProductApi.addProduct({ ...p, category: category.id }, global).then(res => {
-
-                setLoading(false)
-                toast.success("Modife success")
-                navigate("/products")
-            }).catch(err => {
-                alertError(err)
-                setLoading(false)
-            })
+        if(!isJoomla){
+            if (!isAdd) {
+                ProductApi.updateProduct({ ...p, category: category.id }, global).then(res => {
+    
+                    setLoading(false)
+                    toast.success("Ajoute success")
+                    navigate("/products")
+                }).catch(err => {
+                    alertError(err)
+                    setLoading(false)
+                })
+            } else {
+                ProductApi.addProduct({ ...p, category: category.id }, global).then(res => {
+    
+                    setLoading(false)
+                    toast.success("Modife success")
+                    navigate("/products")
+                }).catch(err => {
+                    alertError(err)
+                    setLoading(false)
+                })
+            }
+        }else{
+            if (!isAdd) {
+                JoomlaApi.updateProduct({ ...p, category: category.id }, global).then(_ => {
+    
+                    setLoading(false)
+                    toast.success("Ajoute success")
+                    navigate("/joomla-admin/products")
+                }).catch(err => {
+                    alertError(err)
+                    setLoading(false)
+                })
+            } else {
+                JoomlaApi.createProduct({ ...p, category: category.id }, global).then(_ => {
+    
+                    setLoading(false)
+                    toast.success("Modife success")
+                    navigate("/joomla-admin/products")
+                }).catch(err => {
+                    alertError(err)
+                    setLoading(false)
+                })
+            }
         }
     }
     useEffect(()=>{

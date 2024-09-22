@@ -47,6 +47,12 @@ function ProductPageRequest() {
         checkData: {
             color: null,
             size: null
+        },
+        attribute:product.attribute??{
+            id:0,
+            name:"",
+            options:[],
+            optionsName:""
         }
     }} /> : ""
 

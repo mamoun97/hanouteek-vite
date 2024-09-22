@@ -61,12 +61,20 @@ export const useGetPriceTotalService = (filter:string,db?:string) => {
     const data = useSWR("/tenant/order/associate/price-total"+filter+(db??ApiConfig.db), () => OrderApi.priceTotal(filter,db), options);
     return data
 }
+export const useGetPriceService = (filter:string,db?:string) => {
+    const data = useSWR("/tenant/order/associate/price"+filter+(db??ApiConfig.db), () => OrderApi.price(filter,db), options);
+    return data
+}
 
 export const useGetAllProductsByNameServiceAssociate = (name:string,db?:string) => {
     const data = useSWR<ProductsResponse>("prods?name="+name+db, () => ProductApi.getAllByNameAssociate(name,db), options);
     return data
 }
 export const useGetAllProductsByFilterService = (filter:string,db?:string) => {
+    const data = useSWR<ProductsResponse>("/tenant/product/all/filter="+filter+db, () => ProductApi.getAllByFilter(filter,db), options);
+    return data
+}
+export const useGetAllProductsByFilterJoomlaService = (filter:string,db?:string) => {
     const data = useSWR<ProductsResponse>("/tenant/product/all/filter="+filter+db, () => ProductApi.getAllByFilter(filter,db), options);
     return data
 }
@@ -109,6 +117,9 @@ export const useGetAllOrdersService = (params:string,db?:string) => {
     const data = useSWR<OrdersResponse>("orders/"+params+db, () => OrderApi.getAll(params,db), options);
     return data
 }
+
+
+
 //orderAbandoned service 
 export const useGetOrderAbandonedService = (params:string,db?:string) => {
     const data = useSWR("orderAbandoned/"+params+db, () => OrderApi.orderAbandoned(params,db), options);
@@ -155,3 +166,6 @@ export const useGetAllAssociateService=(filter:string,db?:string)=>{
     const data = useSWR("/tenant/associate/all"+filter+(db??ApiConfig.db), () => AssociateApi.getAll(filter), {...options,...{}});
     return data
 }
+
+
+///////////////// JJJJoooommmmllllllaaaaaa

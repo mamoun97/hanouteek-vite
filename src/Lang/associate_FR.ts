@@ -4,7 +4,8 @@ export default {
         "previous": "Précédent",
         "edit": "Modifier",
         "yes": "Oui",
-        "no": "Non"
+        "no": "Non",
+        "forget_password":"Mot de passe oublié ?"
     },
     "order": {
         "add_order": "Ajouter une commande",
@@ -70,6 +71,20 @@ export default {
         "duplicate": "Commande en double",
         "cancel_order_msg": "Voulez-vous vraiment annuler cette commande ?",
         "cancel_order": "Annuler la commande",
+        "promo_code": "Code Promo",
+        "apply": "Appliquer",
+        "edit_order": "Modifier la commande",
+        "shipping": "Livraison",
+        "vendu_depuis_mag": "Vendu depuis le magasin",
+        "insurance": "Assurance",
+        "free_shipping": "Livraison gratuite",
+        "exchange": "Échange",
+        "exp_note": "Merci d'écrire une note explicative",
+        "mode_conf": "Mode de Confirmation",
+        "conf_auto": "Je veux que RiseDrop confirme la commande",
+        "conf_not_auto": "J’ai déjà confirmé la commande avec le client(e)",
+        "price_conf": "Frais de confirmation",
+        "frais_70": "frais 70 DZD"
     },
     "drower": {
         "dashboard": "Tableau de bord",
@@ -80,7 +95,9 @@ export default {
         "return_manag": "Gestion des retours",
         "prods": "Produits",
         "users": "Utilisateurs",
-        "logout": "Déconnexion"
+        "logout": "Déconnexion",
+        "contact_supp": "Contact et support",
+        "faq": "FAQ"
     },
     "dashboard": {
         "all_orders": "Toutes les commandes",
@@ -144,6 +161,73 @@ export default {
         "Retourné au vendeur": "Retourné au vendeurr", "Echange échoué": "Echange échoué",
         "delivered": "Delivered", "payed": "Payed", "returns": "Returns", "canceled": "Canceled",
         "receivable": "À recevoir",
-        "soldFromTheStore": "Vendu en magasin"
+        "soldFromTheStore": "Vendu en magasin",
+        "confirmed_otp": "OTP confirmé"
+    },
+    faqs: {
+        items:[
+            {
+                question: "Quels sont les moyens de paiement ?",
+                response: "Nous acceptons plusieurs moyens de paiement, dont Flexy, CCP, Baridimob ou Paysera - Wise. Le choix dépend de la somme que vous avez."
+            },
+            {
+                question: "Y a-t-il des frais mensuels ?",
+                response: "Non, c'est gratuit."
+            },
+            {
+                question: "La livraison est-elle disponible sur toutes les wilayas ?",
+                response: "Oui, nous livrons dans 58 wilayas."
+            },
+            {
+                question: "Comment passer une commande sur le site et sur l’application ?",
+                response: ["Choisissez le produit et cliquez sur 'Plus (+)'",
+                    "Sélectionnez la couleur et la pointure.",
+                    `Cliquez sur "Ajouter une commande" et remplissez les informations de l’acheteur :
+                    - Prénom
+                    - Nom de famille
+                    - Adresse
+                    - Téléphone
+                    - Wilaya
+                    - Commune
+                    - Frais de livraison (À domicile ou Livraison au Bureau)
+                    - Votre prix de vente`,
+                    " Cliquez sur 'Ajouter'."]
+            },
+            {
+                question: "Existe-t-il une possibilité de demander un remboursement ?",
+                response: "Non, le client doit vérifier son colis avant de payer le livreur."
+            },
+            {
+                question: "Peut-on mettre le client en contact direct avec la société pour demander des informations sur un produit ?",
+                response: "Non, le vendeur doit fournir toutes les informations sur le produit. Pour d'autres questions, l'agent de messagerie répondra."
+            },
+            {
+                question: "Le client peut-il récupérer la commande lui-même ?",
+                response: "Non, nous faisons uniquement la livraison."
+            },
+            {
+                question: "Avez-vous une garantie sur les produits ?",
+                response: "Oui, nous offrons une garantie d’essai de 24 heures, ce qui signifie que le client peut faire une réclamation ou demander un échange dans les 24 heures suivant la réception de la commande, en cas de problème ou de défaut."
+            },
+            {
+                question: "Comment travailler avec Risedrop ?",
+                response: [
+                    "Recherchez les produits sur notre site.",
+                    "Comprenez le fonctionnement des produits en posant des questions via WhatsApp, Facebook ou par recherche personnelle.",
+                    "Téléchargez les photos et les informations des produits.",
+                    "Publiez et promouvez les produits sur les réseaux sociaux (Facebook, Instagram, etc.).",
+                    "Si un client souhaite acheter, expliquez-lui les détails du produit, le prix et les frais de livraison.",
+                    "Demandez les coordonnées du client pour passer la commande.",
+                    "Passez la commande depuis votre compte en saisissant les informations du client.",
+                    "La société confirmera la commande avec le client dans un délai de 48 heures.",
+                    "Si la commande apparaît comme annulée après 48 heures, renseignez-vous auprès d'un gérant.",
+                    "Une fois le produit livré, le bénéfice sera ajouté à votre compte."
+                ]
+            },
+            {
+                question: "Où publier ?",
+                response: "Vous êtes libre d'utiliser diverses méthodes de partage : Facebook, Instagram, Marketplace, groupes, etc. Vous pouvez également créer une page de vente tant qu'elle ne porte pas le nom officiel de notre page, RISEDROP, et vous pouvez faire de la publicité."
+            },
+        ]
     }
 }

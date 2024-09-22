@@ -140,6 +140,8 @@ export default {
           dark: "var(--secondary-color)",
           foreground: colors.white,
         },
+        rose:"#EB1199",
+        "rose-ligt":"#E059AD",
 
         /*
         * danger colors

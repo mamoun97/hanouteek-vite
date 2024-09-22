@@ -6,6 +6,7 @@ import { Loader } from "rizzui";
 import OrderApi from "../../Api/OrderApi";
 import { initialDataOrder } from "../Const/initialData";
 import useGlobal from "../../hoock/useGlobal";
+import useLang from "../../hoock/useLang";
 
 export default function AddOrder({ update = true }: { update?: boolean }) {
   const param = useParams()
@@ -28,11 +29,13 @@ export default function AddOrder({ update = true }: { update?: boolean }) {
   useEffect(() => {
     getData()
   }, [])
+  const {tr}=useLang()
+ 
     return (
     <div>
 
       {update ? <>
-        <h1 className="text-2xl font-semibold">Modifier la commande</h1>
+        <h1 className="text-2xl font-semibold">{tr.order.edit_order}</h1>
         {
           isLoading &&
           <div className="flex justify-center items-center h-24">
@@ -41,7 +44,7 @@ export default function AddOrder({ update = true }: { update?: boolean }) {
         }
         {data && <FormOrder data={data} />}
       </> : <>
-        <h1 className="text-2xl font-semibold">Ajouter une commande</h1>
+        <h1 className="text-2xl font-semibold">{tr.order.add_order}</h1>
         <FormOrder data={initialDataOrder} isAdd={true} />
       </>}
 

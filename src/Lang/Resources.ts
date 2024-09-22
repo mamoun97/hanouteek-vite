@@ -37,6 +37,7 @@ const Resources = {
             not_delivery: "Cette ville n'est pas livrable",
             home_delivery: "Livraison à Domicile",
             to_yalidine: "au ( Bureau Yalidine de votre Wilaya )",
+            to_kazi_tour: "au ( Bureau KAZITOUR de votre Wilaya )",
             fullname: "Nom & Prénom",
             phone: "Téléphone",
             wilaya: "Wilaya",
@@ -109,7 +110,7 @@ const Resources = {
             enter_promo: "Entrez le code promo",
             contact_us_buy: "Contactez-nous pour acheter",
             dispo: "Disponible",
-            our_shops: "Nos boutiques",
+            our_shops: "Nos entrepôts",
             product_exchange: "Échange  la demande",
             product_exchange_desc: "Votre satisfaction est au cœur de nos priorités. C'est pourquoi nous avons mis en place un service d'échange de produits simple et efficace. Si vous n'êtes pas entièrement satisfait de votre achat, vous pouvez facilement demander un échange. Notre service client est à votre disposition pour vous assister et assurer que votre demande soit traitée rapidement et sans tracas. Achetez en toute confiance, sachant que nous sommes là pour vous aider à chaque étape.",
             id: "ID",
@@ -124,9 +125,11 @@ const Resources = {
             form_note3: "Tout ce qui vous reste à faire ensuite est de réceptionner la nouvelle commande et de renvoyer le premier produit initiale avec le même livreur.",
             change_ur_order: "Modifier votre commande",
             send: "Envoyer",
-            upload_image:"Télécharger une image",
-            send_success:"Votre demande a été envoyée avec succès",
-            associate:associate_FR
+            upload_image: "Télécharger une image",
+            send_success: "Votre demande a été envoyée avec succès",
+            no_vent_prv: "Aucune vente privée pour le moment",
+            next_vent_prv: "Prochaine vente à 23H00",
+            associate: associate_FR
         }
     },
     "en": {
@@ -163,6 +166,7 @@ const Resources = {
             not_delivery: "This city is not deliverable",
             home_delivery: "Home Delivery",
             to_yalidine: "at (Yalidine Office in your Wilaya)",
+            to_kazi_tour: "at (KAZITOUR Office in your Wilaya)",
             fullname: "Full Name",
             phone: "Phone",
             wilaya: "Wilaya",
@@ -235,7 +239,7 @@ const Resources = {
             enter_promo: "Enter promo code",
             contact_us_buy: "Contact us to purchase",
             dispo: "Available",
-            our_shops: "Our Shops",
+            our_shops: "Our warehouses",
             product_exchange: "Order Exchange",
             product_exchange_desc: "Your satisfaction is at the heart of our priorities. That is why we have established a simple and effective product exchange service. If you are not completely satisfied with your purchase, you can easily request an exchange. Our customer service is at your disposal to assist you and ensure that your request is handled quickly and without hassle. Shop with confidence, knowing that we are here to help you every step of the way.",
             id: "Id",
@@ -250,9 +254,11 @@ const Resources = {
             form_note3: "All that remains for you to do then is to receive the new order and return the first initial product with the same delivery person.",
             change_ur_order: "Change your order",
             send: "Send",
-            upload_image:"Upload image",
-            send_success:"Your request has been sent successfully.",
-            associate:associate_EN
+            upload_image: "Upload image",
+            send_success: "Your request has been sent successfully.",
+            no_vent_prv: "No private sale at the moment",
+            next_vent_prv: "Next sale at 11:00 PM",
+            associate: associate_EN
         }
     },
     "ar": {
@@ -288,6 +294,7 @@ const Resources = {
             "not_delivery": "هذه المدينة غير قابلة للتسليم",
             "home_delivery": "توصيل للمنزل",
             "to_yalidine": "إلى (مكتب ياليدين في ولايتك)",
+            "to_kazi_tour": "إلى (مكتب كازيتور في ولايتك)",
             "fullname": "الاسم الكامل",
             "phone": "الهاتف",
             "wilaya": "الولاية",
@@ -360,7 +367,7 @@ const Resources = {
             enter_promo: "أدخل رمز الترويج",
             contact_us_buy: "اتصل بنا للشراء",
             dispo: "متوفر",
-            our_shops: "متاجرنا",
+            our_shops: "مستودعاتنا",
             product_exchange: "تبديل الطلب",
             product_exchange_desc: "رضاكم هو في صميم أولوياتنا. لهذا السبب أنشأنا خدمة تبادل المنتجات بسيطة وفعالة. إذا لم تكن راضيًا تمامًا عن عملية الشراء، يمكنك بسهولة طلب التبادل. خدمة العملاء لدينا تحت تصرفك لمساعدتك وضمان معالجة طلبك بسرعة وبدون متاعب. تسوق بثقة، مع العلم أننا هنا لمساعدتك في كل خطوة على الطريق.",
             id: "المعرف",
@@ -375,9 +382,11 @@ const Resources = {
             form_note3: "كل ما عليك فعله بعد ذلك هو استلام الطلبية الجديدة وإرجاع المنتج الأول.",
             change_ur_order: "تغيير طلبك",
             send: "ارسال",
-            upload_image:"رفع صورة",
-            send_success:"تم ارسال طلبك بنجاح",
-            associate:associate_AR
+            upload_image: "رفع صورة",
+            send_success: "تم ارسال طلبك بنجاح",
+            no_vent_prv: "لا توجد بيع خاص في الوقت الحالي",
+            next_vent_prv: "البيع القادم في الساعة 11:00 مساءً",
+            associate: associate_AR
         }
     }
 }

@@ -33,7 +33,8 @@ export const states: StateItem[] = [
     { label: "Delivered", value: "delivered", description: "" },
     { label: "Payed", value: "payed", description: "" },
     { label: "Returns", value: "returns", description: "" },
-    { label: "Canceled", value: "canceled", description: "" }
+    { label: "Canceled", value: "canceled", description: "" },
+    { label: "Confirmed Otp", value: "confirmed_otp", description: "" }
 ];
 export const associatStates: StateItem[] = [
     { label: "Pending", value: "pending", description: "" },

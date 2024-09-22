@@ -6,7 +6,6 @@ import React, { useEffect, useState } from "react";
 import MenuAnimation from "../MenuAnimation";
 import IconButton from "../TailwindComponent/IconButton";
 import { IoClose } from "react-icons/io5";
-
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../Store";
 import { Cart, openCart } from "../../Store/cartSlice";
@@ -15,14 +14,19 @@ import { ThemeSetting } from "../../Types/ThemeSetting";
 import ApiConfig from "../../Api/ApiConfig";
 import { useTranslation } from "react-i18next";
 import Currency from "../../Constants/Currency";
-import images from "../../assets";
-import { Classes } from "../../Constants";
 import NavbarResturant from "./indexResturant";
 import LoginButton from "./LoginButton";
+import LangButton from "../../Admin/components/LangButton";
+import images from "../../assets";
 
 // import { useSelector } from "react-redux";
 // import { ThemeSetting } from "../../Types/ThemeSetting";
 
+type LinkOp = {
+    text: string,
+    src: string,
+    image?: string
+}
 export default function Navbar() {
     const theme = useSelector<ThemeSetting>(state => state.theme) as ThemeSetting
     const location = useLocation()
@@ -51,10 +55,16 @@ function NavbarDefault() {
         //     text: t("contact"),
         //     src: "#"
         // },
+        ...ApiConfig.categPrv&&ApiConfig.isHanouteek?[{
+            text: 'Hanouteek Private',
+            src: "/private-category/"+ApiConfig.categPrv,
+            image: images.hanouteekPrivate
+        }]:[],
         {
             text: t("tracking_title"),
             src: "/tracking"
         },
+
         // {
         //     text: t("product_exchange"),
         //     src: "/order-exchange"
@@ -85,10 +95,7 @@ function NavbarDefault() {
             setFixed(window.scrollY > 40)
         })
     }, [])
-    const langsicon = (l: any) =>
-        l == "fr" && images.img_fr ||
-        l == "en" && images.img_en ||
-        l == "dz" && images.img_dz || images.img_dz
+
 
     const clr = i18n.language != "ar" ? "right-0 translate-x-1/4" : "left-0 -translate-x-1/4"
     return (<>
@@ -98,19 +105,8 @@ function NavbarDefault() {
             }}>
 
                 <div className="flex items-center">
-                    <img src={langsicon(i18n?.language ?? images.img_dz)} alt="" className="h-4 max-h-4 min-h-[16px]" />
-                    <select className={`${Classes.input} h-12 group
-                    min-w-[100px] !border-transparent outline-none !shadow-none p-1 focus:ring-0
-                        `}
-                        value={i18n.language}
-                        onChange={(e) => {
-                            i18n.changeLanguage(e.target.value)
-                        }}
-                    >
-                        <option value="ar">العربية</option>
-                        <option value="fr">Français</option>
-                        <option value="en">English</option>
-                    </select>
+                    {/* <img src={langsicon(i18n?.language ?? images.img_dz)} alt="" className="h-4 max-h-4 min-h-[16px]" /> */}
+                    <LangButton />
 
 
                 </div>
@@ -163,7 +159,7 @@ function NavbarDefault() {
                             <MdOutlineFavoriteBorder className="text-lg" />
                         </IconButton>
                     }
-                    {ApiConfig.isJoomla&&<LoginButton/>}
+                    {ApiConfig.isJoomla && <LoginButton />}
                     <MenuMobile links={links} />
                 </Container>
             </div>
@@ -176,7 +172,7 @@ function NavbarDefault() {
     )
 }
 function MenuDesktop({ links, className = "" }: {
-    links: Array<any>, className?: string
+    links: LinkOp[], className?: string
 }) {
 
 
@@ -184,8 +180,18 @@ function MenuDesktop({ links, className = "" }: {
         {
             links?.map((el, k) => {
                 return <React.Fragment key={k} >
+
                     <LinkSS to={el.src} className="max-[940px]:text-sm">
-                        {el.text}
+                        {
+                            el.image ? <img src={el.image} className="h-[26px] min-w-[90px] w-auto cursor-pointer" alt="" /> : el.text
+                        }
+                        {/* {
+                             el.image?<div className="text-orange-500 font-bold relative">
+                                Hanouteek
+                                <span className="absolute top-full right-0"></span>
+                             </div>:el.text
+                        } */}
+
                     </LinkSS>
                     {k < links.length - 1 && <div className="me-4"></div>}
                 </React.Fragment>
@@ -216,7 +222,10 @@ function MenuMobile({ links }: {
                     links?.map((el, k) => {
                         return <React.Fragment key={k}>
                             <LinkSS to={el.src} className="py-3 " onClick={() => setOpen(!open)}>
-                                {el.text}
+                                {/* {el.text} */}
+                                {
+                            el.image ? <img src={el.image} className="h-[26px] min-w-[80px] w-auto cursor-pointer" alt="" /> : el.text
+                        }
                             </LinkSS>
                             {k < links.length - 1 && <div className=""></div>}
                         </React.Fragment>
@@ -231,7 +240,7 @@ function LinkSS({ to, children, onClick = () => { }, className = "" }: { to: str
 
     const location = useLocation()
     const active = location.pathname == "/" ? to == "/" : (to != "/" ? location.pathname.includes(to) : false);
-    return <Link onClick={onClick} className={`text-base h-full ${ApiConfig.isJoomla?"":"uppercase"} flex items-center relative 
+    return <Link onClick={onClick} className={`text-base h-full ${ApiConfig.isJoomla ? "" : "uppercase"} flex items-center relative 
     font-medium group whitespace-nowrap
     ${className} `}
         to={to}>

@@ -511,7 +511,7 @@ export interface Theme {
     updated_at:          Date;
     CheckoutSettings:    CheckoutSettings;
     headerFooterSetting: HeaderFooterSetting;
-    generalSetting:      GeneralSetting;
+    generalSetting:      GeneralSetting|null;
     ProductSetting:      ProductSetting;
     HomePage:            HomePage;
 }
@@ -721,12 +721,12 @@ export interface CartClass {
 export interface GeneralSetting {
     id:                     number;
     storeName:              string;
-    storeTitle:             null;
-    storeEmail:             null;
+    storeTitle:             string|null;
+    storeEmail:             string|null;
     storeDescription:       null;
     storeCurrency:          string;
     storeSymbol:            null;
-    contact_phone:          null;
+    contact_phone:          string|null;
     maxCheckoutAmount:      null;
     maxCheckoutQuantity:    null;
     orderPrefix:            null;
@@ -734,10 +734,10 @@ export interface GeneralSetting {
     orderVat:               null;
     orderTimeZone:          null;
     customRobotsTxtContent: null;
-    facebookUrl:            null;
-    twitterUrl:             null;
-    Instagram_url:          null;
-    TiktokUrl:              null;
+    facebookUrl:            string|null;
+    twitterUrl:             string|null;
+    Instagram_url:          string|null;
+    TiktokUrl:              string|null;
 }
 
 export interface HeaderFooterSetting {

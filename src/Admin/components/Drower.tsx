@@ -2,7 +2,7 @@
 import { LuLogOut, LuUsers } from "react-icons/lu";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { BsBoxFill } from "react-icons/bs";
-import { IoBarChartSharp } from "react-icons/io5";
+import { IoBarChartSharp, IoShareSocial } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../Store";
 import { changeUser } from "../../Store/authSlice";
@@ -13,6 +13,7 @@ import { FaList } from "react-icons/fa";
 import { HiPhoneIncoming } from "react-icons/hi";
 import { PiKeyReturnFill } from "react-icons/pi";
 import useLang from "../../hoock/useLang";
+import { RiQuestionnaireFill } from "react-icons/ri";
 
 // const items = [
 //     {
@@ -119,6 +120,20 @@ const items = () => {
             text: tr.drower.users,
             role: ["associate_admin"],
             icon: LuUsers
+        },
+        {
+            link: "/contact-and-support",
+            text: tr.drower.contact_supp,
+            role: ["vendor"],
+            icon: IoShareSocial
+
+        },
+        {
+            link: "/faq",
+            text: tr.drower.faq,
+            role: ["vendor"],
+            icon: RiQuestionnaireFill
+
         },
 
     ]

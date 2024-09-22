@@ -17,8 +17,8 @@ export default function Home() {
   // return <Template2/>
   // return <Template1/>
   // return <HomeJoomlaOld/>
-  // if (ApiConfig.isJoomla/*||theme.theme.templateType=="joomla"*/)
-  //   return <HomeJoomla />
+  if (ApiConfig.isJoomla/*||theme.theme.templateType=="joomla"*/)
+    return <HomeJoomla />
   if (ApiConfig.isHanouteek)
     return <Container>
       <HomeHanouteek />

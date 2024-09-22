@@ -28,6 +28,11 @@ const priceTotal = async (filter: string, db?: string): Promise<number> => {
     const { data } = await req.httpAuth(user?.token ?? "").get("/tenant/order/associate/price-total" + filter + (db ?? ApiConfig.db));
     return data
 }
+const price = async (filter: string, db?: string): Promise<number> => {
+   
+    const { data } = await req.httpAuth("").get("/tenant/order/associate/price" + filter + (db ?? ApiConfig.db));
+    return data
+}
 const statistics = async (filter: string, db?: string): Promise<StatisticOrder[]> => {
     const user: UserAuth | null = loadData("user")
     const { data } = await req.httpAuth(user?.token ?? "").get("/tenant/statistics/days" + filter + (db ?? ApiConfig.db));
@@ -101,7 +106,7 @@ const OrderApi = {
     updateOrder, tracking,
     confirmOtp, createOrder,
     sendOtp, createOrderPos,
-    priceTotal, exchange,
+    priceTotal,price, exchange,
     createOrderAssociate,
     orderAbandoned,
     orderAbandonedEdit,

@@ -1,10 +1,11 @@
 export default {
-    global:{
-        next:"Next",
-        previous:"Previous",
-        edit:"Edit",
-        yes:"Yes",
-        no:"No",
+    global: {
+        next: "Next",
+        previous: "Previous",
+        edit: "Edit",
+        yes: "Yes",
+        no: "No",
+        forget_password:"forget password ?"
     },
     order: {
         add_order: "Add Order",
@@ -60,16 +61,30 @@ export default {
         item: "Item",
         items: "Items",
         not_exist: "Not Exist",
-        sub_state:"Sub State",
-        associate:"َAssociate",
-        platform:"Platform",
-        loader:"Loader",
-        order_history:"Order ( # %DATA% ) History",
-        timeline:"Timeline",
-        print_ticket:"Print ticket",  
-        duplicate:"Duplicate order",
-        cancel_order_msg:"Do you really want to cancel this order?",
-        cancel_order:"Cancel order",
+        sub_state: "Sub State",
+        associate: "َAssociate",
+        platform: "Platform",
+        loader: "Loader",
+        order_history: "Order ( # %DATA% ) History",
+        timeline: "Timeline",
+        print_ticket: "Print ticket",
+        duplicate: "Duplicate order",
+        cancel_order_msg: "Do you really want to cancel this order?",
+        cancel_order: "Cancel order",
+        promo_code:"Promo Code",
+        apply:"Apply",
+        edit_order:"Edit Order",
+        shipping: "Shipping",
+        vendu_depuis_mag: "Vendu depuis le magasin",
+        insurance: "Insurance",
+        free_shipping: "Free shipping",
+        exchange: "Exchange",
+        exp_note: "Please write an explanatory note",
+        mode_conf: "Confirmation Mode",
+        conf_auto: "I want RiseDrop to confirm the order",
+        conf_not_auto: "I have already confirmed the order with the customer",
+        price_conf: "Confirmation fees",
+        frais_70:"fees 70 DZD"
     },
     drower: {
         dashboard: "Dashboard",
@@ -80,7 +95,9 @@ export default {
         return_manag: "Gestion des retours",
         prods: "Products",
         users: "Users",
-        logout: "Logout"
+        logout: "Logout",
+        contact_supp:"Contact and support",
+        faq:"FAQ"
     },
     dashboard: {
         all_orders: "All Orders",
@@ -89,8 +106,8 @@ export default {
         sales_report: "Sales report",
         fresh: "Fresh",
         income: "Income",
-        no_order_indate:"There is no order on this date",
-        coming_soon:"Coming Soon"
+        no_order_indate: "There is no order on this date",
+        coming_soon: "Coming Soon"
     },
     auth: {
         "login": "Login",
@@ -158,7 +175,67 @@ export default {
         "returns": "Returns",
         "canceled": "Canceled",
         "receivable": "Receivable",
-        "soldFromTheStore": "soldFromTheStore"
-    }
-
+        "soldFromTheStore": "soldFromTheStore",
+        "confirmed_otp": "Confirmed Otp"
+    },
+    faqs:{
+        "items": [
+            {
+                "question": "What are the payment methods?",
+                "response": "We accept several payment methods, including Flexy, CCP, Baridimob, or Paysera - Wise. The choice depends on the amount you have."
+            },
+            {
+                "question": "Are there any monthly fees?",
+                "response": "No, it's free."
+            },
+            {
+                "question": "Is delivery available in all wilayas (regions)?",
+                "response": "Yes, we deliver in all 58 wilayas."
+            },
+            {
+                "question": "How to place an order on the website and the app?",
+                "response": [
+                    "Choose the product and click on 'More (+)'",
+                    "Select the color and size.",
+                    "Click on 'Add an order' and fill in the buyer’s information: \n- First name\n- Last name\n- Address\n- Phone\n- Wilaya\n- Commune\n- Delivery fees (Home delivery or Office delivery)\n- Your sale price",
+                    "Click on 'Add'."
+                ]
+            },
+            {
+                "question": "Is there a possibility to request a refund?",
+                "response": "No, the customer must check their package before paying the delivery agent."
+            },
+            {
+                "question": "Can the customer be put in direct contact with the company to ask about a product?",
+                "response": "No, the seller must provide all information about the product. For further questions, the messaging agent will answer."
+            },
+            {
+                "question": "Can the customer pick up the order themselves?",
+                "response": "No, we only deliver."
+            },
+            {
+                "question": "Do you offer a warranty on the products?",
+                "response": "Yes, we offer a 24-hour trial warranty, meaning the customer can make a claim or request an exchange within 24 hours of receiving the order in case of any problem or defect."
+            },
+            {
+                "question": "How to work with Risedrop?",
+                "response": [
+                    "Search for products on our website.",
+                    "Understand how the products work by asking questions via WhatsApp, Facebook, or personal research.",
+                    "Download the product photos and information.",
+                    "Post and promote the products on social media (Facebook, Instagram, etc.).",
+                    "If a customer wants to buy, explain the product details, price, and delivery fees.",
+                    "Ask for the customer's details to place the order.",
+                    "Place the order from your account by entering the customer’s details.",
+                    "The company will confirm the order with the customer within 48 hours.",
+                    "If the order appears as canceled after 48 hours, inquire with a manager.",
+                    "Once the product is delivered, the profit will be added to your account."
+                ]
+            },
+            {
+                "question": "Where to post?",
+                "response": "You are free to use various sharing methods: Facebook, Instagram, Marketplace, groups, etc. You can also create a sales page as long as it doesn't bear the official name of our page, RISEDROP, and you can advertise."
+            }
+        ]
+    }    
 }

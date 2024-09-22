@@ -16,7 +16,7 @@ const UploadImages = ({
 
     const target = e.target as HTMLInputElement;
     const files = Array.from(target.files || []);
-
+  
     upload(files)
   };
 
@@ -32,7 +32,7 @@ const UploadImages = ({
   };
 
   const handleDrop = (e: any) => {
-    console.log(1111)
+    
     e.preventDefault();
     dropzoneRef.current?.classList.remove('border-primary');
     const files = Array.from(e.dataTransfer?.files || []);
@@ -40,6 +40,7 @@ const UploadImages = ({
   };
 
   const upload = (files: File[]) => {
+    console.log(files)
     setLoading(true)
     UploadApi.uploadImages(files).then(res => {
       setData({

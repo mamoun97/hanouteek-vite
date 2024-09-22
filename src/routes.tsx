@@ -25,6 +25,22 @@ import OrderExchange from "./Pages/OrderExchange";
 import OurShops from "./Pages/OurShops";
 import AbandonedCarts from "./Admin/Pages/AbandonedCarts";
 import AddOrderDrop from "./Admin/Pages/AddOrderDrop";
+import ApiConfig from "./Api/ApiConfig";
+import JoomlaCategs from "./Pages/JoomlaCategs";
+import LayoutAdminJoomla from "./AdminJoomla/Layout";
+
+import DashboardJoomla from "./AdminJoomla/Pages/Dashboard";
+import OrdersJoomla from "./AdminJoomla/Pages/Orders";
+import ProductsJoomla from "./AdminJoomla/Pages/Products";
+import AddProductJoomla from "./AdminJoomla/Pages/AddProduct";
+import PrivateCategory from "./Pages/PrivateCategory";
+ import LoginJoomla from "./AdminJoomla/Pages/Login"
+ import RegisterJoomla from "./AdminJoomla/Pages/Register"
+import JoomlaOrders from "./Pages/JoomlaOrders";
+import ContactSupport from "./Admin/Pages/ContactSupport";
+import FAQ from "./Admin/Pages/FAQ";
+import Profile from "./Pages/Profile";
+import ForgetPassword from "./AdminJoomla/Pages/ForgetPassword";
 
 export default function getRoutes(t:ThemeSetting) {
     return [
@@ -57,7 +73,26 @@ export default function getRoutes(t:ThemeSetting) {
         path: "/checkout",
         element: <Layout><Checkout /></Layout>
       },
-      ...t.theme.templateType == "restaurant" ? [
+      {
+        path: "/private-category/:id",
+        element: <Layout><PrivateCategory /></Layout>
+      },
+      ...
+      ApiConfig.isJoomla?[
+        {
+          path: "/categories",
+          element: <Layout><JoomlaCategs /></Layout>,
+        },
+        {
+          path: "/categories/:id",
+          element: <Layout><JoomlaCategs /></Layout>,
+        },
+        {
+          path: "/categories/:id/:idSub",
+          element: <Layout><JoomlaCategs /></Layout>,
+        },
+      ]:
+      t.theme.templateType == "restaurant" ? [
         {
           path: "/categories",
           element: <Layout><CategoriesResturant /></Layout>,
@@ -133,12 +168,20 @@ export default function getRoutes(t:ThemeSetting) {
         element: <LayoutAdmin><AddProduct update={false}/></LayoutAdmin>,
       },
       {
+        path: "/faq",
+        element: <LayoutAdmin><FAQ/></LayoutAdmin>,
+      },
+      {
         path: "/abandoned-carts",
         element: <LayoutAdmin><AbandonedCarts /></LayoutAdmin>,
       },
       {
         path: "/products/edit/:id",
         element: <LayoutAdmin><AddProduct /></LayoutAdmin>,
+      },
+      {
+        path: "/contact-and-support",
+        element: <LayoutAdmin><ContactSupport /></LayoutAdmin>,
       },
   
       {
@@ -159,12 +202,57 @@ export default function getRoutes(t:ThemeSetting) {
         path: "/order/edit/:id",
         element: <LayoutAdmin><AddOrder /></LayoutAdmin>,
       },
+
+      {
+        path: "/joomla-orders",
+        element: <Layout><JoomlaOrders/></Layout>,
+      },
+      {
+        path: "/joomla/profile",
+        element: <Layout><Profile/></Layout>,
+      },
+      {
+        path: "/joomla-admin/dashboard",
+        element: <LayoutAdminJoomla><DashboardJoomla /></LayoutAdminJoomla>,
+      },
+      {
+        path: "/joomla-admin/orders",
+        element: <LayoutAdminJoomla><OrdersJoomla /></LayoutAdminJoomla>,
+      },
+      {
+        path: "/joomla-admin/products",
+        element: <LayoutAdminJoomla><ProductsJoomla /></LayoutAdminJoomla>,
+      },
+      {
+        path: "/joomla-admin/add-product",
+        element: <LayoutAdminJoomla><AddProductJoomla update={false} /></LayoutAdminJoomla>,
+      },
+      {
+        path: "/joomla-admin/products/edit/:id",
+        element: <LayoutAdminJoomla><AddProductJoomla isJoomla={true}  update={true} /></LayoutAdminJoomla>,
+      },
+      {
+        path: "/joomla-auth/",
+        element: <LoginJoomla/>,
+      },
+      {
+        path: "/joomla-auth/register",
+        element: <RegisterJoomla/>,
+      },
+      {
+        path: "/joomla-auth/forget_password",
+        element: <ForgetPassword/>,
+      },
+
+
+
       ...t.Pages.map(el=>{
         return {
           path: "/"+el.slug,
           element: <Layout><DynamicPage page={el} /></Layout>,
         }
       }),
+
       
     ]
   }
