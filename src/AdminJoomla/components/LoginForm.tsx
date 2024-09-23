@@ -29,7 +29,7 @@ export default function LoginForm() {
     const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
-    const {tr}=useLang()
+    const { tr } = useLang()
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -118,8 +118,7 @@ export default function LoginForm() {
                         onBlur={formik.handleBlur}
                     />
                     <div className='flex justify-end'>
-                    <Link to={"/joomla-auth/forget_password"} className='text-primary text-sm font-semibold cursor-pointer'>{tr.global.forget_password}</Link>
-
+                        <Link to={"/joomla-auth/forget_password"} className='text-primary text-sm font-semibold cursor-pointer'>{tr.global.forget_password}</Link>
                     </div>
                     <Button
                         type="submit"

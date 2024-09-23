@@ -5,7 +5,19 @@ export default {
         edit: "Edit",
         yes: "Yes",
         no: "No",
-        forget_password:"forget password ?"
+        forget_password: "forget password ?",
+        validation: {
+            fname_req: 'First name is required',
+            lname_req: 'Last name is required',
+            email_err: 'Invalid email format',
+            email_req: 'Email is required',
+            phone_err: 'Phone number must start with 0 followed by 5, 6, or 7, and then 8 digits',
+            phone_req: 'Phone number is required',
+            address_req: 'address is required',
+            password_req: 'Password is required',
+            wilaya_req: 'Wilaya is required',
+            commune_req: 'Commune is required',
+        }
     },
     order: {
         add_order: "Add Order",
@@ -71,9 +83,9 @@ export default {
         duplicate: "Duplicate order",
         cancel_order_msg: "Do you really want to cancel this order?",
         cancel_order: "Cancel order",
-        promo_code:"Promo Code",
-        apply:"Apply",
-        edit_order:"Edit Order",
+        promo_code: "Promo Code",
+        apply: "Apply",
+        edit_order: "Edit Order",
         shipping: "Shipping",
         vendu_depuis_mag: "Vendu depuis le magasin",
         insurance: "Insurance",
@@ -84,7 +96,7 @@ export default {
         conf_auto: "I want RiseDrop to confirm the order",
         conf_not_auto: "I have already confirmed the order with the customer",
         price_conf: "Confirmation fees",
-        frais_70:"fees 70 DZD"
+        frais_70: "fees 70 DZD"
     },
     drower: {
         dashboard: "Dashboard",
@@ -96,8 +108,8 @@ export default {
         prods: "Products",
         users: "Users",
         logout: "Logout",
-        contact_supp:"Contact and support",
-        faq:"FAQ"
+        contact_supp: "Contact and support",
+        faq: "FAQ"
     },
     dashboard: {
         all_orders: "All Orders",
@@ -136,7 +148,14 @@ export default {
         "contact": "Contact",
         "terms1": "I agree to RiseCart",
         "terms2": "terms and conditions",
-        "terms3": "of use"
+        "terms3": "of use",
+        "dont_have_account": "Don't have an account ?",
+        "recover_password": "Recover password",
+        "recover_password_subtitle": "Entrez votre email et nous vous enverrons le mot de passe par email",
+        "send":"Send",
+        "back_to_login":"Back to login",
+        "create_account_succ_drop":"Bienvenue dans la famille Risedrop, votre inscription a été effectuée avec succès. Votre compte sera vérifié et activé sous peu 🙏."
+
     },
     states: {
         "pending": "Pending",
@@ -178,7 +197,7 @@ export default {
         "soldFromTheStore": "soldFromTheStore",
         "confirmed_otp": "Confirmed Otp"
     },
-    faqs:{
+    faqs: {
         "items": [
             {
                 "question": "What are the payment methods?",
@@ -237,5 +256,5 @@ export default {
                 "response": "You are free to use various sharing methods: Facebook, Instagram, Marketplace, groups, etc. You can also create a sales page as long as it doesn't bear the official name of our page, RISEDROP, and you can advertise."
             }
         ]
-    }    
+    }
 }

@@ -13,6 +13,11 @@ const signOut = async (): Promise<any> => {
     return data
 }
 
+const signUp = async (dt: AssociateUser): Promise<any> => {
+    const { data } = await req.http.post("/tenant/associate/signup" + ApiConfig.dbq, dt);
+    return data
+}
+
 const signInClient = async (dt: { phoneNumber: string, password: string }): Promise<ClientAuth> => {
     const { data } = await req.http.post("/tenant/client/login" + ApiConfig.dbq, dt);
     return data
@@ -28,6 +33,7 @@ const signOutClient = async (): Promise<any> => {
 const AuthApi = {
     signIn, signOut,
     signInClient,
-    signOutClient
+    signOutClient,
+    signUp
 }
 export default AuthApi

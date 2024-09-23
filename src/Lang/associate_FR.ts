@@ -5,7 +5,20 @@ export default {
         "edit": "Modifier",
         "yes": "Oui",
         "no": "Non",
-        "forget_password":"Mot de passe oublié ?"
+        "forget_password": "Mot de passe oublié ?",
+        "validation": {
+            fname_req: "Le prénom est requis",
+            lname_req: "Le nom est requis",
+            email_err: "Format de l'email invalide",
+            email_req: "L'email est requis",
+            phone_err: "Le numéro de téléphone doit commencer par 0 suivi de 5, 6 ou 7, puis de 8 chiffres",
+            phone_req: "Le numéro de téléphone est requis",
+            address_req: "L'adresse est requise",
+            password_req: "Le mot de passe est requis",
+            wilaya_req: "La wilaya est requise",
+            commune_req: "La commune est requise"
+        }
+
     },
     "order": {
         "add_order": "Ajouter une commande",
@@ -136,7 +149,13 @@ export default {
         "contact": "Contact",
         "terms1": "J'accepte RiseCart",
         "terms2": "termes et conditions",
-        "terms3": "utile"
+        "terms3": "utile",
+        "dont_have_account": "Vous n'avez pas de compte ?",
+        "recover_password": "Récupérer le mot de passe",
+        "recover_password_subtitle": "Entrez votre email et nous vous enverrons le mot de passe par email",
+        "send": "Envoyer",
+        "back_to_login": "Retour à la connexion",
+        "create_account_succ_drop": "Bienvenue dans la famille Risedrop, votre inscription a été effectuée avec succès. Votre compte sera vérifié et activé sous peu 🙏."
     },
     "states": {
         "pending": "Pending",
@@ -165,7 +184,7 @@ export default {
         "confirmed_otp": "OTP confirmé"
     },
     faqs: {
-        items:[
+        items: [
             {
                 question: "Quels sont les moyens de paiement ?",
                 response: "Nous acceptons plusieurs moyens de paiement, dont Flexy, CCP, Baridimob ou Paysera - Wise. Le choix dépend de la somme que vous avez."

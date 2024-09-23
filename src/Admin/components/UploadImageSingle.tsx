@@ -86,7 +86,7 @@ const UploadImageSingle = ({
                         <input id="file-upload" name="file-upload" type="file" className="sr-only" ref={inputFileRef} multiple />
                     </label>
                 </h3>
-                <p className="mt-1 text-xs opacity-50">PNG, JPG, GIF up to 5MB each</p>
+                <p className="mt-1 text-xs opacity-50">(PNG, JPG, GIF) max  5MB </p>
             </div>}
 
             {!!imgSrc &&

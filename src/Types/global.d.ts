@@ -106,3 +106,16 @@ interface JoomlaClientFull extends JoomlaClient {
     orders: 1,
     isActive: false,
 }
+
+
+interface AssociateUser {
+    id: number,
+    firstName: string,
+    lastName: string,
+    email: string,
+    phone: string,
+    address: string,
+    role: string,
+    password:string,
+    avatar: string
+}

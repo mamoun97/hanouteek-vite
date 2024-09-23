@@ -7,6 +7,8 @@ import Categories from "./Pages/Categories";
 import { ThemeSetting } from "./Types/ThemeSetting";
 import LayoutAdmin from "./Admin/Layout";
 import Login from "./Admin/Pages/Login";
+import RegisterAdmin from "./Admin/Pages/Register";
+import ForgetPasswordAdmin from "./Admin/Pages/ForgetPassword";
 import Dashboard from "./Admin/Pages/Dashboard";
 import Orders from "./Admin/Pages/Orders";
 import AddOrder from "./Admin/Pages/AddOrder";
@@ -134,6 +136,14 @@ export default function getRoutes(t:ThemeSetting) {
       {
         path: "/admin",
         element: <Login />,
+      },
+      {
+        path: "/admin/register",
+        element: <RegisterAdmin/>,
+      },
+      {
+        path: "/admin/forget_password",
+        element: <ForgetPasswordAdmin/>,
       },
       {
         path: "/dashboard",
