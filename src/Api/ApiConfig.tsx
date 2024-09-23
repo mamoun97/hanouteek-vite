@@ -40,7 +40,7 @@ const param = {
 
     },
     
-    isDrop:window.location.host.includes("drop.risecart.net")?true:false,
+    isDrop:window.location.host.includes("drop.risecart.net")||window.location.host.includes("localhost")?true:false,
     db: db ? "&" + db : "",
     dbq: db ? "?" + db : "",
 

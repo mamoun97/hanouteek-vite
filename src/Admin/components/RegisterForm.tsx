@@ -115,7 +115,11 @@ export default function RegisterForm() {
         </div>
         <div className="grid grid-cols-2 gap-2 mt-4">
             <div className='col-span-full'>
+                <span className='rizzui-input-label block text-sm mb-1.5 font-medium'>
+                    {tr.auth.up_img_profile}
+                </span>
                 <UploadImageSingle
+
                     className='min-h-[210px]'
                     setData={(e) => formik.setFieldValue("avatar", e)}
                     imgSrc={formik.values.avatar}
@@ -155,7 +159,7 @@ export default function RegisterForm() {
         </div>
         <div className="mt-4">
             <Button isLoading={isLoading} disabled={isLoading} variant="solid" type='submit' className='gap-2 w-full'>
-                {tr.auth.send} <IoMdSave className='text-lg' />
+                {tr.auth.register} <IoMdSave className='text-lg' />
             </Button>
         </div>
         <p className='text-center text-sm mt-4'>

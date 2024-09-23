@@ -125,6 +125,8 @@ export default {
     "auth": {
         "login": "تسجيل الدخول",
         "signup": "اشتراك",
+        "register":"تسحيل",
+        "up_img_profile":"تحميل صورة شخصية",
         "email": "بريد إلكتروني",
         "enter_email": "أدخل البريد الإلكتروني الخاص بك",
         "password": "كلمة المرور",

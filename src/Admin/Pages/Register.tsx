@@ -7,7 +7,7 @@ import RegisterForm from '../components/RegisterForm'
 export default function Register() {
     const { lang } = useLang()
     return (
-        <div className="flex min-h-[100vh]" dir={lang == "ar" ? "rtl" : "ltr"}>
+        <div className="flex min-h-[100vh] no-scrollbar" dir={lang == "ar" ? "rtl" : "ltr"}>
             <div className="h-full w-full max-w-md flex  py-10 items-center flex-col px-6 max-sm:px-4" >
                 <div className='max-w-lg w-full bg-card p-4'>
                     <RegisterForm />

@@ -57,7 +57,7 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
         }, global?.platform ? "?" + global.platform : undefined).then(_ => {
           toast.success(t.add_succ)
           if (user.role == "associate" || user.role == "vendor")
-            navigate("/orders")
+            navigate("/orders?refrech=true")
           setLoading(false)
         }).catch(err => {
           setLoading(false)

@@ -37,6 +37,7 @@ function getState({
 type QueryParams = {
   dateStart?: string;
   dateEnd?: string;
+  refrech?: string;
 };
 export default function Orders({ type = "default" }: { type?: OrderProsType }) {
   const failed = type == "failed"
@@ -51,13 +52,14 @@ export default function Orders({ type = "default" }: { type?: OrderProsType }) {
   const params: QueryParams = {
     dateStart: searchParams.get('dateStart') || undefined,
     dateEnd: searchParams.get('dateEnd') || undefined,
+    refrech: searchParams.get('refrech') || undefined,
   };
- 
+
   const [option, setOptions] = useState<OrderOptionRequest>({
     limit: 10,
     page: 1,
-    startDate: params.dateStart?moment(new Date(params.dateStart)).format():moment().add(-15, "day").startOf("day").format(),
-    endDate:params.dateEnd?moment(new Date(params.dateEnd)).format(): moment().endOf("day").format(),
+    startDate: params.dateStart ? moment(new Date(params.dateStart)).format() : moment().add(-15, "day").startOf("day").format(),
+    endDate: params.dateEnd ? moment(new Date(params.dateEnd)).format() : moment().endOf("day").format(),
     duplicate: false,
     contact_phone: "",
     id: "0",
@@ -71,14 +73,16 @@ export default function Orders({ type = "default" }: { type?: OrderProsType }) {
   const [param, setParam] = useState(`?limit=${option.limit}&page=${option.page}`)
 
   const { data, isLoading, mutate } = useGetAllOrdersService(param, global)
- 
-const deleteCols=["associate"]
-  const [showCols, setShowCols] = useState(OrderCols(t1,deleteCols))
+
+  const deleteCols = ["associate"]
+  const [showCols, setShowCols] = useState(OrderCols(t1, deleteCols))
   useEffect(() => {
-    let f=OrderCols(t1,deleteCols)
-    setShowCols(showCols.map((el,k)=>({...el,label:f[k].label})))
+    let f = OrderCols(t1, deleteCols)
+    setShowCols(showCols.map((el, k) => ({ ...el, label: f[k].label })))
   }, [lang])
   useEffect(() => {
+    if(params.refrech)
+      mutate()
     window.scrollTo(0, 0)
   }, [])
   useEffect(() => {
@@ -209,7 +213,7 @@ const deleteCols=["associate"]
           </Popover.Trigger>
           <Popover.Content className="p-2">
             {({ }) => (
-              <div className="w-56" key={lang+"444"}>
+              <div className="w-56" key={lang + "444"}>
                 {
                   showCols.map((el, k) => {
                     return el.value != "id" && el.value != "checked" ? <div key={k} onClick={() => {

@@ -124,6 +124,8 @@ export default {
     auth: {
         "login": "Login",
         "signup": "Sign Up",
+        "register":"Register",
+        "up_img_profile":"Add a profile picture",
         "email": "Email",
         "enter_email": "Enter your email",
         "password": "Password",

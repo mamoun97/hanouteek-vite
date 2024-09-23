@@ -4,7 +4,7 @@ export default function useMediaQuery() {
     const [width, setWidth] = useState(window.innerWidth)
     function handleResize() {
         setWidth(window.innerWidth)
-        console.log(window.innerWidth)
+        // console.log(window.innerWidth)
     }
     useEffect(() => {
 
