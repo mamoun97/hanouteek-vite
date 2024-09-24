@@ -1,0 +1,15 @@
+version: '3'
+services:
+  risecart-template:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: risecart_template
+    restart: "always"
+    networks:
+      - proxy-net
+    expose:
+      - "4000"
+networks:
+  proxy-net:
+    external: true
