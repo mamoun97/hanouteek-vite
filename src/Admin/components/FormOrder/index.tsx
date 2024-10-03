@@ -119,16 +119,16 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
             <h1 className="mb-4 font-semibold text-lg">{t.mode_conf}</h1>
             <div>
               <Radio
-                onChange={() => setDataOrder({ ...dataOrder, auto_confirmed: false })}
-                label={t.conf_not_auto}
-                name="confauto"  checked={dataOrder.auto_confirmed != true} />
-              <Radio
                 onChange={() => setDataOrder({ ...dataOrder, auto_confirmed: true })}
+                label={t.conf_not_auto}
+                name="confauto"  checked={dataOrder.auto_confirmed != false} />
+              <Radio
+                onChange={() => setDataOrder({ ...dataOrder, auto_confirmed: false })}
                 label={<span>
                   {t.conf_auto} <span className="text-red-600">( {t.frais_70} )</span>
                 </span>}
                 className="mt-2"
-                name="confauto" checked={dataOrder.auto_confirmed === true} />
+                name="confauto" checked={dataOrder.auto_confirmed === false} />
             </div>
           </div>
         </div>
@@ -188,7 +188,7 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
                   <div className="grow"></div>
                   <span className="font-semibold">{getTotal().toFixed(2)} <Currency /></span>
                 </div>
-                {dataOrder.auto_confirmed&&<div className="flex mb-3 items-center">
+                {!dataOrder.auto_confirmed&&<div className="flex mb-3 items-center">
                   <h1 className="text-sm font-medium">{t.price_conf}</h1>
                   <div className="grow"></div>
                   <span className="font-semibold text-red-700">-70 <Currency /></span>
@@ -239,7 +239,7 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
                         <IoIosCheckmarkCircle className="flex-shrink-0 inline w-5 h-5 me-3" />
                         <div>
                           {t.success_benif}
-                          ( <strong className="text-green-400">{(dataOrder.price_drop ?? 0) - getTotal()-(dataOrder.auto_confirmed?70:0)} <Currency /></strong> )
+                          ( <strong className="text-green-400">{(dataOrder.price_drop ?? 0) - getTotal()-(dataOrder.auto_confirmed?0:70)} <Currency /></strong> )
                         </div>
                       </div>
 
@@ -273,6 +273,8 @@ export default function FormOrder({ data, isAdd = false }: { data: OrderFull, is
                   className="mt-2"
                   label="Password"
                   placeholder="."
+                  value={dataOrder.password}
+                  onChange={(e)=>setDataOrder({...dataOrder,password:e.target.value})}
                 />
                 <Input
                   suffix={

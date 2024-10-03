@@ -11,23 +11,21 @@ const http = axios.create({
 })
 const httpAuth = (token: string) => {
   const user: UserAuth | null = loadData("user")
-  const client: ClientAuth | null = loadData("client")
   return axios.create({
     baseURL: ApiConfig.url,
     headers: {
       "Content-type": "application/json",
-      Authorization: "Bearer " + (user?.token??client?.token)
+      Authorization: "Bearer " + (user?.token)
     }
   })
 }
 const httpAuthUpload = (token: string) => {
   const user: UserAuth | null = loadData("user")
-  const client: ClientAuth | null = loadData("client")
   return axios.create({
     baseURL: ApiConfig.url,
     headers: {
       "Content-type": "multipart/form-data",
-      Authorization: "Bearer " + (user?.token??client?.token)
+      Authorization: "Bearer " + (user?.token)
     }
   })
 }

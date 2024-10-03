@@ -43,6 +43,7 @@ import ContactSupport from "./Admin/Pages/ContactSupport";
 import FAQ from "./Admin/Pages/FAQ";
 import Profile from "./Pages/Profile";
 import ForgetPassword from "./AdminJoomla/Pages/ForgetPassword";
+import Supplier from "./Pages/Supplier";
 
 export default function getRoutes(t:ThemeSetting) {
     return [
@@ -53,6 +54,14 @@ export default function getRoutes(t:ThemeSetting) {
       {
         path: "/catalog",
         element: <Catalog />,
+      },
+      {
+        path: "/supplier",
+        element: <Layout><Supplier /></Layout>,
+      },
+      {
+        path: "/supplier/:id",
+        element: <Layout><Supplier /></Layout>,
       },
       {
         path: "/product/:slug",

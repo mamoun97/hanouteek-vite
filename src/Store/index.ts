@@ -3,6 +3,7 @@ import themeSlice from "./themeSlice";
 import cartSlice from "./cartSlice";
 import orderSlice from "./orderSlice";
 import authSlice from "./authSlice";
+import authSliceSupplier from "./authSliceSupplier";
 import globalSlice from "./globalSlice";
 import authSliceClient from "./authSliceClient";
 
@@ -13,8 +14,9 @@ export const store = configureStore({
     cart:cartSlice,
     order:orderSlice,
     user:authSlice,
-    client:authSliceClient,
-    global:globalSlice
+    // client:authSliceClient,
+    global:globalSlice,
+    // supplier:authSliceSupplier
   },
 });
 

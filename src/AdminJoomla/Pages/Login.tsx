@@ -1,23 +1,28 @@
 
-import { Toaster } from 'react-hot-toast'
-import images from '../../assets'
-import useLang from '../../hoock/useLang'
+
 import LoginForm from '../components/LoginForm'
+import LangButton from '../../Admin/components/LangButton'
+import ContainerAuth from '../../Admin/components/ContainerAuth'
+import PassToDashboard from '../../hoock/usePassToDashboard'
 
 export default function Login() {
-    const { lang } = useLang()
     return (
-        <div className="flex h-[100vh]" dir={lang == "ar" ? "rtl" : "ltr"}>
-            <div className="h-full w-full max-w-md flex justify-center items-center flex-col px-6 max-sm:px-4" >
-                <div className='max-w-lg w-full'>
-                    <LoginForm />
-                </div>
-            </div>
-            <div
-                className="bg-cover bg-no-repeat bg-center grow h-full scale-95 rounded-3xl shadow-md"
-                style={{ backgroundImage: "url('" + images.bg_auth + "')" }}></div>
-
-            <Toaster position="bottom-center" />
-        </div>
+        <PassToDashboard authType='supplier' navUrl='/joomla-admin/dashboard'>
+            <ContainerAuth type='joomla'>
+                <>
+                    <div className="grow"></div>
+                    <div className='max-w-lg w-full'>
+                        <LoginForm />
+                    </div>
+                    <div className="grow"></div>
+                    <div className="my-2">
+                        <LangButton />
+                    </div>
+                    <div className="text-sm mb-3" dir="ltr">
+                        All rights reserved by <a href="https://devgate.net/" target="_blank" className="ms-1"> Devgate</a> © 2024..
+                    </div>
+                </>
+            </ContainerAuth>
+        </PassToDashboard>
     )
 }

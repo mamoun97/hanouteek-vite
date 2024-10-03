@@ -5,6 +5,7 @@ const productLoading = <div className={`flex flex-col gap-3 animate-pulse items-
 </div>
 
 export default {
+    productLoading,
     cateroriesHanouteek: <>
         <div className={`col-span-1 relative pt-[70%] group animate-pulse`}>
             <div className={`absolute top-0 left-0 right-0 bottom-0 bg-gray-300`}> </div>

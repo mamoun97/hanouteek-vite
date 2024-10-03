@@ -20,7 +20,7 @@ const url = "https://api.risecart.net";
 // const db = "db=mBoutiquemboutiquesBC900gHy"
 // const db = "db=dropdropmSqp6A8rx"
 const db = false;
-const isHanouteek = false
+const isHanouteek = !true
 const isJoomla=false;
 const param = {
     url: url + "/api/v1",

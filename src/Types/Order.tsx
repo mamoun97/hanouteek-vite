@@ -105,6 +105,7 @@ type OrderFull = {
     fullName?: string,
     email?: string,
     weight?: string,
+    password?:string,
     width?: number,
     height?: number,
     length?: number,

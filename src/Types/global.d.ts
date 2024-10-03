@@ -10,7 +10,10 @@ type OptionsFilter = {
     page: number,
     categoryId: number | null,
     minPrice: number | null,
-    maxPrice: number | null
+    maxPrice: number | null,
+    willaya?:string|null,
+    name?:string|null
+    ,
 }
 
 type SubFormProps = {
@@ -118,4 +121,29 @@ interface AssociateUser {
     role: string,
     password:string,
     avatar: string
+}
+
+interface Supplier{
+    id: number,
+    firstName: string,
+    lastName: string,
+    email: string,
+    phone: string,
+    wilaya: string,
+    commune: string,
+    avatar: string,
+    role: strung,
+    active: true,
+    socketId: string|null,
+    isOnline: boolean,
+    created_at: string,
+    updated_at: string,
+    Products: Product[]
+}
+interface SupplierResponse{
+    page: number,
+    limit: number,
+    totalCount: number,
+    data: Supplier[],
+    hasMore: boolean
 }

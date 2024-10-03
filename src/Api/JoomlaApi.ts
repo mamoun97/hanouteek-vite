@@ -15,8 +15,17 @@ const getOrders = async (param: string, db?: string): Promise<OrdersResponse> =>
     const { data } = await req.httpAuth("").get("/tenant/sub-seller/order" + param + (db ?? ApiConfig.db));
     return data
 }
+const getOrdersClient = async (param: string, db?: string): Promise<OrdersResponse> => {
+
+    const { data } = await req.httpAuth("").get("/tenant/order/client" + param + (db ?? ApiConfig.db));
+    return data
+}
 const getProducts = async (filter: string, db?: string): Promise<ProductsResponse> => {
     const { data } = await req.httpAuth("").get("/tenant/sub-seller/product" + filter + (db ?? ApiConfig.db));
+    return data
+}
+const getSuppliers = async (filter: string, db?: string): Promise<SupplierResponse> => {
+    const { data } = await req.httpAuth("").get("/tenant/sub-seller/all" + filter + (db ?? ApiConfig.db));
     return data
 }
 
@@ -48,7 +57,7 @@ const signUpClient = async (dt: JoomlaClient): Promise<JoomlaClientFull> => {
     return data
 }
 
-const signInSaller = async (dt: { email: string, password: string }): Promise<ClientAuth> => {
+const signInSaller = async (dt: { email: string, password: string }): Promise<SupplierAuth> => {
     const { data } = await req.http.post("/tenant/sub-seller/login" + ApiConfig.dbq, dt);
     return data
 }
@@ -72,10 +81,26 @@ const getOrdersService = (params: string, db?: string) => {
     );
     return data
 }
+const getSuppliersService = (params: string, db?: string) => {
+    const data = useSWR(
+        "/tenant/sub-seller/all" + params + (db ?? ApiConfig.db),
+        () => getSuppliers(params, db),
+        ApiConfig.swrStop
+    );
+    return data
+}
 const getProductsService = (filter: string, db?: string) => {
     const data = useSWR<ProductsResponse>(
         "/tenant/sub-seller/product" + filter + (db ?? ApiConfig.db),
         () => getProducts(filter, db),
+        ApiConfig.swrStop
+    );
+    return data
+}
+const getOrdersClientService = (params: string, db?: string) => {
+    const data = useSWR<OrdersResponse>(
+        "orders-client/" + params + db,
+        () => getOrdersClient(params, db),
         ApiConfig.swrStop
     );
     return data
@@ -94,6 +119,8 @@ const JoomlaApi = {
     signUpSaller,
     getById,
     getProducts,
+    getOrdersClientService,
+    getSuppliersService
 }
 
 export default JoomlaApi

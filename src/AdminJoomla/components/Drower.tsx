@@ -8,16 +8,12 @@ import { BsBoxFill } from "react-icons/bs";
 import { IoBarChartSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../Store";
-import { changeUser } from "../../Store/authSlice";
 import ApiConfig from "../../Api/ApiConfig";
-import AuthApi from "../../Api/Auth";
-// import { TbShoppingCartPlus } from "react-icons/tb";
 import { FaList } from "react-icons/fa";
-// import { HiPhoneIncoming } from "react-icons/hi";
-// import { PiKeyReturnFill } from "react-icons/pi";
 import useLang from "../../hoock/useLang";
 import { Button } from "rizzui";
-import { changeClient } from "../../Store/authSliceClient";
+import { changeAuthType } from "../../Store/globalSlice";
+import { changeSupplier } from "../../Store/authSliceSupplier";
 
 const items = () => {
     const { tr } = useLang()
@@ -58,7 +54,8 @@ export default function Drower({
 
     const navigate = useNavigate()
     const location = useLocation()
-    const user = useSelector<RootState>((state) => state.client) as ClientAuth
+    const user = useSelector((state:RootState) => state.user) 
+
     const dispatch: AppDispatch = useDispatch();
 
     return (
@@ -70,16 +67,16 @@ export default function Drower({
                 <div className='flex flex-col items-center'>
 
                     <div className="w-20 h-20 rounded-full  bg-slate-300 border-2 border-white bg-center bg-cover bg-no-repeat"
-                        style={{ backgroundImage: "url('" + ApiConfig.rootUrl + "/" + user.avatar + "')" }}></div>
+                        style={{ backgroundImage: "url('" + ApiConfig.rootUrl + "/" + user?.avatar + "')" }}></div>
                     <h1 className='text-lg font-bold capitalize mt-2   max-w-[80%]  truncate ...'>
-                        {user.firstName + " " + user.lastName}
+                        {user?.firstName + " " + user?.lastName}
                     </h1>
-                    <p className='text-sm'>{user.email}</p>
+                    <p className='text-sm'>{user?.email}</p>
 
                     {/* <Link to={"/joomla-auth"}> */}
                         <Button className="mt-4 bg-red-800"  onClick={() => {
-                            
-                            dispatch(changeClient(null))
+                            dispatch(changeAuthType(null))
+                            dispatch(changeSupplier(null))
                             navigate("/joomla-auth")
                         }}>
                              <LuLogOut className="text-lg" />

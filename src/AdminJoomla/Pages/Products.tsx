@@ -13,7 +13,7 @@ import ProductsTable from "../components/ProductsTable"
 
 export default function Products() {
   const global = useSelector<RootState>((state) => state.global) as GlobalS
-  const user = useSelector<RootState>((state) => state.user) as UserAuth
+ 
   const [option, setOptions] = useState<ProductOptionRequest>({
     limit: 10,
     page: 1,

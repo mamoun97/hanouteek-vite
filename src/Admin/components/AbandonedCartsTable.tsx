@@ -212,7 +212,7 @@ const getColumns = (
 export default function AbandonedCartsTable({ data, option, showCols, setOption, isLoading, afterChange = () => { } }:
     { data: OrderAbandonedResponse, option: AssociateOptionRequest, setOption: any, afterChange: any, showCols: typeof orderCols, isLoading: boolean }) {
 
-    if (showCols) { }
+    // if (showCols) { }
     const [order, _] = React.useState<string>("desc");
     const [count, setCount] = React.useState<number>(0);
     const [column, setColumn] = React.useState<string>("");

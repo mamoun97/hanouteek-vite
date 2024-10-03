@@ -6,6 +6,8 @@ const getFilter = (options: OptionsFilter) => {
     f += `${options.categoryId ? "&categoryId=" + options.categoryId : ""}`
     f += `${options.minPrice ? "&minPrice=" + options.minPrice : ""}`
     f += `${options.maxPrice ? "&maxPrice=" + options.maxPrice : ""}`
+    f += `${options?.willaya ? "&willaya=" + options.willaya : ""}`
+    f += `${options?.name ? "&name=" + options.name : ""}`
     return f;
 }
 export default  getFilter

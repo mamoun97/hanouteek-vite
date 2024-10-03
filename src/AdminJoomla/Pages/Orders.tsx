@@ -39,7 +39,7 @@ function getState({
 export default function Orders({ type = "default" }: { type?: OrderProsType }) {
   const failed = type == "failed"
   const global = useSelector<RootState>((state) => state.global) as GlobalS
-  const user = useSelector<RootState>((state) => state.client) as ClientAuth
+
   const paramSlugState = useParams()
   const { tr, t: t1, lang } = useLang()
   const t = tr.order

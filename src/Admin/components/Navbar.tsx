@@ -8,7 +8,9 @@ import { IoIosNotifications } from "react-icons/io";
 import ModeThemeButton from './ModeThemeButton'
 
 import LangButton from './LangButton'
-import SelectPlatform from './SelectPlatform'
+import SelectPlatform, { options } from './SelectPlatform'
+import { useMemo, useState } from 'react'
+import { GlobalS } from '../../Store/globalSlice'
 // import SelectPlatform from './SelectPlatform'
 export default function Navbar({
     open,
@@ -20,7 +22,10 @@ export default function Navbar({
     btnClose?: any
 }) {
     const theme = useSelector<RootState>(state => state.theme) as ThemeSetting
-    
+    const global = useSelector<RootState>((state) => state.global) as GlobalS
+    const value = useMemo(()=>{
+        return options.find(el=>el.db==global?.platform)??null
+    },[global]);
     const user = useSelector<RootState>((state) => state.user) as UserAuth
     if (open) { }
 
@@ -36,15 +41,24 @@ export default function Navbar({
                             <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12"> <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h14M1 6h14M1 11h7" /> </svg>
                         </button>
                         <Link to="/dashboard" className="flex mr-4  h-full">
-                            <img src={ApiConfig.rootUrl + "/" + theme.theme.Logo} className="mr-3 max-h-5 w-auto max-[640px]:hidden" alt="" />
-                            <img src={ApiConfig.rootUrl + "/" + theme.theme.favicon} className="mr-3 max-h-5 hidden w-auto max-[640px]:block" alt="" />
+                    
+                        {
+                            value?.avatar? <div className='flex items-center gap-2'>
+                                <img src={value.avatar} className=" max-h-5 w-auto " alt="" />
+                                <span className='text-sm  font-bold opacity-70'>{value.label}</span>
+                            </div>:<>
+                             <img src={ApiConfig.rootUrl + "/" + theme.theme.Logo} className="mr-3 max-h-5 w-auto max-[640px]:hidden" alt="" />
+                             <img src={ApiConfig.rootUrl + "/" + theme.theme.favicon} className="mr-3 max-h-5 hidden w-auto max-[640px]:block" alt="" />
+                            </>
+                        }
+                           
                         </Link>
                         <div className="grow">
 
                         </div>
                         {
 
-                            user.role=="associate"&&["/dashboard","/orders"].includes(location.pathname)&&
+                            (user.role=="associate"||user.role=="associate_admin")&&["/dashboard","/orders"].includes(location.pathname)&&
                             <SelectPlatform />
                             }
 

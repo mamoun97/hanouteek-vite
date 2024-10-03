@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Button, Input, Password } from 'rizzui';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import alertError from '../../hoock/alertError';
 import { IoIosInformationCircleOutline, IoMdCheckmark, IoMdSave } from 'react-icons/io';
 import UploadImageSingle from '../../Admin/components/UploadImageSingle';
@@ -9,16 +8,10 @@ import ApiConfig from '../../Api/ApiConfig';
 import { useSelector } from 'react-redux';
 import { ThemeSetting } from '../../Types/ThemeSetting';
 import JoomlaApi from '../../Api/JoomlaApi';
+import useValidation from '../../hoock/Validation';
+import useLang from '../../hoock/useLang';
 
-const validationSchema = Yup.object({
-    firstName: Yup.string().required('First name is required'),
-    lastName: Yup.string().required('Last name is required'),
-    email: Yup.string().email('Invalid email format').required('Email is required'),
-    phoneNumber: Yup.string().matches(/^0[567][0-9]{8}$/, 'Phone number must start with 0 followed by 5, 6, or 7, and then 8 digits').required('Phone number is required'),
-    // avatar: Yup.string().required('Image is required'),
-    password: Yup.string().required('Password is required'),
-    address: Yup.string().required('address is required'),
-});
+
 
 
 interface JoomlaUserInput extends Omit<JoomlaClient, 'password'> {
@@ -28,7 +21,16 @@ interface JoomlaUserInput extends Omit<JoomlaClient, 'password'> {
 
 export default function RegisterView({ onClose, afterChange }: { afterChange: (e: JoomlaClientFull) => void, onClose: (e: boolean) => void }) {
     const [isLoading, setLoading] = useState(false);
+    const { tr } = useLang()
     const theme = useSelector<ThemeSetting>(state => state.theme) as ThemeSetting
+    const validationSchema = useValidation({
+        email: true,
+        firstName: true,
+        lastName: true,
+        phoneNumber: true,
+        password: true,
+        address: true,
+    });
     const formik = useFormik({
         initialValues: {
             firstName: "",
@@ -54,7 +56,7 @@ export default function RegisterView({ onClose, afterChange }: { afterChange: (e
         }
     });
 
-    const register = (name:keyof JoomlaUserInput, label: string) => ({
+    const register = (name: keyof JoomlaUserInput, label: string) => ({
         label,
         suffix: formik.touched[name] ? (
             !!formik.errors[name] ? <IoIosInformationCircleOutline className='text-lg' /> : <IoMdCheckmark className='text-lg' />
@@ -75,11 +77,14 @@ export default function RegisterView({ onClose, afterChange }: { afterChange: (e
         <div className='flex items-center justify-center flex-col gap-4'>
             <img src={ApiConfig.rootUrl + "/" + theme.theme.favicon}
                 className="h-9 max-md:h-5 max-[400px]:hidden" alt="" />
-            <h1 className='text-2xl font-bold'>Inscription</h1>
+            <h1 className='text-2xl font-bold'>{tr.auth.signup}</h1>
 
         </div>
         <div className="grid grid-cols-2 gap-2 mt-4">
             <div className='col-span-full'>
+                <span className='rizzui-input-label block text-sm mb-1.5 font-medium'>
+                    {tr.auth.up_img_profile}
+                </span>
                 <UploadImageSingle
                     className='min-h-[210px]'
                     setData={(e) => formik.setFieldValue("avatar", e)}
@@ -93,32 +98,38 @@ export default function RegisterView({ onClose, afterChange }: { afterChange: (e
                 )} */}
             </div>
             <Input
-                className='col-span-1' 
-                {...register("firstName", "Nom")} />
+                className='col-span-1'
+                placeholder={tr.auth.enter_first_name}
+                {...register("firstName", tr.auth.first_name)} />
             <Input
-                className='col-span-1' 
-                {...register("lastName", "Prénom")} />
+                className='col-span-1'
+                placeholder={tr.auth.enter_last_name}
+                {...register("lastName", tr.auth.last_name)} />
             <Input
-                className='col-span-1 max-sm:col-span-full' 
-                {...register("email", "Email")} type='email' />
+                className='col-span-1 max-sm:col-span-full'
+                placeholder={tr.auth.enter_email}
+                {...register("email", tr.auth.email)} type='email' />
             <Input
-                className='col-span-1 max-sm:col-span-full' 
-                {...register("phoneNumber", "N° Téléphone")} />
+                className='col-span-1 max-sm:col-span-full'
+                placeholder={tr.auth.phone}
+                {...register("phoneNumber", tr.auth.phone)} />
             <Password
-                className='col-span-full' 
-                {...register("password", "Mot de pass")} />
+                className='col-span-full'
+                placeholder={tr.auth.enter_password}
+                {...register("password", tr.auth.password)} />
             <Input
-                className='col-span-full' 
-                {...register("address", "Address")} />
+                className='col-span-full'
+                placeholder={tr.auth.enter_address}
+                {...register("address", tr.auth.address)} />
 
         </div>
         <div className="mt-4">
             <Button isLoading={isLoading} disabled={isLoading} variant="solid" type='submit' className='gap-2 w-full'>
-                Register <IoMdSave className='text-lg' />
+                {tr.auth.register} <IoMdSave className='text-lg' />
             </Button>
         </div>
         <p className='text-center text-sm mt-4'>
-            Already have an account ? <span onClick={() => onClose(false)} className='text-primary font-semibold cursor-pointer'>Login</span>
+            {tr.auth.have_account} <span onClick={() => onClose(false)} className='text-primary font-semibold cursor-pointer'>{tr.auth.login}</span>
         </p>
     </form>
 }

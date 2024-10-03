@@ -31,23 +31,24 @@ type JoomlaUserInput = {
 export default function RegisterForm() {
     const [isLoading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
+    const {tr,t}=useLang()
     const { ModalView } = useModal({
         open, setOpen,
         closable: false,
         content: <div className='flex items-center justify-center flex-col gap-2'>
             <LuBadgeCheck className='text-green-500 w-14 h-14' />
             <p className='text-center max-w-md'>
-                Bienvenue dans la famille Risedrop, votre inscription a été effectuée avec succès. Votre compte sera vérifié et activé sous peu 🙏.
+                {tr.auth.create_account_succ_drop}
             </p>
             <Link to={"/admin"}>
                 <Button variant='solid' className='min-w-[80px] mt-6' color='primary'>
-                    Ok
+                    {t.ok}
                 </Button>
             </Link>
         </div>
     })
     const theme = useSelector<ThemeSetting>(state => state.theme) as ThemeSetting
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
     const validationSchema = useValidation({
         firstName:true,
         lastName:true,
@@ -104,7 +105,7 @@ export default function RegisterForm() {
         }
     });
 
-    const {tr}=useLang()
+    
 
     return <form onSubmit={formik.handleSubmit}>
         <div className='flex items-center justify-center flex-col gap-4'>

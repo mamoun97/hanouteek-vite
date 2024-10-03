@@ -39,7 +39,6 @@ function getState({
 export default function Orders({ type = "default" }: { type?: OrderProsType }) {
   const failed = type == "failed"
   const global = useSelector<RootState>((state) => state.global) as GlobalS
-  const user = useSelector<RootState>((state) => state.client) as ClientAuth
   const paramSlugState = useParams()
   const { tr, t: t1, lang } = useLang()
   const t = tr.order
@@ -60,7 +59,7 @@ export default function Orders({ type = "default" }: { type?: OrderProsType }) {
 
   const [param, setParam] = useState(`?limit=${option.limit}&page=${option.page}`)
 
-  const { data, isLoading, mutate } = JoomlaApi.getOrdersService(param, (global?.platform) ? "&" + global?.platform : undefined)
+  const { data, isLoading, mutate } = JoomlaApi.getOrdersClientService(param)
 
   const deleteCols = ["associate"]
   const [showCols, setShowCols] = useState(OrderCols(t1, deleteCols))

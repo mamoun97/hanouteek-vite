@@ -8,6 +8,7 @@ const getAll = async (param: string, db?: string): Promise<OrdersResponse> => {
     const { data } = await req.httpAuth(user?.token ?? "").get("/tenant/order/associate" + param + (db ?? ApiConfig.db));
     return data
 }
+
 const orderAbandoned = async (param: string, db?: string): Promise<OrderAbandonedResponse> => {
     const user: UserAuth | null = loadData("user")
     const { data } = await req.httpAuth(user?.token ?? "").get("/tenant/order-abandoned" + param + (db ?? ApiConfig.db));

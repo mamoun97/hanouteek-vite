@@ -2,9 +2,9 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { loadData, saveData } from "./localStorage";
 
 
-type UserAuthS= UserAuth|null
-
+type UserAuthS= UserAuth|SupplierAuth|ClientAuth|null
 const initialState:UserAuthS=loadData("user")
+
 
 const authSlice = createSlice({
   name: "user",
@@ -12,10 +12,10 @@ const authSlice = createSlice({
   reducers: {
     changeUser: (state:UserAuthS, action: PayloadAction<UserAuthS>) => {
       state=action.payload;
-   
       saveData("user",action.payload)
       return state
     },
+    
   },
  
 });

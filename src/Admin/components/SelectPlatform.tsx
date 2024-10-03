@@ -11,7 +11,7 @@ type selectOptionR = {
   db: string,
   avatar: string,
 }
-const options: selectOptionR[] = [
+export const options: selectOptionR[] = [
   {
     label: "Hanouteek",
     value: "Hanouteek",
@@ -48,6 +48,12 @@ const options: selectOptionR[] = [
     db: "db=oranshoesdefweGOLG",
     avatar: ApiConfig.rootUrl + "/434094843_930261791983750_2048385286810111503_n-1711454875827-785379680.webp",
   },
+  {
+    label: "Risedrop",
+    value: "Risedrop",
+    db: "db=dropdropmSqp6A8rx",
+    avatar: ApiConfig.rootUrl + "/favicon-1722351504309-715605991.webp",
+  },
 
 ];
 
@@ -66,11 +72,6 @@ export default function SelectPlatform() {
       value={value}
       className={"grow max-w-xs"}
       onChange={setValue}
-    //     (e: selectOptionR) => {
-    //     dispatch(changePlatform(e.db))
-    //     setValue(e)
-    //   }
-    // }
       displayValue={(value: any) => renderDisplayValue(value)}
       getOptionDisplayValue={(option) => renderOptionDisplayValue(option)}
     />

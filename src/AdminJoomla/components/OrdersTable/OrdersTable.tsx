@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import { Select } from "rizzui";
 import { Toaster } from "react-hot-toast";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../Store";
 import { IoArrowBack, IoArrowForward } from "react-icons/io5";
 import getColumns, { ColumnTypeReturn } from "./Columns";
 import Table from "../../../Admin/components/Table";
@@ -27,7 +25,7 @@ export default function OrdersTable({ data, option, showCols, setOption, isLoadi
   const changeFilter = (e: any) => {
     setOption(e)
   }
-  const user = useSelector<RootState>((state) => state.user) as UserAuth
+
   const columns = useMemo<ColumnTypeReturn[]>(() => getColumns({
     order,
     column,

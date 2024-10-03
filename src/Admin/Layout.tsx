@@ -4,9 +4,6 @@ import Navbar from './components/Navbar'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../Store'
 import { useLocation, useNavigate } from 'react-router-dom'
-import sha256 from 'crypto-js/sha256';
-import { changeUser } from '../Store/authSlice'
-import { loadData } from '../Store/localStorage'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from "next-themes";
 import { ThemeProvider } from '../utils/ThemeProvider'
@@ -14,10 +11,11 @@ import { GlobalS } from '../Store/globalSlice'
 import { useThemeService } from '../Api/Services'
 import { changeTheme } from '../Store/themeSlice'
 import { LuArrowLeftToLine, LuArrowRightFromLine } from 'react-icons/lu'
+import useSessionMiddleware from '../hoock/useSessionMiddleware'
 export default function LayoutAdmin({ children }: {
   children: React.ReactNode
 }) {
-
+  useSessionMiddleware({navUrl:"/admin"})
   const global = useSelector<RootState>((state) => state.global) as GlobalS
 
   const [open, setOpen] = useState(false)
@@ -29,22 +27,13 @@ export default function LayoutAdmin({ children }: {
   const user = useSelector<RootState>((state) => state.user) as UserAuth
   const dispatch: AppDispatch = useDispatch();
   useEffect(() => {
-    if (!user?.id) {
+    if (!user?.id||user?.authType!="user") {
       navigate("/admin")
     }
+
    
   }, [])
-  useEffect(() => {
-    let d = loadData("user")
-    let oldMd5 = d.md5
-
-    delete d.md5
-    let newMd5 = sha256(JSON.stringify(d) + import.meta.env.VITE_SEC_KEY).toString()
-    if (newMd5 != oldMd5) {
-      dispatch(changeUser(null))
-      navigate("/admin")
-    }
-  })
+  
 
 
 
@@ -59,7 +48,7 @@ export default function LayoutAdmin({ children }: {
   }, [data])
 
   return (
-    <ThemeProvider
+    !(!user?.id||user?.authType!="user")&&<ThemeProvider
     // key={global?.platform??'4'}
     >
       <TH >
@@ -100,7 +89,6 @@ function TH({ children }: {
 
     document.getElementById("html")?.classList.remove("dark")
     document.getElementById("html")?.classList.remove("light")
-
     document.getElementById("html")?.classList.add(theme??"light")
     
 

@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import  { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../Store'
 import { addToCart as addToCartS, addToFavorite, Cart, openCart, removeFromFavorite, updateCart } from '../../Store/cartSlice'
-import { useTranslation } from 'react-i18next'
 import ApiConfig from '../../Api/ApiConfig'
 import { addToCartEvent, viewContentEvent } from '../../Api/PixelService'
 import Container from '../Container'
@@ -14,7 +13,7 @@ import OffersView from '../OffersView'
 import IconButton from '../TailwindComponent/IconButton'
 import { MdOutlineFavorite, MdOutlineFavoriteBorder } from 'react-icons/md'
 import { Link } from 'react-router-dom'
-import { Badge, Button as ButtonR, Modal } from "rizzui";
+import {  Button as ButtonR } from "rizzui";
 import { BsMessenger } from 'react-icons/bs'
 import Qte from '../Qte'
 import { FiShoppingCart } from 'react-icons/fi'
@@ -31,12 +30,12 @@ export function ProductPageDefault({ data, isUpdate = false, index = -1, isSmall
     const cart = useSelector<RootState>(state => state.cart) as Cart
     // const { t } = useTranslation()
     const { t } = useLang()
-    const client = useSelector<RootState>((state) => state.client) as UserAuth
+    const client = useSelector<RootState>((state) => state.user) as UserAuth
     const hidePrice = ApiConfig.isJoomla ? (client?.id ? false : true) : false
     const dispatch: AppDispatch = useDispatch();
     const [isCheck, setIsCheck] = useState(false);
     const [openOfferModal, setOpenOfferModal] = useState(false);
-    const [openContact, setOpenContact] = useState(false);
+    // const [openContact, setOpenContact] = useState(false);
     const checkoutRef = useRef<HTMLDivElement | null>(null);
     const [fixedB, setFixedB] = useState(false)
     const refF = useRef<HTMLDivElement | null>(null);
@@ -311,7 +310,7 @@ export function ProductPageDefault({ data, isUpdate = false, index = -1, isSmall
                                         <Button
                                             onClick={() => {
                                                 if (hidePrice) {
-                                                    setOpenContact(true)
+                                                    // setOpenContact(true)
                                                     return
                                                 }
                                                 addToCart()
@@ -324,7 +323,7 @@ export function ProductPageDefault({ data, isUpdate = false, index = -1, isSmall
                                         <Button
                                             onClick={() => {
                                                 if (hidePrice) {
-                                                    setOpenContact(true)
+                                                    // setOpenContact(true)
                                                     return
                                                 }
                                                 addToCart()
@@ -349,13 +348,13 @@ export function ProductPageDefault({ data, isUpdate = false, index = -1, isSmall
                         {t("buy")}
                     </Button>
                 </div>} */}
-                <div className="mt-2">
+                {data.description&&data.description!=""&&<div className="mt-2">
                     <h2 className="font-medium italic">{t.desc}</h2>
                     <div className="overflow-auto font-normal mt-2">
                         <div dangerouslySetInnerHTML={{ __html: data.description }} ></div>
                     </div>
 
-                </div>
+                </div>}
             </div>
         </div>
         <div>

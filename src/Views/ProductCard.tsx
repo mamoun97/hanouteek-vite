@@ -42,7 +42,7 @@ function ProductHanouteek({ data, showFull = false, className = "",
 }: ProductsProps) {
     const theme = useSelector<ThemeSetting>(state => state.theme) as ThemeSetting
     const cart = useSelector<RootState>(state => state.cart) as Cart
-    const client = useSelector<RootState>((state) => state.client) as UserAuth
+    const client = useSelector<RootState>((state) => state.user) as ClientAuth
     const hidePrice = ApiConfig.isJoomla ? (client?.id ? false : true) : false
     const dispatch: AppDispatch = useDispatch();
     const [openModal, setOpenModal] = useState(false)

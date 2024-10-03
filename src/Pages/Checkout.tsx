@@ -14,7 +14,6 @@ import { useEffect, useRef, useState } from "react";
 import { useGetWilayasService } from "../Api/Services";
 import { useFormik } from "formik";
 import { getSubTotal } from "../Constants/Functions";
-import * as Yup from "yup";
 import ProductApi from "../Api/ProductApi";
 import useSWR from "swr";
 import { Link } from "react-router-dom";
@@ -33,6 +32,7 @@ import alertError from "../hoock/alertError";
 import Gift from "../Views/Gift";
 import useLang from "../hoock/useLang";
 import ApiConfig from "../Api/ApiConfig";
+import useValidation from "../hoock/Validation";
 
 
 type ModeLivraisan = {
@@ -42,27 +42,8 @@ type ModeLivraisan = {
     isWaslet?: boolean,
     value?: PriceDeliveryResponce
 }
-type Erros = {
-    toshort: string,
-    fullname_op: string,
-    invalid_phone: string,
-    phone_op: string,
-    wilaya_op: string,
-    commune_op: string
-}
-const validationS = (dt: Erros) => Yup.object().shape({
-    fullName: Yup.string()
-        .min(2, dt.toshort)
-        .required(dt.fullname_op),
-    contact_phone: Yup.string()
-        .matches(
-            /^0[567][0-9]{8}$/,
-            dt.invalid_phone
-        ).required(dt.phone_op),
-    to_wilaya_name: Yup.string().required(dt.wilaya_op),
-    to_commune_name: Yup.string().required(dt.commune_op),
-    nots: Yup.string()
-});
+
+
 export default function Checkout() {
     const theme = useSelector<ThemeSetting>(state => state.theme) as ThemeSetting
 
@@ -70,18 +51,18 @@ export default function Checkout() {
 }
 
 function CheckoutDefault() {
-    const { t: llll, i18n } = useTranslation()
+    const { i18n } = useTranslation()
     const { t } = useLang()
-    
+
     const [modalState, setModalState] = useState<any>(null);
     const [otp, setOtp] = useState<OtpModalOpen | null>();
     const [orderResponse, setOrderResponse] = useState<CreateOrderResponse | null>(null);
     const cart = useSelector<RootState>(state => state.cart) as Cart
-    // const { orderData, commune, wilaya } = useSelector<RootState>(state => state.order) as OrderStore
+    // const client = useSelector<RootState>(state => state.cart) as ClientAuth
     const [selectedWilaya, setSelectedWilaya] = useState<Wilaya | null>(null)
     const [selectedCommune, setSelectedCommune] = useState<Commune | null>(null)
     const initialValues = {
-        to_commune_name: "",
+        to_commune_name: "ff",
         to_wilaya_name: "",
         fullName: "",
         contact_phone: "",
@@ -166,6 +147,14 @@ function CheckoutDefault() {
             })
         }
     }
+
+    const validationSchema = useValidation({
+        fullName: true,
+        contact_phone: true,
+        to_wilaya_name: true,
+        to_commune_name: true,
+        nots: true
+    })
     const formik = useFormik({
         initialValues,
 
@@ -205,16 +194,9 @@ function CheckoutDefault() {
             })
 
         },
-        validationSchema: validationS({
-            toshort: t.toshort,
-            commune_op: t.commune_op,
-            fullname_op: t.fullname_op,
-            invalid_phone: t.invalid_phone,
-            phone_op: t.phone_op,
-            wilaya_op: t.wilaya_op
-        }),
+        validationSchema,
     });
-
+    
 
 
     const gestionErrors = () => {
@@ -277,7 +259,7 @@ function CheckoutDefault() {
                 if (p.deliveryCostToTheOffice != null) {
                     let m = p.deliveryCostToTheOffice != 0 ? "" : t.free;
                     ml.push({
-                        title: t.delivery + " " + m + " " + (ApiConfig.isJoomla? t.to_kazi_tour: t.to_yalidine),
+                        title: t.delivery + " " + m + " " + (ApiConfig.isJoomla ? t.to_kazi_tour : t.to_yalidine),
                         check: false,
                         cost: p.deliveryCostToTheOffice,
                         value: priceDelivery
@@ -285,7 +267,7 @@ function CheckoutDefault() {
 
 
                 }
-                if (p.deliveryCostToTheHome != null&&!ApiConfig.isJoomla)
+                if (p.deliveryCostToTheHome != null && !ApiConfig.isJoomla)
                     ml.push({
                         title: t.home_delivery,
                         check: false,
@@ -295,7 +277,7 @@ function CheckoutDefault() {
                 if (priceDelivery.priceDeliveryOffice != null) {
                     let m = priceDelivery.priceDeliveryOffice != 0 ? "" : t.free;
                     ml.push({
-                        title: t.delivery + " " + m + " " + (ApiConfig.isJoomla? t.to_kazi_tour: t.to_yalidine),
+                        title: t.delivery + " " + m + " " + (ApiConfig.isJoomla ? t.to_kazi_tour : t.to_yalidine),
                         check: false,
                         cost: priceDelivery.priceDeliveryOffice,
                         value: priceDelivery
@@ -303,7 +285,7 @@ function CheckoutDefault() {
 
 
                 }
-                if (priceDelivery.priceDeliveryHome != null&&!ApiConfig.isJoomla)
+                if (priceDelivery.priceDeliveryHome != null && !ApiConfig.isJoomla)
                     ml.push({
                         title: t.home_delivery,
                         check: false,

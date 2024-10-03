@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MdClear } from 'react-icons/md'
 import { RiUserLine } from 'react-icons/ri'
 import { ActionIcon, Avatar, Button, Dropdown, Input, Modal, Password, Text } from 'rizzui'
@@ -6,24 +6,21 @@ import { ThemeSetting } from '../../Types/ThemeSetting';
 import { useDispatch, useSelector } from 'react-redux';
 import ApiConfig from '../../Api/ApiConfig';
 import { AppDispatch, RootState } from '../../Store';
-import * as Yup from "yup";
 import { useFormik } from 'formik';
-import { changeClient } from '../../Store/authSliceClient';
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import alertError from '../../hoock/alertError';
 import { SHA256 } from 'crypto-js';
 import JoomlaApi from '../../Api/JoomlaApi';
 import RegisterView from './RegisterView';
+import { changeUser } from '../../Store/authSlice';
+import useValidation from '../../hoock/Validation';
+import useSessionMiddleware from '../../hoock/useSessionMiddleware';
 type LoginInfo = {
     phone: string,
     password: string
 }
 
-const validationS = Yup.object().shape({
-    password: Yup.string().min(0, "").required("requis"),
-    phone: Yup.string().matches(/^0[567][0-9]{8}$/, 'Phone number must start with 0 followed by 5, 6, or 7, and then 8 digits').required('Phone number is required'),
-});
 
 /* 
 phoneNumber: 0661397937
@@ -31,13 +28,18 @@ password: secret123
 */
 
 export default function LoginButton() {
+    useSessionMiddleware({navUrl:"/"})
     const [modalState, setModalState] = useState(false);
     const theme = useSelector<ThemeSetting>(state => state.theme) as ThemeSetting
-    const userS = useSelector<RootState>((state) => state.client) as UserAuth
+    const userS = useSelector<RootState>((state) => state.user) as UserAuth
     const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
     const [openRegiter, setOpenRegiste] = useState(false)
+    const validationSchema = useValidation({
+        phone: true,
+        password: true,
+    });
     const formik = useFormik({
         initialValues: {
             phone: "",
@@ -49,7 +51,7 @@ export default function LoginButton() {
             loginService(values)
 
         },
-        validationSchema: validationS,
+        validationSchema,
     });
 
     const loginService = async (values: LoginInfo, isLoginFromUrl?: boolean) => {
@@ -62,12 +64,13 @@ export default function LoginButton() {
 
             // const data = client
             if (data.id) {
-
-                dispatch(changeClient({
+                type UserAuthS= UserAuth|SupplierAuth|ClientAuth|null
+                const d:UserAuthS={
                     ...data,
-                    md5: SHA256(JSON.stringify(data) + import.meta.env.VITE_SEC_KEY).toString()
-                }))
-
+                    authType:"client",
+                    md5: SHA256(JSON.stringify({...data,authType:"client"}) + import.meta.env.VITE_SEC_KEY).toString()
+                }
+                dispatch(changeUser(d))
                 setModalState(false)
             } else
                 toast.error("téléphone ou mot de passe non valide")
@@ -80,9 +83,12 @@ export default function LoginButton() {
             alertError(err)
         }
     }
+    useEffect(()=>{
+        setOpenRegiste(false)
+    },[modalState])
     return (
         <>
-            {userS ?
+            {userS&&userS.authType=="client" ?
                 <Dropdown placement="bottom-end">
                     <Dropdown.Trigger className='flex'>
                         <Button variant="text" size="sm" className="text-base gap-2" onClick={() => {
@@ -125,7 +131,7 @@ export default function LoginButton() {
                         </Dropdown.Item>
                         <div className="">
                             <Dropdown.Item onClick={() => {
-                                dispatch(changeClient(null))
+                                dispatch(changeUser(null))
                                 navigate("/")
                             }}>
                                 Se déconnecter

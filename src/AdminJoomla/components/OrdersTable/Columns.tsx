@@ -181,49 +181,49 @@ const getColumns = ({ order, column, onHeaderClick, afterChange, changeFilter, i
         }],
 
         // name
-        // ...deleteCols.find(el => el == "name") ? [] : [{
-        //     title: <HeaderCell title={t.fullname} />,
-        //     dataIndex: "name",
-        //     key: "name",
-        //     show: false,
-        //     render: (_: string, row: OrderFull) => (
-        //         <div className="flex items-center">
-        //             <Text className="mb-0.5 !text-sm font-medium min-w-[150px]">
-        //                 {row.firstname}
-        //             </Text>
-        //         </div>
-        //     ),
-        // }],
+        ...deleteCols.find(el => el == "name") ? [] : [{
+            title: <HeaderCell title={t.fullname} />,
+            dataIndex: "name",
+            key: "name",
+            show: false,
+            render: (_: string, row: OrderFull) => (
+                <div className="flex items-center">
+                    <Text className="mb-0.5 !text-sm font-medium min-w-[150px]">
+                        {row.firstname}
+                    </Text>
+                </div>
+            ),
+        }],
 
         // contact_phone
-        // ...deleteCols.find(el => el == "contact_phone") ? [] : [{
-        //     title: <HeaderCell title={t1.phone} />,
-        //     dataIndex: "contact_phone",
-        //     key: "contact_phone",
+        ...deleteCols.find(el => el == "contact_phone") ? [] : [{
+            title: <HeaderCell title={t1.phone} />,
+            dataIndex: "contact_phone",
+            key: "contact_phone",
 
-        //     render: (phone: string) => (
-        //         <div className="flex items-center">
+            render: (phone: string) => (
+                <div className="flex items-center">
 
 
-        //             <Badge
-        //                 variant="flat"
-        //                 color="info"
-        //                 className="cursor-pointer flex whitespace-nowrap items-center"
+                    <Badge
+                        variant="flat"
+                        color="info"
+                        className="cursor-pointer flex whitespace-nowrap items-center"
 
-        //             >
-        //                 <a href={"tel:" + phone} className="flex items-center">
-        //                     <MdLocalPhone className="text-lg" />
-        //                     <div className="me-1"></div>
-        //                     <span className="whitespace-nowrap" dir="ltr">{formatPhoneNumber(phone)}</span>
-        //                 </a>
+                    >
+                        <a href={"tel:" + phone} className="flex items-center">
+                            <MdLocalPhone className="text-lg" />
+                            <div className="me-1"></div>
+                            <span className="whitespace-nowrap" dir="ltr">{formatPhoneNumber(phone)}</span>
+                        </a>
 
-        //                 <div className="me-1"></div>
-        //                 <MdContentCopy onClick={() => { CopyText(phone); toast.success("Texte copié") }} className="text-lg" />
-        //             </Badge>
+                        <div className="me-1"></div>
+                        <MdContentCopy onClick={() => { CopyText(phone); toast.success("Texte copié") }} className="text-lg" />
+                    </Badge>
 
-        //         </div>
-        //     ),
-        // }],
+                </div>
+            ),
+        }],
 
         // to_wilaya_name
         ...deleteCols.find(el => el == "to_wilaya_name") ? [] : [{
