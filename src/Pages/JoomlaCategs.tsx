@@ -62,10 +62,8 @@ export default function JoomlaCategs() {
 
     const getFilterNumber=()=>{
         let s=0;
-        if(options.maxPrice)s++;
-        if(options.minPrice)s++;
-        if(options.name)s++;
-        if(options.willaya)s++;
+        ['maxPrice', 'minPrice', 'name', 'willaya'].
+        forEach((key) => { if (options[key as keyof OptionsFilter]) s++; });
         return s
     }
 
@@ -195,7 +193,7 @@ export default function JoomlaCategs() {
                                 <div className="relative cursor-pointer  h-24 border overflow-hidden rounded-lg bg-cover bg-center" style={{
                                     backgroundImage: "url('" + imgSrc(el.avatar, true) + "')"
                                 }}>
-                                    <Link to={"/supplier/" + k}>
+                                    <Link to={"/supplier/" + el.id}>
                                         <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/40 to-transparent p-2">
                                             <p className="text-sm font-semibold line-clamp-2 text-white  ">
                                                 {el.lastName}

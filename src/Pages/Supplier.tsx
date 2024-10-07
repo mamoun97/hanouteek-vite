@@ -7,6 +7,8 @@ import ProductCard from '../Views/ProductCard'
 import Loading from '../Constants/Loading'
 import CartEmpty from '../Views/CartEmpty'
 import useLang from '../hoock/useLang'
+import JoomlaApi from '../Api/JoomlaApi'
+import imgSrc from '../utils/imgSrc'
 type Param = {
     id: string
 }
@@ -14,6 +16,7 @@ export default function Supplier() {
     const { t } = useLang();
     const { id } = useParams<Param>()
     const supplier = DataF[Number(id)]
+    const {data}=JoomlaApi.getSupplierByIdService(Number(id))
     const { data: prods, isLoading: loadingProds, error } = useGetAllProductsByFilterService("?limit=15&page=1")
     if (!supplier) return "404"
     return (
@@ -23,9 +26,9 @@ export default function Supplier() {
             }}>
                 <Container className='relative h-[calc(65vh)]'>
                     {
-                        supplier.mediaUrls?.logoImage && <img
-                            className='absolute bottom-0 translate-y-1/2 bg-card left-4 w-20 h-20 rounded-full'
-                            src={"https://scontent.fqsf1-1.fna.fbcdn.net/v/t1.15752-9/461091070_883395350402492_7766158947118720732_n.jpg?stp=dst-jpg_s2048x2048&_nc_cat=105&ccb=1-7&_nc_sid=9f807c&_nc_eui2=AeEzI64AFimpYVhKQq4wpwDffUnhHFG0IAB9SeEcUbQgAB0RvdInPbELJ9Ki9r1N7WnSQMWDPTH8hQL1L8-adzjQ&_nc_ohc=KJHld99q9j8Q7kNvgFdgxzo&_nc_ht=scontent.fqsf1-1.fna&oh=03_Q7cD1QHs2SiBWIxfnwMpk0p22ZwWWwzcxy_dlaJBfPlQdUZmOw&oe=672344D0"} />
+                        data?.avatar && <img
+                            className='absolute bottom-0 translate-y-1/2 bg-card border-4 border-white left-4 w-20 h-20 rounded-full'
+                            src={imgSrc(data?.avatar,true)} />
 
                     }
                 </Container>

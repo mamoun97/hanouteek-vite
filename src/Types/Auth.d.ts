@@ -46,6 +46,7 @@ interface SupplierAuth {
 }
 
 
+
 interface ClientAuth {
     id: number,
     firstName: string,

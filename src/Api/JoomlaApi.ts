@@ -10,6 +10,22 @@ type ProductCreateResponse = {
     message: string,
     product: ProductFull
 }
+type Supplier={
+    id: number,
+    firstName: string,
+    lastName: string,
+    email: string,
+    phone: string,
+    wilaya: string,
+    commune: string,
+    role: string,
+    avatar: string,
+    active: boolean,
+    socketId: null|string,
+    isOnline: boolean,
+    created_at: string,
+    updated_at: string
+}
 
 const getOrders = async (param: string, db?: string): Promise<OrdersResponse> => {
     const { data } = await req.httpAuth("").get("/tenant/sub-seller/order" + param + (db ?? ApiConfig.db));
@@ -28,8 +44,11 @@ const getSuppliers = async (filter: string, db?: string): Promise<SupplierRespon
     const { data } = await req.httpAuth("").get("/tenant/sub-seller/all" + filter + (db ?? ApiConfig.db));
     return data
 }
-
-
+const getSupplierById = async (id: number, db?: string): Promise<Supplier> => {
+    const { data } = await req.httpAuth("").get("/tenant/sub-seller/" + id + (db ?? ApiConfig.dbq));
+    return data
+}
+// const getCleints=()=
 
 const getById = async (id: number, db?: string): Promise<Product> => {
 
@@ -89,6 +108,14 @@ const getSuppliersService = (params: string, db?: string) => {
     );
     return data
 }
+const getSupplierByIdService = (id: number, db?: string) => {
+    const data = useSWR(
+        "/tenant/sub-seller/" + id + (db ?? ApiConfig.db),
+        () => getSupplierById(id, db),
+        ApiConfig.swrStop
+    );
+    return data
+}
 const getProductsService = (filter: string, db?: string) => {
     const data = useSWR<ProductsResponse>(
         "/tenant/sub-seller/product" + filter + (db ?? ApiConfig.db),
@@ -120,7 +147,8 @@ const JoomlaApi = {
     getById,
     getProducts,
     getOrdersClientService,
-    getSuppliersService
+    getSuppliersService,
+    getSupplierByIdService
 }
 
 export default JoomlaApi
