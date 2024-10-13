@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Attribute from "../../../Views/Attribute"
 import Qte from "../../../Views/Qte"
 import { Button } from "rizzui"
@@ -9,7 +9,7 @@ import useLang from "../../../hoock/useLang"
 
 type PriceDrop = {
     drop_price: number,
-    min_selling_drop_price: number|null
+    min_selling_drop_price: number | null
 }
 const NULL_STOCK = -9999999
 export function ProductOptions({ data, setValue }:
@@ -21,7 +21,7 @@ export function ProductOptions({ data, setValue }:
     const [newprice, setNewprice] = useState<PriceDrop>()
     const initSizes = prod.attribute.options.length ? (prod.attribute.options[0].sizes.length ? true : false) : false;
     const addToCart = () => {
-
+        // console.log(prod)
         if (isValid())
 
             setValue({
@@ -32,7 +32,7 @@ export function ProductOptions({ data, setValue }:
                 "color": prod.checkData.color?.value ?? "",
                 "size": prod.checkData.size?.value ?? "",
                 "qte": prod.qte,
-                min_selling_drop_price: prod.min_selling_drop_price,
+                "min_selling_drop_price": prod.min_selling_drop_price,
                 "cancelled": false,
                 "product": {
                     id: prod.id,
@@ -40,9 +40,10 @@ export function ProductOptions({ data, setValue }:
                 }
             })
         else alert(t.select_ops)
-
-
     }
+    useEffect(() => {
+        console.log(prod)
+    }, [prod])
 
     const isValid = (): boolean => {
         if (prod.attribute.options.length == 0) return true;
@@ -69,19 +70,19 @@ export function ProductOptions({ data, setValue }:
                         product={prod}
                         setProduct={setProd}
                         onClick={(el: Color) => {
-                            
+                            // console.log(el)
                             setProd({
                                 ...prod,
                                 checkData: {
                                     size: null,
                                     color: el
                                 },
-                                
+
                                 price: el.price ? el.price : data.price,
-                                ...el.drop_price?{
-                                    drop_price:el.drop_price,
-                                    min_selling_drop_price:el.min_selling_drop_price??0
-                                }:{}
+                                ...el.drop_price ? {
+                                    drop_price: el.drop_price,
+                                    min_selling_drop_price: el.min_selling_drop_price ?? 0
+                                } : {}
 
                             })
                             setStock(el.sizes.length != 0 ? NULL_STOCK : el.stock)
