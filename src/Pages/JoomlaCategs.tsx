@@ -10,7 +10,7 @@ import getFilter from "../utils/getFilter";
 import { ActionIcon, Badge, Drawer, Input } from "rizzui";
 import useLang from "../hoock/useLang";
 import JoomlaCategFilter from "../Views/JoomlaCategFilter";
-import DataF from "../Constants/DataF";
+// import DataF from "../Constants/DataF";
 import JoomlaApi from "../Api/JoomlaApi";
 import imgSrc from "../utils/imgSrc";
 type Param = {
@@ -19,7 +19,7 @@ type Param = {
 }
 // const d: readonly number=/
 export default function JoomlaCategs() {
-    const { width } = useMediaQuery()
+    // const { width } = useMediaQuery()
     const location = useLocation()
     const p = useParams()
     const { t } = useLang();
@@ -191,11 +191,11 @@ export default function JoomlaCategs() {
                         suppliers?.data.map((el, k) => {
                             return <div key={k}>
                                 <div className="relative cursor-pointer  h-24 border overflow-hidden rounded-lg bg-cover bg-center" style={{
-                                    backgroundImage: "url('" + imgSrc(el.avatar, true) + "')"
+                                    backgroundImage: "url('" + imgSrc(el.banner, true) + "')"
                                 }}>
                                     <Link to={"/supplier/" + el.id}>
                                         <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/40 to-transparent p-2">
-                                            <p className="text-sm font-semibold line-clamp-2 text-white  ">
+                                            <p className="text-sm uppercase font-semibold line-clamp-2 text-white  ">
                                                 {el.lastName}
                                             </p>
                                         </div>
@@ -206,6 +206,7 @@ export default function JoomlaCategs() {
                             </div>
                         })
                     }
+                    
                     {
                         (prods?.data.length === 0 || errorF) && <div className="col-span-full flex justify-center mt-20 ">
                             <CartEmpty text={"Aucun Fournisseur"} />

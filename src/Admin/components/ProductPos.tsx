@@ -96,8 +96,8 @@ export default function ProductPos({ data, showAddToCart = false, addToCart }: {
                 }
             </div>
             <div className="text-small justify-between items-center max-sm:flex-col max-sm:items-start p-2">
-                <b className="h-11 flex font-medium items-center text-start line-clamp-2 w-full leading-4 text-foreground">{data.name}</b>
-                <p className="text-default-500 text-sm font-bold ">{data.price} <Currency /></p>
+                <b className="h-8  font-medium  text-start  w-full leading-4 line-clamp-2 text-foreground ">{data.name}</b>
+                <p className="text-default-500 text-sm font-bold text-primary ">{data.price} <Currency /></p>
             </div>
         </div>
 

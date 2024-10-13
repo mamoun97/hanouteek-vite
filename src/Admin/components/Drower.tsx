@@ -82,7 +82,7 @@ const items = () => {
         {
             link: "/abandoned-carts",
             text: tr.drower.abandoned_carts,
-            role: ["associate_admin", "associate_sav"],
+            role: ["associate_admin", "associate_sav","associate"],
             icon: HiPhoneIncoming
         },
         {

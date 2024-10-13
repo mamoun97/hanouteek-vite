@@ -12,8 +12,8 @@ type OptionsFilter = {
     minPrice: number | null,
     maxPrice: number | null,
     willaya?:string|null,
-    name?:string|null
-    ,
+    name?:string|null,
+    subseller?:number,
 }
 
 type SubFormProps = {
@@ -73,6 +73,7 @@ interface JoomlaUser {
     wilaya: string,
     commune: string,
     avatar: string,
+    banner: string,
 }
 interface JoomlaUserFull extends JoomlaUser {
     id: number,
@@ -131,6 +132,7 @@ interface Supplier{
     phone: string,
     wilaya: string,
     commune: string,
+    banner:string,
     avatar: string,
     role: strung,
     active: true,

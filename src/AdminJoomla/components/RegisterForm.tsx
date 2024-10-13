@@ -1,5 +1,5 @@
-import {useState } from 'react';
-import {  Button, Input, Loader, Password, Select } from 'rizzui';
+import { useState } from 'react';
+import { Button, Input, Loader, Password, Select } from 'rizzui';
 import { useFormik } from 'formik';
 import alertError from '../../hoock/alertError';
 import { IoMdSave } from 'react-icons/io';
@@ -25,6 +25,7 @@ type JoomlaUserInput = {
     commune: { label: string, value: string, item: Commune } | null,
     role: string,
     avatar: string,
+    banner: string,
     password: string
 };
 
@@ -55,7 +56,8 @@ export default function RegisterForm() {
             commune: null,
             role: "",
             avatar: "",
-            password: ""
+            password: "",
+            banner: ""
         },
         validationSchema,
         onSubmit: async (values: JoomlaUserInput) => {
@@ -75,7 +77,7 @@ export default function RegisterForm() {
         }
     });
 
-    const register = (name: "email" | "firstName" | "lastName" | "phone" | "password" | "email" | "avatar", label: string) => ({
+    const register = (name: "email" | "firstName" | "lastName" | "phone" | "password" | "email" | "avatar"|"banner", label: string) => ({
         label,
         // suffix: formik.touched[name] ? (
         //     !!formik.errors[name] ? <IoIosInformationCircleOutline className='text-lg' /> : <IoMdCheckmark className='text-lg' />
@@ -108,41 +110,26 @@ export default function RegisterForm() {
 
         </div>
         <div className="grid grid-cols-2 gap-2 mt-4">
-            <div className='col-span-full'>
-                <span className='rizzui-input-label block text-sm mb-1.5 font-medium'>
-                    {tr.auth.up_img_profile}
-                </span>
-                <UploadImageSingle
-                    className='min-h-[210px]'
-                    setData={(e) => formik.setFieldValue("avatar", e)}
-                    imgSrc={formik.values.avatar}
-                    error={formik.touched.avatar && formik.errors.avatar ? "error" : null}
-                />
-                {/* {formik.touched.avatar && formik.errors.avatar && (
-                    <span className='text-red text-[13px] mt-0.5 rizzui-input-error-text'>
-                        {formik.errors.avatar}
-                    </span>
-                )} */}
-            </div>
+
             <Input
                 placeholder={tr.auth.enter_first_name}
-                className='col-span-1' 
+                className='col-span-1'
                 {...register("firstName", tr.auth.first_name)} />
             <Input
                 placeholder={tr.auth.enter_last_name}
-                className='col-span-1' 
+                className='col-span-1'
                 {...register("lastName", tr.auth.last_name)} />
             <Input
                 placeholder={tr.auth.enter_email}
-                className='col-span-1 max-sm:col-span-full' 
+                className='col-span-1 max-sm:col-span-full'
                 {...register("email", tr.auth.email)} type='email' />
             <Input
                 placeholder={tr.auth.phone}
-                className='col-span-1 max-sm:col-span-full' 
+                className='col-span-1 max-sm:col-span-full'
                 {...register("phone", tr.auth.phone)} />
             <Password
-                placeholder={tr.auth.enter_password} 
-                className='col-span-full' 
+                placeholder={tr.auth.enter_password}
+                className='col-span-full'
                 {...register("password", tr.auth.password)} />
             <Select
                 label={t.wilaya}
@@ -151,7 +138,7 @@ export default function RegisterForm() {
                 onChange={(e: any) => formik.setFieldValue("wilaya", e)}
                 className='col-span-1 max-sm:col-span-full'
                 options={
-                    wilayas?.data.map((el,k) => ({ label:(k+1)+" - " + el.name, value: el.name, item: el })) ?? []
+                    wilayas?.data.map((el, k) => ({ label: (k + 1) + " - " + el.name, value: el.name, item: el })) ?? []
                 }
                 onBlur={(_: any) => {
                     formik.setTouched({
@@ -160,7 +147,7 @@ export default function RegisterForm() {
                     })
                 }}
                 suffix={
-                    lodingWilaya?<Loader/>:null
+                    lodingWilaya ? <Loader /> : null
                 }
             />
             <Select
@@ -170,7 +157,7 @@ export default function RegisterForm() {
                 onChange={(e: any) => formik.setFieldValue("commune", e)}
                 className='col-span-1 max-sm:col-span-full'
                 options={
-                    communes?.communes.map(el => ({ label:el.name, value: el.name })) ?? []
+                    communes?.communes.map(el => ({ label: el.name, value: el.name })) ?? []
                 }
                 onBlur={(_: any) => {
                     formik.setTouched({
@@ -179,18 +166,47 @@ export default function RegisterForm() {
                     })
                 }}
                 suffix={
-                    communeLoading?<Loader/>:null
+                    communeLoading ? <Loader /> : null
                 }
             />
+
+            <div className='col-span-full'>
+                <span className='rizzui-input-label block text-sm mb-1.5 font-medium'>
+                    Banner
+                </span>
+                <div className='relative'>
+                    <UploadImageSingle
+                        className='min-h-[210px]'
+                        setData={(e) => formik.setFieldValue("banner", e)}
+                        imgSrc={formik.values.banner}
+                        error={formik.touched.banner && formik.errors.banner ? "error" : null}
+                    />
+
+                </div>
+
+            </div>
+            <div className='col-span-full'>
+                <span className='rizzui-input-label block text-sm mb-1.5 font-medium'>
+                    {tr.auth.up_img_profile}
+                </span>
+                <div className="flex justify-center">
+                    <UploadImageSingle
+                        className=' h-32'
+                        setData={(e) => formik.setFieldValue("avatar", e)}
+                        imgSrc={formik.values.avatar}
+                        error={formik.touched.avatar && formik.errors.avatar ? "error" : null}
+                    />
+                </div>
+            </div>
 
         </div>
         <div className="mt-4">
             <Button isLoading={isLoading} disabled={isLoading} variant="solid" type='submit' className='gap-2 w-full'>
-            {tr.auth.register} <IoMdSave className='text-lg' />
+                {tr.auth.register} <IoMdSave className='text-lg' />
             </Button>
         </div>
         <p className='text-center text-sm mt-4'>
-        {tr.auth.have_account} <Link to={"/joomla-auth"} className='text-primary font-semibold cursor-pointer'>{tr.auth.login}</Link>
+            {tr.auth.have_account} <Link to={"/joomla-auth"} className='text-primary font-semibold cursor-pointer'>{tr.auth.login}</Link>
         </p>
     </form>
 }

@@ -7,6 +7,8 @@ import ApiConfig from '../../Api/ApiConfig'
 import { IoIosNotifications } from "react-icons/io";
 import LangButton from '../../Admin/components/LangButton'
 import ModeThemeButton from '../../Admin/components/ModeThemeButton'
+import ExitButton from './ExitButton'
+import { ActionIcon } from 'rizzui'
 // import SelectPlatform from './SelectPlatform'
 export default function Navbar({
     open,
@@ -50,9 +52,10 @@ export default function Navbar({
 
                         <ModeThemeButton />
 
-                        <button className="text-2xl p-2 mr-2 text-gray-600 rounded cursor-pointer max-sm:inline hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700">
-                            <IoIosNotifications />
-                        </button>
+                        <ActionIcon variant='text'  >
+                            <IoIosNotifications className='w-5 h-5'/>
+                        </ActionIcon>
+                        <ExitButton/>
                     </div>
 
                 </div>

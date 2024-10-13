@@ -13,8 +13,8 @@ import Navbar from './components/Navbar'
 import Drower from './components/Drower';
 import useGlobal from '../hoock/useGlobal';
 import useSessionMiddleware from '../hoock/useSessionMiddleware';
-export default function LayoutAdminJoomla({ children }: {
-  children: React.ReactNode
+export default function LayoutAdminJoomla({contentClassName="", children }: {
+  children: React.ReactNode,contentClassName?:string
 }) {
 
   useSessionMiddleware({navUrl:"/joomla-auth"})
@@ -69,7 +69,7 @@ export default function LayoutAdminJoomla({ children }: {
                       }
                     </button>
                   } />
-                <div className="p-5 relative max-md:p-3 ">
+                <div className={"p-5 relative max-md:p-3 "+contentClassName}>
                   {children}
                 </div>
               </div>

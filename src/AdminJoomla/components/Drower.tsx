@@ -14,6 +14,8 @@ import useLang from "../../hoock/useLang";
 import { Button } from "rizzui";
 import { changeAuthType } from "../../Store/globalSlice";
 import { changeSupplier } from "../../Store/authSliceSupplier";
+import { IoMdPerson } from "react-icons/io";
+import { MdOutlinePerson } from "react-icons/md";
 
 const items = () => {
     const { tr } = useLang()
@@ -73,17 +75,12 @@ export default function Drower({
                     </h1>
                     <p className='text-sm'>{user?.email}</p>
 
-                    {/* <Link to={"/joomla-auth"}> */}
-                        <Button className="mt-4 bg-red-800"  onClick={() => {
-                            dispatch(changeAuthType(null))
-                            dispatch(changeSupplier(null))
-                            navigate("/joomla-auth")
-                        }}>
-                             <LuLogOut className="text-lg" />
-                             <div className="me-2"></div>
-                            Logout
+                    <Link  to={"/joomla-admin/profile"}>
+                        <Button variant="outline" color="primary"  className="mt-4 min-w-[120px] gap-2 items-center ">
+                             <MdOutlinePerson className="text-lg" />
+                            Profile
                         </Button>
-                    {/* </Link> */}
+                    </Link>
                 </div>
                 <div className="border border-gray-700 my-3"></div>
                 <ul className="space-y-2 font-medium">

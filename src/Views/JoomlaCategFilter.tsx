@@ -7,9 +7,12 @@ import useLang from '../hoock/useLang';
 type PropsType = {
     options: OptionsFilter,
     setOptions: (e: OptionsFilter) => void,
-    setOpen:(e:boolean) => void
+    setOpen:(e:boolean) => void,
+    hideWilaya?:boolean,
+    hideName?:boolean
 }
-export default function JoomlaCategFilter({ options,setOpen, setOptions }: PropsType) {
+export default function JoomlaCategFilter({ options,setOpen, hideWilaya=false,
+    hideName=false,setOptions }: PropsType) {
     const { data: wilayas, isLoading: lodingWilaya } = useGetWilayasService();
     const { t } = useLang();
     return (
@@ -26,10 +29,10 @@ export default function JoomlaCategFilter({ options,setOpen, setOptions }: Props
                     />
                 </ActionIcon>
             </header>
-            <Select
+            {!hideWilaya&&<Select
                 // label={t.wilaya}
                 value={options.willaya}
-                onChange={(e: any) => setOptions({ ...options, willaya: e })}
+                onChange={(e: any) => setOptions({ ...options, willaya: e.value })}
                 placeholder={t.wilaya}
                 options={
                     wilayas?.data.map((el, k) => ({ label: (k + 1) + " - " + el.name, value: el.name, item: el })) ?? []
@@ -44,7 +47,7 @@ export default function JoomlaCategFilter({ options,setOpen, setOptions }: Props
                 }
 
 
-            />
+            />}
 
             <NumberInput
                 formatType="numeric"
@@ -80,7 +83,7 @@ export default function JoomlaCategFilter({ options,setOpen, setOptions }: Props
                 thousandSeparator=","
 
             />
-            <Input
+            {!hideWilaya&&<Input
                 className="grow"
                 value={options.name??""}
                 onChange={(e) => {
@@ -91,7 +94,7 @@ export default function JoomlaCategFilter({ options,setOpen, setOptions }: Props
                 }}
                 placeholder={"Supplier"}
 
-            />
+            />}
         </div>
     )
 }

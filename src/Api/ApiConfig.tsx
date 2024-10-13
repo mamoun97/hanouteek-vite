@@ -18,8 +18,8 @@ const url = "https://api.risecart.net";
 // const db = "db=joomlajoomlayhLZnl16G"
 // const db = "db=quincailleriequincaillerieQ9KnMUuwA"
 // const db = "db=mBoutiquemboutiquesBC900gHy"
-// const db = "db=dropdropmSqp6A8rx"
-const db = false;
+const db = "db=dropdropmSqp6A8rx"
+// const db = false;
 const isHanouteek = false
 const isJoomla=false;
 const param = {
@@ -40,7 +40,7 @@ const param = {
 
     },
     
-    isDrop:window.location.host.includes("drop.risecart.net")||window.location.host.includes("localhostdd")?true:false,
+    isDrop:true,//window.location.host.includes("drop.risecart.net")||window.location.host.includes("localhostdd")?true:false,
     db: db ? "&" + db : "",
     dbq: db ? "?" + db : "",
 

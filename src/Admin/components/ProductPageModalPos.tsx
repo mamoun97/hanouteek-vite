@@ -24,7 +24,7 @@ type CartProps = {
 }
 function ProductPageRequest({ prod }: { prod: ProductModalProps }) {
     const global = useGlobal("?")
-    const {tr}=useLang()
+    const { tr, t } = useLang()
     const user = useSelector<RootState>((state) => state.user) as UserAuth
     const [product, setProduct] = useState<Product>()
     const [loading, setLoading] = useState(false)
@@ -35,7 +35,17 @@ function ProductPageRequest({ prod }: { prod: ProductModalProps }) {
                 ...res,
                 ...user.role == "vendor" ? {
                     price: res.drop_price ?? res.price
-                } : {}
+                } : {},
+                // attribute:{
+                //     ...res.attribute,
+                //     options:res.attribute.options.map((el,k)=>{
+                //         return {
+                //             ...el,
+                //             drop_price:(res.drop_price??0)+k*20,
+                //             min_selling_drop_price:(res.min_selling_drop_price??0)+20*k
+                //         }
+                //     })
+                // }
             })
             setLoading(false)
         }).catch(err => {
@@ -55,11 +65,12 @@ function ProductPageRequest({ prod }: { prod: ProductModalProps }) {
     return product ? <div key={prod.slug} className="">
         <div className="flex justify-center items-center flex-col">
             <h1 className="text-lg font-bold text-center">
-                {product?.name }
+                {product?.name}
             </h1>
             <p className=" text-center">
                 {user.role == "vendor" ? product?.drop_price ?? product?.price : product?.price} <Currency />
             </p>
+
         </div>
         {product && <ProductOptions
             key={product.slugName}
@@ -74,7 +85,17 @@ function ProductPageRequest({ prod }: { prod: ProductModalProps }) {
                     color: null,
                     size: null
                 }
-            }} />}
+            }} />
+        }
+        <div className="p-2">
+            {product.description && product.description != "" && <div className="mt-2">
+                <h2 className="font-medium italic">{t.desc}</h2>
+                <div className="overflow-auto font-normal mt-2">
+                    <div dangerouslySetInnerHTML={{ __html: product.description }} ></div>
+                </div>
+
+            </div>}
+        </div>
     </div> : <div>
         <h1 className="text-lg font-bold text-center text-red-500">
             {tr.order.in_dispo}

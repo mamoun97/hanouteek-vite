@@ -19,13 +19,17 @@ type Supplier={
     wilaya: string,
     commune: string,
     role: string,
+    banner:string,
     avatar: string,
     active: boolean,
     socketId: null|string,
     isOnline: boolean,
     created_at: string,
-    updated_at: string
+    updated_at: string,
+    categories:Category[],
+    description:string
 }
+
 
 const getOrders = async (param: string, db?: string): Promise<OrdersResponse> => {
     const { data } = await req.httpAuth("").get("/tenant/sub-seller/order" + param + (db ?? ApiConfig.db));

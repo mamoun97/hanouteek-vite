@@ -5,17 +5,25 @@ import { Button } from "rizzui"
 import useLang from "../../../hoock/useLang"
 // import ApiConfig from "../../../Api/ApiConfig"
 
+
+
+type PriceDrop = {
+    drop_price: number,
+    min_selling_drop_price: number|null
+}
 const NULL_STOCK = -9999999
 export function ProductOptions({ data, setValue }:
     { data: ProductCart, setValue: (e: OrderFullItem) => void }) {
-    const {tr}=useLang()
-    const t=tr.order
+    const { tr } = useLang()
+    const t = tr.order
     const [prod, setProd] = useState<ProductCart>(data)
     const [stock, setStock] = useState<number>(NULL_STOCK)
+    const [newprice, setNewprice] = useState<PriceDrop>()
     const initSizes = prod.attribute.options.length ? (prod.attribute.options[0].sizes.length ? true : false) : false;
     const addToCart = () => {
 
         if (isValid())
+
             setValue({
                 "index": Date(),
                 "name": prod.name,
@@ -56,18 +64,25 @@ export function ProductOptions({ data, setValue }:
 
             <div>
                 {prod.attribute.options.length ? <div className="mt-3">
-                    <h2 className="font-medium italic">{t.color}</h2>
+                    <h2 className="font-medium italic">{prod.attribute?.name} </h2>
                     <Attribute
                         product={prod}
                         setProduct={setProd}
                         onClick={(el: Color) => {
+                            
                             setProd({
                                 ...prod,
                                 checkData: {
                                     size: null,
                                     color: el
                                 },
-                                price: el.price ? el.price : data.price
+                                
+                                price: el.price ? el.price : data.price,
+                                ...el.drop_price?{
+                                    drop_price:el.drop_price,
+                                    min_selling_drop_price:el.min_selling_drop_price??0
+                                }:{}
+
                             })
                             setStock(el.sizes.length != 0 ? NULL_STOCK : el.stock)
 
@@ -79,7 +94,7 @@ export function ProductOptions({ data, setValue }:
                 </div> : ""}
                 {
                     initSizes ? <div className="mt-2">
-                        <h2 className="font-medium italic">{t.size}</h2>
+                        <h2 className="font-medium italic">{prod.attribute?.optionsName}</h2>
                         <Attribute
                             product={prod}
                             setProduct={setProd}

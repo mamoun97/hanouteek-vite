@@ -6,10 +6,14 @@ declare global {
         stock: number,
         price: number,
         underStock: boolean,
+        drop_price:number|null,
+        min_selling_drop_price:number|null,
     }
     type Color = {
         id: number,
         value: string,
+        drop_price:number|null,
+        min_selling_drop_price:number|null,
         sku: string,
         price: number | null,
         image: string,

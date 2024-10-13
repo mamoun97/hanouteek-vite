@@ -49,6 +49,10 @@ export default function Checkout() {
 
     return theme.theme.templateType == "restaurant" ? <CheckoutResturant /> : <CheckoutDefault />
 }
+function formatPhoneNumber(phoneNumber: string) {
+    const localNumber = phoneNumber.replace(/^(\+\d{3})(\d{9})$/, '0$2');
+    return localNumber.replace(/(\d{4})(\d{2})(\d{2})(\d{2})/, '$1$2$3$4');
+}
 
 function CheckoutDefault() {
     const { i18n } = useTranslation()
@@ -61,11 +65,14 @@ function CheckoutDefault() {
     // const client = useSelector<RootState>(state => state.cart) as ClientAuth
     const [selectedWilaya, setSelectedWilaya] = useState<Wilaya | null>(null)
     const [selectedCommune, setSelectedCommune] = useState<Commune | null>(null)
+    const client = useSelector<RootState>((state) => state.user) as UserAuth
+    const isJoomla = ApiConfig.isJoomla ? (client?.id ? true : false) : false
+
     const initialValues = {
-        to_commune_name: "ff",
+        to_commune_name: "",
         to_wilaya_name: "",
         fullName: "",
-        contact_phone: "",
+        contact_phone: isJoomla?formatPhoneNumber(client.phoneNumber):"",
         is_stopdesk: false,
         stopdesk_id: 0,
         nots: "",
@@ -147,6 +154,7 @@ function CheckoutDefault() {
             })
         }
     }
+  
 
     const validationSchema = useValidation({
         fullName: true,
@@ -432,6 +440,7 @@ function CheckoutDefault() {
                                         <TextEditor
                                             id="contact_phone"
                                             label={t.phone}
+                                            disabled={isJoomla}
                                             type="tel"
                                             inputClassName=""
                                             placeholder={t.phone}

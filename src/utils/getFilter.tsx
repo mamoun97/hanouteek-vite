@@ -8,6 +8,7 @@ const getFilter = (options: OptionsFilter) => {
     f += `${options.maxPrice ? "&maxPrice=" + options.maxPrice : ""}`
     f += `${options?.willaya ? "&willaya=" + options.willaya : ""}`
     f += `${options?.name ? "&name=" + options.name : ""}`
+    f += `${options?.subseller ? "&subseller=" + options.subseller : ""}`
     return f;
 }
 export default  getFilter
