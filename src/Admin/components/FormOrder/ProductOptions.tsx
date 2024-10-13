@@ -79,9 +79,12 @@ export function ProductOptions({ data, setValue }:
                                 },
 
                                 price: el.price ? el.price : data.price,
+
                                 ...el.drop_price ? {
                                     drop_price: el.drop_price,
-                                    min_selling_drop_price: el.min_selling_drop_price ?? 0
+                                } : {},
+                                ...el.min_selling_drop_price ? {
+                                    min_selling_drop_price: el.min_selling_drop_price ?? prod.min_selling_drop_price
                                 } : {}
 
                             })
