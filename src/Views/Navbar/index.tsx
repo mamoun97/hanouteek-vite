@@ -69,10 +69,10 @@ function NavbarDefault() {
         //     text: t("product_exchange"),
         //     src: "/order-exchange"
         // },
-        {
+        ...ApiConfig.isHanouteek?[{
             text: t("our_shops"),
             src: "/our-shops"
-        },
+        }]:[],
     ]
     // const [openCart, setOpenCart] = useState(false)
     const cart = useSelector<RootState>(state => state.cart) as Cart
